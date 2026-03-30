@@ -1,0 +1,54 @@
+<script>
+  /**
+   * Utility functions for string manipulation and JSON parsing.
+   * @module StringUtils
+   */
+  const StringUtils = (() => {
+    /**
+     * Converts a string to Proper Case (first letter of each word capitalized).
+     * Non-alphanumeric characters are replaced with spaces.
+     * @param {string} str - The input string.
+     * @returns {string} Proper-cased string.
+     */
+    const toProperCase = (str) => {
+      const cleaned = str.replace(/[^\p{L}\p{N}'\s]/gu, ' ');
+
+      return cleaned
+        .split(/\s+/)
+        .map((word) =>
+          word
+            ? word[0].toLocaleUpperCase() + word.slice(1).toLocaleLowerCase()
+            : '',
+        )
+        .join(' ');
+    };
+
+    /**
+     *
+     * @param {String} str
+     * @returns {String}
+     */
+    const normalizeEmail = (str = '') =>
+      str
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^\p{L}\p{N}@._+-]/gu, '');
+
+    /**
+     * Checks if a string is a valid email.
+     * @param {string} email
+     * @returns {boolean}
+     */
+    const isValidEmail = (email) => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    };
+
+    return {
+      toProperCase,
+      normalizeEmail,
+      isValidEmail,
+    };
+  })();
+</script>

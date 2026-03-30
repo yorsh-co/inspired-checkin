@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+  <head>
+    <base target="_top" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="mobile-web-app-capable" content="no" />
+
+    <!-- FONTS -->
+    <!-- Roboto -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Google Material Icons -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+
+    <!-- STYLE -->
+
+    <!-- /components -->
+    <?!= $css('components/loaders') ?>
+
+    <!-- /elements -->
+    <?!= $css('elements/buttons') ?> <?!=
+    $css('elements/input') ?> <?!=
+    $css('elements/semantic') ?> <?!=
+    $css('elements/table') ?>
+
+    <!-- /views -->
+    <?!= $css('views/user-scores') ?> <?!=
+    $css('views/errors') ?>
+
+    <!-- / -->
+    <?!= $css('global') ?>
+
+    <!-- /STYLE -->
+  </head>
+
+  <body>
+    <main><?!= body ?></main>
+
+    <?!= $partial('footer') ?>
+  </body>
+
+  <!-- SCRIPT -->
+
+  <!-- /utils -->
+  <?!= $js('utils/StringUtils') ?>
+
+  <!-- /components -->
+  <?!= $js('components/Loaders') ?>
+
+  <!-- /pages -->
+  <?!= $js('views/UserScores') ?>
+
+  <!-- /core -->
+  <?!= $js('core/eventListeners') ?>
+
+  <!-- / -->
+  <?!= $js('onload') ?>
+
+  <!-- /SCRIPT -->
+</html>

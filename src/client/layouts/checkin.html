@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inspire</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg-gradient: linear-gradient(135deg, #6a11cb, #2575fc);
+        --glass: rgba(255, 255, 255, 0.08);
+        --text: #ffffff;
+        --input-bg: rgba(255, 255, 255, 0.15);
+        --input-focus: rgba(255, 255, 255, 0.25);
+        --button-bg: #ffffff;
+        --button-text: #333;
+        --error: #ff6b6b;
+      }
+
+      @media (prefers-color-scheme: light) {
+        :root {
+          --bg-gradient: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+          --glass: rgba(255, 255, 255, 0.6);
+          --text: #222;
+          --input-bg: rgba(0, 0, 0, 0.05);
+          --input-focus: rgba(0, 0, 0, 0.1);
+          --button-bg: #222;
+          --button-text: #fff;
+        }
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Inter', sans-serif;
+      }
+
+      body {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg-gradient);
+        min-height: 100dvh; /*For iOS*/
+      }
+
+      .container {
+        position: relative;
+        width: 90%;
+        max-width: 400px;
+        padding: 40px 30px;
+        background: var(--glass);
+        border-radius: 20px;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        color: var(--text);
+        transition: opacity 0.3s ease;
+      }
+
+      /* cursor glow */
+      .container::before {
+        content: '';
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.25),
+          transparent 60%
+        );
+        opacity: 0;
+        top: var(--y);
+        left: var(--x);
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        transition: opacity 0.2s;
+      }
+
+      .container:hover::before {
+        opacity: 1;
+      }
+
+      h1 {
+        margin-bottom: 25px;
+      }
+
+      input {
+        width: 100%;
+        padding: 16px;
+        border-radius: 12px;
+        border: none;
+        outline: none;
+        margin-bottom: 15px;
+        background: var(--input-bg);
+        color: var(--text);
+        font-size: 16px;
+        line-height: 1.4;
+        -webkit-text-fill-color: var(--text);
+        opacity: 0.9;
+        transition: all 0.25s ease;
+      }
+
+      input:focus {
+        background: var(--input-focus);
+        transform: scale(1.03);
+      }
+
+      input.error {
+        box-shadow: 0 0 0 2px var(--error);
+        animation: shake 0.3s;
+      }
+
+      input::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      input:not(.error):valid {
+        box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.5);
+      }
+
+      @media (prefers-color-scheme: light) {
+        input::placeholder {
+          color: rgba(0, 0, 0, 0.4);
+        }
+      }
+
+      @keyframes shake {
+        0% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-4px);
+        }
+        50% {
+          transform: translateX(4px);
+        }
+        75% {
+          transform: translateX(-4px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
+
+      /* input loader */
+      .input-wrapper {
+        position: relative;
+      }
+
+      .input-spinner {
+        position: absolute;
+        right: 14px;
+        top: 20px;
+        width: 16px;
+        height: 16px;
+        border: 2px solid transparent;
+        border-top: 2px solid currentColor;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+      }
+
+      .input-wrapper.loading .input-spinner {
+        opacity: 1;
+      }
+
+      button {
+        width: 100%;
+        padding: 16px;
+        border-radius: 12px;
+        border: none;
+        background: var(--button-bg);
+        color: var(--button-text);
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all 0.25s ease;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      button:active {
+        transform: scale(0.97);
+      }
+
+      input:active {
+        transform: scale(1.01);
+      }
+
+      button:hover {
+        transform: translateY(-3px);
+      }
+
+      button.loading {
+        pointer-events: none;
+        opacity: 0.8;
+      }
+
+      .spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid transparent;
+        border-top: 2px solid currentColor;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .error-msg {
+        margin-top: 10px;
+        font-size: 0.9rem;
+        color: var(--error);
+        min-height: 18px;
+        transition: opacity 0.2s;
+      }
+
+      .success {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        animation: fadeIn 0.4s ease;
+      }
+
+      .check {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 2px solid #4ade80;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .check::after {
+        content: '✔';
+        color: #4ade80;
+        font-size: 28px;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <?!= body ?>
+  </body>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <script>
+    const inputWrapper = document.getElementById('inputWrapper');
+    const input = document.getElementById('input');
+    const btn = document.getElementById('btn');
+    const btnText = document.getElementById('btnText');
+    const error = document.getElementById('error');
+    const form = document.getElementById('form');
+    const success = document.getElementById('success');
+
+    // ✅ prevent going back to check-in page after login
+    window.history.replaceState(null, '', '/');
+
+    window.addEventListener('load', () => {
+      if (window.innerWidth < 768) return;
+      input.focus();
+
+      // ✅ hide button (auto-submit UX)
+      //btn.style.display = 'none';
+    });
+
+    input.addEventListener('focus', () => {
+      setTimeout(() => {
+        input.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+      }, 300);
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleSubmit();
+      }
+    });
+
+    let typingTimer;
+    const TYPING_DELAY = 600;
+
+    const formatTicket = (value) => {
+      return value
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, '')
+        .slice(0, 5);
+    };
+
+    const isValidTicket = (value) => {
+      return /^[a-z0-9]{5}$/.test(value);
+    };
+
+    input.addEventListener('input', () => {
+      clearTimeout(typingTimer);
+
+      const formatted = formatTicket(input.value);
+      input.value = formatted;
+
+      error.textContent = '';
+      input.classList.remove('error');
+
+      if (!formatted) return;
+      if (!isValidTicket(formatted)) return;
+
+      typingTimer = setTimeout(() => {
+        handleSubmit();
+      }, 300);
+    });
+
+    input.addEventListener('paste', () => {
+      setTimeout(() => {
+        const formatted = formatTicket(input.value);
+        input.value = formatted;
+
+        if (isValidTicket(formatted)) {
+          handleSubmit(true);
+        } else {
+          error.textContent = 'Código inválido ✨';
+          input.classList.add('error');
+        }
+      }, 0);
+    });
+
+    let isSubmitting = false;
+
+    // animated placeholder (unchanged)
+    const phrases = [
+      { text: 'Digite seu código de ingresso...', pause: 1200 },
+      { text: 'Cola seu ID do ticket aqui...', pause: 1000 },
+      { text: 'Pronto pra a Inspire?', pause: 1400 },
+      { text: 'Vamos fazer seu check-in ✨', pause: 1500 },
+    ];
+
+    let i = 0;
+    let j = 0;
+    let isDeleting = false;
+    let cursorVisible = true;
+    let isThinking = true;
+
+    const cursorBlinkSpeed = 500;
+
+    setInterval(() => {
+      cursorVisible = !cursorVisible;
+    }, cursorBlinkSpeed);
+
+    const type = () => {
+      const current = phrases[i].text;
+
+      if (isThinking) {
+        input.placeholder = cursorVisible ? '|' : '';
+        setTimeout(
+          () => {
+            isThinking = false;
+            type();
+          },
+          600 + Math.random() * 600,
+        );
+        return;
+      }
+
+      if (isDeleting) j--;
+      else j++;
+
+      const text = current.substring(0, j);
+      input.placeholder = cursorVisible ? text + '|' : text;
+
+      if (!isDeleting && j === current.length) {
+        isDeleting = true;
+        setTimeout(type, phrases[i].pause);
+        return;
+      }
+
+      if (isDeleting && j === 0) {
+        isDeleting = false;
+        i = (i + 1) % phrases.length;
+        isThinking = true;
+      }
+
+      const speed = isDeleting
+        ? 30 + Math.random() * 30
+        : 60 + Math.random() * 50;
+
+      setTimeout(type, speed);
+    };
+
+    type();
+
+    // qr scanner
+    let qrScanner;
+    let qrTimeout;
+    const startCameraBtn = document.getElementById('startCameraBtn');
+
+    const startQRScanner = () => {
+      startCameraBtn.style.display = 'none';
+      const qrRegionId = 'qrReader';
+
+      qrScanner = new Html5Qrcode(qrRegionId);
+
+      // ⏳ timeout fallback
+      qrTimeout = setTimeout(() => {
+        error.textContent =
+          'Não conseguiu escanear? Procure ajuda no evento ✨';
+      }, 15000);
+
+      qrScanner
+        .start(
+          { facingMode: 'environment' },
+          {
+            fps: 10,
+            qrbox: { width: 220, height: 220 },
+          },
+          async (decodedText) => {
+            clearTimeout(qrTimeout); // stop timeout on success
+            await handleQRScan(decodedText);
+          },
+          () => {},
+        )
+        .catch((err) => {
+          console.error(err);
+          error.textContent = 'Não foi possível acessar a câmera ✨';
+        });
+    };
+
+    const stopQRScanner = async () => {
+      clearTimeout(qrTimeout);
+
+      if (qrScanner) {
+        await qrScanner.stop();
+        qrScanner.clear();
+      }
+    };
+
+    const verifyQR = async (qrCode) => {
+      const res = await fetch('/api/verify-presence', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ qrCode }),
+      });
+
+      if (!res.ok) throw new Error('invalid');
+
+      return res.json();
+    };
+
+    const handleQRScan = async (qrCode) => {
+      try {
+        navigator.vibrate?.(50);
+        await stopQRScanner();
+
+        inputWrapper.classList.add('loading');
+
+        await verifyQR(qrCode);
+
+        document.body.style.opacity = '0.7';
+
+        setTimeout(() => {
+          alert('OK');
+          //goToApp();
+        }, 250);
+      } catch {
+        error.textContent = 'QR inválido — tente novamente ✨';
+        inputWrapper.classList.remove('loading');
+        startQRScanner(); // restart scanning
+      }
+    };
+    startCameraBtn.addEventListener('click', async () => {
+      try {
+        error.textContent = '';
+        startCameraBtn.disabled = true;
+
+        // 🔥 create scanner HERE (inside click)
+        const qrRegionId = 'qrReader';
+        qrScanner = new Html5Qrcode(qrRegionId);
+
+        qrTimeout = setTimeout(() => {
+          error.textContent =
+            'Não conseguiu escanear? Procure ajuda no evento ✨';
+        }, 15000);
+
+        await qrScanner.start(
+          { facingMode: 'environment' },
+          {
+            fps: 10,
+            qrbox: { width: 220, height: 220 },
+          },
+          async (decodedText) => {
+            clearTimeout(qrTimeout);
+            await handleQRScan(decodedText);
+          },
+          () => {},
+        );
+
+        startCameraBtn.style.display = 'none';
+      } catch (err) {
+        console.error(err);
+        error.textContent = err.message || 'Erro ao acessar câmera';
+        startCameraBtn.disabled = false;
+      }
+    });
+
+    // loader
+    const loadingMessages = [
+      'Verificando seu ingresso...',
+      'Validando seu acesso...',
+      'Quase lá...',
+      'Preparando sua entrada...',
+    ];
+
+    let loadingInterval;
+
+    const startLoading = () => {
+      inputWrapper.classList.add('loading');
+    };
+
+    const stopLoading = () => {
+      inputWrapper.classList.remove('loading');
+    };
+
+    // submission
+    const fakeRequest = () => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          // simulate random success/failure
+          Math.random() > 0.4 ? resolve() : reject();
+        }, 1800);
+      });
+    };
+
+    const verifyTicket = async (ticket) => {
+      const res = await fetch('/api/checkin', {
+        method: 'POST',
+        credentials: 'include', // ✅ important for httpOnly cookie
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ticket }),
+      });
+
+      if (!res.ok) throw new Error('invalid');
+
+      return res.json();
+    };
+
+    const goToApp = () => {
+      window.location.href = '/app';
+    };
+
+    const handleSubmit = async (fromPaste = false) => {
+      if (isSubmitting) return;
+
+      const value = formatTicket(input.value);
+      input.value = value;
+
+      error.textContent = '';
+      input.classList.remove('error');
+
+      if (!value) {
+        if (!fromPaste) {
+          error.textContent = 'Digite seu código de ingresso ✨';
+          input.classList.add('error');
+        }
+        return;
+      }
+
+      if (!isValidTicket(value)) {
+        error.textContent = 'O código deve ter 5 letras ou números ✨';
+        input.classList.add('error');
+        return;
+      }
+
+      isSubmitting = true;
+      input.blur();
+
+      startLoading();
+
+      try {
+        input.disabled = true;
+
+        await fakeRequest(value);
+        // await verifyTicket(value);
+
+        // transition to QR step
+        form.style.display = 'none';
+        const qrStep = document.getElementById('qrStep');
+
+        qrStep.style.display = 'flex';
+        qrStep.style.opacity = '0';
+
+        setTimeout(() => {
+          qrStep.style.opacity = '1';
+        }, 150);
+      } catch {
+        stopLoading();
+        isSubmitting = false;
+
+        error.textContent = 'Código inválido — tenta de novo ✨';
+
+        input.disabled = false;
+        input.focus();
+        input.classList.add('error');
+      }
+    };
+
+    const container = document.getElementById('container');
+
+    container.addEventListener('mousemove', (e) => {
+      const rect = container.getBoundingClientRect();
+      container.style.setProperty('--x', e.clientX - rect.left + 'px');
+      container.style.setProperty('--y', e.clientY - rect.top + 'px');
+    });
+  </script>
+</html>

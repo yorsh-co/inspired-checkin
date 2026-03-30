@@ -1,0 +1,12 @@
+# Easily accessible ignore folder
+.ignore/**
+
+# Ignore node_modules
+node_modules/**
+
+# Ignore VS Code config
+.vscode/**
+
+# Ignore Git config (optional)
+.git/**
+.gitignore

@@ -1,0 +1,26 @@
+button {
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  border: none;
+  background: var(--button-bg);
+  color: var(--button-text);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:hover {
+  transform: translateY(-3px);
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+button.loading {
+  pointer-events: none;
+  opacity: 0.8;
+}

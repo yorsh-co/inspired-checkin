@@ -1,9 +1,48 @@
-<!-- checkin.ejs -->
-<%- include('../layouts/main') %>
+<% styles = `
+<link rel="stylesheet" href="/css/pages/checkin.css" />
+`; scripts = `
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script type="module" src="/js/pages/checkin/index.js"></script>
+`; %>
 
-<div id="container" class="container">
-  <%- include('../components/checkin-form') %>
-  <%- include('../components/qr-step') %>
+<div data-checkin="checkin-container" class="container">
+  <div id="checkin-form">
+    <h1>inspire</h1>
+
+    <div data-checkin="input-wrapper" class="input-wrapper">
+      <input
+        id="checkin-ticket-input"
+        data-checkin="ticket-input"
+        type="text"
+        placeholder="Digite seu código de ingresso..."
+        inputmode="text"
+        pattern="[a-z0-9]{5}"
+        autocomplete="one-time-code"
+        autocorrect="on"
+        autocapitalize="sentences"
+        enterkeyhint="send"
+      />
+      <div class="input-spinner"></div>
+    </div>
+
+    <div data-checkin="error-div" class="error-msg"></div>
+  </div>
+
+  <div data-checkin="success" class="success">
+    <div class="check"></div>
+    <div>Check-in realizado ✨</div>
+  </div>
+
+  <!-- turn this into a component -->
+  <div data-checkin="qr-step" class="qr-step">
+    <h1>Confirme sua presença</h1>
+
+    <div id="qr-reader" class="qr-reader"></div>
+
+    <button data-checkin="start-camera-btn">Ativar câmera</button>
+
+    <div class="qr-hint">Aponte a câmera para o QR code no evento</div>
+  </div>
 </div>
 
-<script src="/js/pages/checkin.js"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>

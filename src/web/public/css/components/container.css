@@ -1,0 +1,40 @@
+body {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-gradient);
+  min-height: 100dvh;
+}
+
+.container {
+  position: relative;
+  width: 90%;
+  max-width: 400px;
+  padding: 40px 30px;
+  background: var(--glass);
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  transition: opacity 0.3s ease;
+}
+
+/* glow */
+.container::before {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255,255,255,0.25), transparent 60%);
+  opacity: 0;
+  top: var(--y);
+  left: var(--x);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.container:hover::before {
+  opacity: 1;
+}

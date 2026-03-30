@@ -503,20 +503,7 @@
       }
     };
 
-    const verifyQR = async (qrCode) => {
-      const res = await fetch('/api/verify-presence', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ qrCode }),
-      });
-
-      if (!res.ok) throw new Error('invalid');
-
-      return res.json();
-    };
+    
 
     const handleQRScan = async (qrCode) => {
       try {

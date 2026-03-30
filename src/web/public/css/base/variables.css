@@ -1,0 +1,22 @@
+:root {
+  --bg-gradient: linear-gradient(135deg, #6a11cb, #2575fc);
+  --glass: rgba(255, 255, 255, 0.08);
+  --text: #ffffff;
+  --input-bg: rgba(255, 255, 255, 0.15);
+  --input-focus: rgba(255, 255, 255, 0.25);
+  --button-bg: #ffffff;
+  --button-text: #333;
+  --error: #ff6b6b;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg-gradient: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    --glass: rgba(255, 255, 255, 0.6);
+    --text: #222;
+    --input-bg: rgba(0, 0, 0, 0.05);
+    --input-focus: rgba(0, 0, 0, 0.1);
+    --button-bg: #222;
+    --button-text: #fff;
+  }
+}

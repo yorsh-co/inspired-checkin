@@ -1,0 +1,15 @@
+.qr-step {
+  display: none;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.qr-reader {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.qr-hint {
+  font-size: 0.9rem; opacity: 0.8
+}

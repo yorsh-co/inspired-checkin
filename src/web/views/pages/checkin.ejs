@@ -1,42 +1,9 @@
+<!-- checkin.ejs -->
+<%- include('../layouts/main') %>
+
 <div id="container" class="container">
-  <div id="form">
-    <h1>inspire</h1>
-    <div class="input-wrapper" id="inputWrapper">
-      <input
-        id="input"
-        type="text"
-        placeholder="Digite seu código de ingresso..."
-        inputmode="text"
-        pattern="[a-z0-9]{5}"
-        autocomplete="one-time-code"
-        autocorrect="on"
-        autocapitalize="sentences"
-        enterkeyhint="send"
-      />
-      <div class="input-spinner"></div>
-    </div>
-    <!--
-          <button id="btn" onclick="handleSubmit()">
-            <span id="btnText">Fazer check-in</span>
-          </button>
-        -->
-    <div class="error-msg" id="error"></div>
-  </div>
-
-  <div class="success" id="success">
-    <div class="check"></div>
-    <div>Check-in realizado ✨</div>
-  </div>
-
-  <div id="qrStep" style="display: none; flex-direction: column; gap: 15px">
-    <h1>Confirme sua presença</h1>
-    <div
-      id="qrReader"
-      style="width: 100%; border-radius: 12px; overflow: hidden"
-    ></div>
-    <button id="startCameraBtn">Ativar câmera</button>
-    <div style="font-size: 0.9rem; opacity: 0.8">
-      Aponte a câmera para o QR code no evento
-    </div>
-  </div>
+  <%- include('../components/checkin-form') %>
+  <%- include('../components/qr-step') %>
 </div>
+
+<script src="/js/pages/checkin.js"></script>

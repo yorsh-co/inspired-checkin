@@ -11,6 +11,8 @@ export const setupQR = (qrReaderId, startCameraBtn, error, onScan) => {
       error.textContent = '';
       startCameraBtn.disabled = true;
 
+      // TODO: loading
+
       const scanner = new Html5Qrcode(qrReaderId);
 
       const timeout = setTimeout(() => {

@@ -3,6 +3,7 @@ import { handleSubmit } from './submit.js';
 import { startTyping } from './typing.js';
 import { handleQRScan } from './qr.js';
 import { setupQR } from '../../modules/qr.js';
+import { attachScrollOnResize } from '../../components/container/resize-scroll.js';
 
 const ticketInput = document.querySelector('[data-checkin="ticket-input"]');
 
@@ -31,8 +32,11 @@ setupQR(
   handleQRScan,
 );
 
-// cursor glow
+// resize scroll
 const container = document.querySelector('[data-checkin="checkin-container"]');
+attachScrollOnResize(container);
+
+// cursor glow
 container.addEventListener('mousemove', (e) => {
   const rect = container.getBoundingClientRect();
 

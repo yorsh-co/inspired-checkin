@@ -1,16 +1,17 @@
 /**
  *
+ * @param {string} qrReaderId
  * @param {HTMLButtonElement} startCameraBtn
  * @param {HTMLDivElement} error
  * @param {(qrText: string) => Promise<void>|void} onScan
  */
-export const setupQR = (startCameraBtn, error, onScan) => {
+export const setupQR = (qrReaderId, startCameraBtn, error, onScan) => {
   startCameraBtn.addEventListener('click', async () => {
     try {
       error.textContent = '';
       startCameraBtn.disabled = true;
 
-      const scanner = new Html5Qrcode('qrReader');
+      const scanner = new Html5Qrcode(qrReaderId);
 
       const timeout = setTimeout(() => {
         error.textContent =

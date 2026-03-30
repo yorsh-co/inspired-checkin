@@ -1,5 +1,6 @@
 import { formatTicket, isValidTicket } from './utils.js';
-import { clearError, showError } from './ui.js';
+import { clearError, showError } from '../../modules/ui.js';
+import { attachScrollOnFocus } from '../../components/input/focus-scroll.js';
 
 /**
  *
@@ -11,11 +12,12 @@ import { clearError, showError } from './ui.js';
 export const setupInput = ({ input, error, onSubmit }) => {
   let typingTimer;
 
-  input.addEventListener('focus', () => {
+  /*input.addEventListener('focus', () => {
     setTimeout(() => {
       input.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 300);
-  });
+  });*/
+  attachScrollOnFocus(input);
 
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {

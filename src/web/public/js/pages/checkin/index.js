@@ -25,6 +25,7 @@ setupInput({
 startTyping(ticketInput);
 
 setupQR(
+  'checkin-qr-reader',
   document.querySelector('[data-checkin="start-camera-btn"]'),
   document.querySelector('[data-checkin="error-div"]'),
   handleQRScan,

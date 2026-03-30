@@ -7,22 +7,21 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, './web/views'));
 
-/*app.use(expressLayouts);
+app.use(expressLayouts);
 app.set('layout', 'layouts/main');
 
-app.use(express.static('src/web/public'));*/
+app.use(express.static('src/web/public'));
 
-/*app.get('/', (req, res) => {
+app.get('/', (req, res) => {
   res.render('pages/checkin', {
     title: 'Check-in',
   });
-});*/
+});
 
-app.get('/', (req, res) => {
+/*app.get('/', (req, res) => {
   res.render('index', {
     title: 'Check-in',
   });
-});
-//app.use(express.static('public'))
+});*/
 
 app.listen(3000);

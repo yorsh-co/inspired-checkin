@@ -9,7 +9,7 @@
   "scripts": {
   "devStart": "node ./node_modules/concurrently/dist/bin/concurrently.js \"npm:dev:server\" \"npm:dev:tunnel\"",
   "dev:server": "node ./node_modules/nodemon/bin/nodemon.js server.js",
-  "dev:tunnel": "cloudflared tunnel --url http://localhost:3000 --loglevel info"
+  "dev:tunnel": "cloudflared tunnel --url http://localhost:3000 --loglevel info 2>&1 | grep --line-buffered -o 'https://[-a-zA-Z0-9\\.]*trycloudflare.com'"
 },
   "devDependencies": {
     "concurrently": "^9.2.1",

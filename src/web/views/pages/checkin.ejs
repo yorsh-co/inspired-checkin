@@ -37,11 +37,18 @@
   <div data-checkin="qr-step" class="qr-step">
     <h1>Confirme sua presença</h1>
 
-    <div id="checkin-qr-reader" class="qr-reader"></div>
+    <div class="qr-reader-wrapper">
+      <div id="checkin-qr-reader" class="qr-reader"></div>
+      <div class="div-spinner"></div>
+    </div>
 
-    <button data-checkin="start-camera-btn">Ativar câmera</button>
+    <button data-checkin="start-camera-btn">
+      <!--<span class="material-symbols-outlined btn-label"> qr_code_scanner </span>-->
+      <span class="btn-label">Ativar câmera</span>
+      <span class="btn-spinner"></span>
+    </button>
 
-    <div class="qr-hint">Aponte a câmera para o QR code no evento</div>
+    <div data-checkin="hint-div" class="qr-hint"></div>
   </div>
 </div>
 

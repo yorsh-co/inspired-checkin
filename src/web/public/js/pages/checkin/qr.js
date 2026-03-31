@@ -5,6 +5,7 @@
 export const handleQRScan = async (qrCode) => {
   try {
     console.log('qr code scan', qrCode);
+    alert(qrCode);
 
     navigator.vibrate?.(50);
 

@@ -8,6 +8,10 @@ button {
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   transition: all 0.25s ease;
   -webkit-tap-highlight-color: transparent;
 }
@@ -20,7 +24,26 @@ button:active {
   transform: scale(0.97);
 }
 
-button.loading {
+/* spinner */
+.btn-spinner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+/* loading state */
+button.loading .btn-spinner {
   pointer-events: none;
-  opacity: 0.8;
+  opacity: 1;
+}
+
+button.loading .btn-label {
+  opacity: 0;
 }

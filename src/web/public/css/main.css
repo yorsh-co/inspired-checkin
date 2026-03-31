@@ -1,8 +1,10 @@
 @import './base/reset.css';
 @import './base/variables.css';
 @import './base/typography.css';
+@import './base/elements.css';
 
 @import './components/container.css';
+@import './components/div.css';
 @import './components/form.css';
 @import './components/button.css';
 @import './components/feedback.css';

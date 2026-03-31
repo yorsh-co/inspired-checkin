@@ -6,6 +6,15 @@
   transition: opacity 0.2s;
 }
 
+div.error {
+  /*box-shadow: 0 0 0 2px var(--error);*/
+  margin-top: 10px;
+  color: var(--error);
+  min-height: 18px;
+  transition: opacity 0.2s;
+  animation: shake 0.3s;
+}
+
 .success {
   display: none;
   flex-direction: column;

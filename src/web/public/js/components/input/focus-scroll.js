@@ -18,6 +18,6 @@ export const attachScrollOnBlur = (input) => {
   input.addEventListener('blur', () => {
     setTimeout(() => {
       input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 300);
+    }, 500);
   });
 };

@@ -1,5 +1,5 @@
 import { setupInput } from './input.js';
-import { handleTicketNumber } from './submit.js';
+import { handleTicketNumber } from './ticket.js';
 import { startTyping } from './typing.js';
 import { verifyEventQR } from './qr.js';
 import { setupQR } from '../../modules/qr.js';

@@ -3,7 +3,7 @@ import {
   startLoading,
   stopLoading,
   showError,
-  transitionToQR,
+  transitionToQR
 } from '../../modules/ui.js';
 
 let isSubmitting = false;
@@ -13,8 +13,8 @@ const fakeRequest = () =>
     (res, rej) =>
       setTimeout(
         () => (/*Math.random() > 0.4*/ true ? res(200) : rej(500)),
-        1800,
-      ), // FIXME:
+        1800
+      ) // FIXME:
   );
 
 /**
@@ -68,7 +68,7 @@ export const handleSubmit = async (fromPaste = false) => {
     // if the ticket is invalid, return to the input
     transitionToQR(
       document.querySelector('[data-checkin="checkin-form"]'),
-      document.querySelector('[data-checkin="qr-step"]'),
+      document.querySelector('[data-checkin="qr-step"]')
     );
   } catch (err) {
     console.error(err);

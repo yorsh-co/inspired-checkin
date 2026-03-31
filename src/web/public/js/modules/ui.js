@@ -3,16 +3,16 @@ export const showError = (el, msg) => {
   el.classList.add('error');
 };
 
-export const clearError = (el) => {
+export const clearError = el => {
   el.textContent = '';
   el.classList.remove('error');
 };
 
-export const startLoading = (wrapper) => {
+export const startLoading = wrapper => {
   wrapper.classList.add('loading');
 };
 
-export const stopLoading = (wrapper) => {
+export const stopLoading = wrapper => {
   wrapper.classList.remove('loading');
 };
 
@@ -24,10 +24,12 @@ export const stopLoading = (wrapper) => {
 export const transitionToQR = (form, qrStep) => {
   form.style.display = 'none';
 
-  qrStep.style.display = 'flex';
+  qrStep.classList.add('open');
+
+  /*qrStep.style.display = 'flex';
   qrStep.style.opacity = '0';
 
   setTimeout(() => {
     qrStep.style.opacity = '1';
-  }, 150);
+  }, 150);*/
 };

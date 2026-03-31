@@ -9,18 +9,19 @@ import * as ui from './ui.js';
  */
 export const setupQR = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
   startCameraBtn.addEventListener('click', async () => {
-    ui.showHint(
+    /*ui.showHint(
       hintDiv,
-      'Use o QR code da Inspire para confirmar o check-in 🆗',
-    );
+      'Use o QR code da Inspire para confirmar que você chegou 📍',
+    );*/
     const qrReader = document.getElementById(qrReaderId);
     const qrWrapper = qrReader.closest('.qr-reader-wrapper');
+    let helpTimeout;
 
     try {
       // update ui
       const permissionTimeout = setTimeout(() => {
-        ui.showHint(hintDiv, '👉 Permita o acesso à câmera para continuar');
-      }, 2000);
+        ui.showHint(hintDiv, '👉 Libera acesso à câmera pra continuar');
+      }, 3000);
 
       startCameraBtn.disabled = true;
 
@@ -36,16 +37,12 @@ export const setupQR = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
       ui.hide(startCameraBtn);
 
       // set help timeout
-      let helpTimeout;
-      const startHelpTimeout = (delay = 30000) => {
+      const startHelpTimeout = (delay = 20000) => {
         clearTimeout(helpTimeout);
 
         helpTimeout = setTimeout(() => {
           console.error('qr scan timeout');
-          ui.showError(
-            hintDiv,
-            'Se o QR code não for reconhecido, procure ajuda no evento ✨',
-          );
+          ui.showError(hintDiv, 'Se não funcionar, chama um voluntário ✨');
         }, delay);
       };
       startHelpTimeout();
@@ -68,10 +65,10 @@ export const setupQR = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
           clearTimeout(helpTimeout);
 
           // show loading
-          ui.showHint(hintDiv, 'Processando o QR code… 🔎');
+          ui.showHint(hintDiv, 'Lendo o QR code... 🔎');
           setTimeout(() => {
             if (isProcessing) {
-              ui.showHint(hintDiv, 'Isso pode levar alguns segundos… ⌛');
+              ui.showHint(hintDiv, 'Isso pode levar uns segundinhos... ⌛');
             }
           }, 2000);
 
@@ -86,10 +83,10 @@ export const setupQR = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
             hintDiv,
             /*err.code === 'INVALID_QR'
               ? 'Este QR code não é válido para este evento'
-              :*/ 'Não foi possível ler este QR code ⚠️ Tente novamente ou use outro código',
+              :*/ 'Ops! Não deu pra ler esse QR 😕 Tenta de novo ou usa outro',
           );
 
-          startHelpTimeout(5000);
+          startHelpTimeout(10000);
         } finally {
           // display the scanner again
           qrReader.style.opacity = 1;
@@ -108,7 +105,7 @@ export const setupQR = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
       clearTimeout(permissionTimeout);
       ui.showHint(
         hintDiv,
-        'Aponte a câmera para o QR code disponível na recepção do evento 🤳',
+        'Aponte a câmera pro QR code que está na recepção da Inspire 🤳',
       );
 
       await waitForVideoReady(qrReader);
@@ -117,6 +114,7 @@ export const setupQR = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
       console.log('qr scanner started');
     } catch (err) {
       console.error(err);
+      clearTimeout(helpTimeout);
       ui.showError(
         hintDiv,
         'Não foi possível acessar a câmera 📷 Verifique as permissões e tente novamente',

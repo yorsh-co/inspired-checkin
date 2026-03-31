@@ -1,5 +1,5 @@
 import { formatTicket, isValidTicket } from './utils.js';
-import { clear, clearError, showError } from '../../modules/ui.js';
+import * as ui from '../../modules/ui.js';
 import {
   attachScrollOnFocus,
   attachScrollOnBlur,
@@ -26,7 +26,7 @@ export const setupInput = ({ input, hintDiv, onSubmit }) => {
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      clearError(hintDiv);
+      ui.clearError(hintDiv);
       onSubmit();
     }
   });
@@ -40,7 +40,7 @@ export const setupInput = ({ input, hintDiv, onSubmit }) => {
     input.value = formatted;
 
     /*if (formatted !== lastValue) {
-      clearError(hintDiv);
+      ui.clearError(hintDiv);
     }
 
     lastValue = formatted;*/
@@ -54,12 +54,12 @@ export const setupInput = ({ input, hintDiv, onSubmit }) => {
     setTimeout(() => {
       const formatted = formatTicket(input.value);
       input.value = formatted;
-      clearError(hintDiv);
+      ui.clearError(hintDiv);
 
       if (isValidTicket(formatted)) {
         onSubmit(true);
       } else {
-        showError(hintDiv, 'Código inválido ✨');
+        ui.showError(hintDiv, 'Código inválido 😕');
       }
     }, 0);
   });

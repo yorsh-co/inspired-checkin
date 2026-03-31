@@ -34,14 +34,14 @@ export const handleTicketNumber = async (fromPaste = false) => {
   if (!value) {
     if (!fromPaste) {
       console.error('input is empty');
-      ui.showError(hintDiv, 'Digite seu código de ingresso ✨');
+      ui.showError(hintDiv, 'Coloca seu código de ingresso ✨');
     }
     return;
   }
 
   if (!isValidTicket(value)) {
     console.error('input is invalid');
-    ui.showError(hintDiv, 'O código deve ter 5 letras ou números ✨');
+    ui.showError(hintDiv, 'O código precisa ter 5 letras ou números ✨');
     return;
   }
   console.log('input is valid');
@@ -68,7 +68,7 @@ export const handleTicketNumber = async (fromPaste = false) => {
     if (res === 309) {
       // TODO: if the ticket is valid, prompt for qr validation
       ui.showHint(hintDiv, 'Ingresso ok! Agora escaneia o QR code 📷');
-      await utils.sleep(1500);
+      await utils.sleep(1000);
 
       ui.transitionToQR(
         document.querySelector('[data-checkin="checkin-form"]'),
@@ -76,10 +76,11 @@ export const handleTicketNumber = async (fromPaste = false) => {
       );
     } else if (res === 200) {
       // TODO: go to the app
-      ui.showHint(hintDiv, 'Entrada liberada! Aproveita 🎉');
+      ui.showHint(hintDiv, 'Tudo certo! Pode entrar 🎉');
       await utils.sleep(1500);
     } else {
       // TODO: if the ticket is invalid, return to the input
+      ui.showError(hintDiv, 'Código inválido 😕 Tenta de novo');
       throw new Error('Invalid');
     }
   } catch (err) {
@@ -88,7 +89,7 @@ export const handleTicketNumber = async (fromPaste = false) => {
     ui.stopLoading(inputWrapper);
     isSubmitting = false;
 
-    ui.showError(hintDiv, 'Código inválido — tenta de novo ✨');
+    ui.showError(hintDiv, 'Código inválido 😕 Tenta de novo'); // FIXME: error-specific messages
 
     input.disabled = false;
     input.focus();

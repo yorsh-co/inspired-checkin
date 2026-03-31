@@ -41,7 +41,7 @@ export const handleTicketNumber = async (fromPaste = false) => {
 
   if (!isValidTicket(value)) {
     console.error('input is invalid');
-    ui.showError(hintDiv, 'O código precisa ter 5 letras ou números ✨');
+    ui.showError(hintDiv, 'O código precisa ter 5️⃣ letras ou números');
     return;
   }
   console.log('input is valid');

@@ -57,6 +57,7 @@
 
 .qr-reader video {
   animation: fadeIn 0.4s ease;
+  transition: opacity 0.4s ease;
 }
 
 /* override Html5Qrcode */

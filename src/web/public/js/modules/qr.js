@@ -37,12 +37,38 @@ export const setupQR = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
         );
       }, 20000);
 
+      let isProcessing = false;
+      let lastScanTime = 0;
+
       await scanner.start(
         { facingMode: 'environment' },
         { fps: 10, qrbox: { width: 220, height: 220 } },
         async (decodedText) => {
-          clearTimeout(timeout);
-          await onScan(decodedText);
+          const now = Date.now();
+          if (now - lastScanTime < 1500) return;
+          if (isProcessing) return;
+
+          lastScanTime = now;
+          isProcessing = true;
+          console.log('qr code scanned');
+
+          try {
+            clearTimeout(timeout);
+
+            ui.startLoading(qrWrapper);
+            qrReader.style.opacity = 0;
+
+            // FIXME: handle errors or invalid QR code
+            await onScan(decodedText);
+          } catch (err) {
+            console.error(err);
+            ui.showError(hintDiv, 'Erro ao processar o QR code');
+
+            qrReader.style.opacity = 1;
+          } finally {
+            ui.stopLoading(qrWrapper);
+            isProcessing = false;
+          }
         },
       );
 

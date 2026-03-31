@@ -4,23 +4,22 @@
  */
 export const handleQRScan = async (qrCode) => {
   try {
-    console.log('qr code scan', qrCode);
-    alert(qrCode);
+    //alert(qrCode);
 
     navigator.vibrate?.(50);
 
-    inputWrapper.classList.add('loading');
+    //inputWrapper.classList.add('loading');
 
     await verifyQR(qrCode);
 
-    document.body.style.opacity = '0.7';
+    //document.body.style.opacity = '0.7';
 
     setTimeout(() => {
       alert('OK');
       // TODO: goToApp();
     }, 250);
   } catch {
-    error.textContent = 'QR inválido — tente novamente ✨';
+    //error.textContent = 'QR inválido — tente novamente ✨';
     inputWrapper.classList.remove('loading');
     startQRScanner(); // restart scanning
   }

@@ -1,25 +1,30 @@
-export const showError = (el, msg) => {
+import * as animate from './animations.js';
+
+export const showError = async (el, msg) => {
+  el.classList.remove('hint');
   el.textContent = msg;
+  animate.shake(el);
   el.classList.add('error');
 };
 
-export const clearError = (el) => {
+export const clearError = async (el) => {
   el.textContent = '';
   el.classList.remove('error');
 };
 
-export const showHint = (el, msg) => {
+export const showHint = async (el, msg) => {
   if (el.textContent === msg && el.classList.contains('hint')) return;
   el.classList.add('changing');
 
   setTimeout(() => {
+    el.classList.remove('error');
     el.textContent = msg;
     el.classList.add('hint');
     el.classList.remove('changing');
   }, 120);
 };
 
-export const clearHint = (el) => {
+export const clearHint = async (el) => {
   el.classList.add('changing');
 
   setTimeout(() => {
@@ -29,7 +34,7 @@ export const clearHint = (el) => {
   }, 120);
 };
 
-export const clear = (el) => {
+export const clear = async (el) => {
   el.classList.add('changing');
 
   setTimeout(() => {
@@ -39,12 +44,12 @@ export const clear = (el) => {
   }, 120);
 };
 
-export const startLoading = (wrapper) => {
+export const startLoading = async (wrapper) => {
   wrapper.classList.add('loading');
   wrapper.disabled = true;
 };
 
-export const stopLoading = (wrapper) => {
+export const stopLoading = async (wrapper) => {
   wrapper.classList.remove('loading');
   wrapper.disabled = false;
 };

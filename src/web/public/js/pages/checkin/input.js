@@ -31,7 +31,7 @@ export const setupInput = ({ input, hintDiv, onSubmit }) => {
     }
   });
 
-  let lastValue = '';
+  //let lastValue = '';
 
   input.addEventListener('input', () => {
     clearTimeout(typingTimer);
@@ -39,11 +39,11 @@ export const setupInput = ({ input, hintDiv, onSubmit }) => {
     const formatted = formatTicket(input.value);
     input.value = formatted;
 
-    if (formatted !== lastValue) {
+    /*if (formatted !== lastValue) {
       clearError(hintDiv);
     }
 
-    lastValue = formatted;
+    lastValue = formatted;*/
 
     if (!isValidTicket(formatted)) return;
 

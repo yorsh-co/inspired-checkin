@@ -7,8 +7,8 @@ const fakeRequest = () =>
     (res, rej) =>
       setTimeout(
         () => (/*Math.random() > 0.4*/ true ? res(309) : rej(500)),
-        1800,
-      ), // FIXME:
+        1800
+      ) // FIXME:
   );
 
 let isSubmitting = false;
@@ -41,7 +41,7 @@ export const handleTicketNumber = async (fromPaste = false) => {
 
   if (!isValidTicket(value)) {
     console.error('input is invalid');
-    ui.showError(hintDiv, 'O código precisa ter 5️⃣ letras ou números');
+    ui.showError(hintDiv, 'O código precisa ter 5 letras ou números');
     return;
   }
   console.log('input is valid');
@@ -72,7 +72,7 @@ export const handleTicketNumber = async (fromPaste = false) => {
 
       ui.transitionToQR(
         document.querySelector('[data-checkin="checkin-form"]'),
-        document.querySelector('[data-checkin="qr-step"]'),
+        document.querySelector('[data-checkin="qr-step"]')
       );
     } else if (res === 200) {
       // TODO: go to the app

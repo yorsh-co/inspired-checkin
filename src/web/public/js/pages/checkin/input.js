@@ -2,7 +2,7 @@ import { formatTicket, isValidTicket } from './utils.js';
 import * as ui from '../../modules/ui.js';
 import {
   attachScrollOnFocus,
-  attachScrollOnBlur,
+  attachScrollOnBlur
 } from '../../components/input/focus-scroll.js';
 
 /**
@@ -23,7 +23,7 @@ export const setupInput = ({ input, hintDiv, onSubmit }) => {
   attachScrollOnFocus(input);
   attachScrollOnBlur(input);
 
-  input.addEventListener('keydown', (e) => {
+  input.addEventListener('keydown', e => {
     if (e.key === 'Enter') {
       e.preventDefault();
       ui.clearError(hintDiv);

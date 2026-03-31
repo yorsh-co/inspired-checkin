@@ -2,8 +2,6 @@ import { formatTicket, isValidTicket } from './utils.js';
 import * as ui from '../../modules/ui.js';
 import * as utils from '../../modules/utils.js';
 
-let isSubmitting = false;
-
 const fakeRequest = () =>
   new Promise(
     (res, rej) =>
@@ -12,6 +10,8 @@ const fakeRequest = () =>
         1800,
       ), // FIXME:
   );
+
+let isSubmitting = false;
 
 /**
  *
@@ -22,6 +22,7 @@ export const handleTicketNumber = async (fromPaste = false) => {
   if (isSubmitting) return;
   console.log('form submitted');
 
+  // validate input
   const input = document.querySelector('[data-checkin="ticket-input"]');
   const value = formatTicket(input.value);
   input.value = value;
@@ -45,6 +46,7 @@ export const handleTicketNumber = async (fromPaste = false) => {
   }
   console.log('input is valid');
 
+  // submit input
   isSubmitting = true;
   ui.clear(hintDiv);
   ui.showHint(hintDiv, 'Validando seu ingresso... ⏳');
@@ -55,12 +57,14 @@ export const handleTicketNumber = async (fromPaste = false) => {
 
   try {
     input.disabled = true;
-
     console.log('submitting to server');
+
+    // validate ticket number with the server
     const res = await fakeRequest(); // TODO:
     console.log(res);
     ui.clear(hintDiv);
 
+    // handle server response
     if (res === 309) {
       // TODO: if the ticket is valid, prompt for qr validation
       ui.showHint(hintDiv, 'Ingresso ok! Agora escaneia o QR code 📷');

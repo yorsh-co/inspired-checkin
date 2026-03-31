@@ -1,36 +1,13 @@
-/**
- *
- * @param {string} qrCode
- */
-export const handleQRScan = async (qrCode) => {
-  try {
-    //alert(qrCode);
-
-    navigator.vibrate?.(50);
-
-    //inputWrapper.classList.add('loading');
-
-    await verifyQR(qrCode);
-
-    //document.body.style.opacity = '0.7';
-
-    setTimeout(() => {
-      alert('OK');
-      // TODO: goToApp();
-    }, 250);
-  } catch {
-    //error.textContent = 'QR inválido — tente novamente ✨';
-    inputWrapper.classList.remove('loading');
-    startQRScanner(); // restart scanning
-  }
-};
+import * as utils from '../../modules/utils.js';
 
 /**
  * TODO:
  * @param {} qrCode
  * @returns
  */
-const verifyQR = async (qrCode) => {
+export const verifyEventQR = async (qrCode) => {
+  await utils.sleep(3000);
+
   const res = await fetch('/api/verify-presence', {
     method: 'POST',
     credentials: 'include',

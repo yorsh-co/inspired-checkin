@@ -1,5 +1,5 @@
 import { formatTicket, isValidTicket } from './utils.js';
-import { clearError, showError } from '../../modules/ui.js';
+import { clear, clearError, showError } from '../../modules/ui.js';
 import {
   attachScrollOnFocus,
   attachScrollOnBlur,
@@ -9,10 +9,10 @@ import {
  *
  * @param {params} params
  * @param {HTMLInputElement} params.input
- * @param {HTMLDivElement} params.error
+ * @param {HTMLDivElement} params.hintDiv
  * @param {(fromPaste?: boolean) => Promise<void>|void} params.onSubmit
  */
-export const setupInput = ({ input, error, onSubmit }) => {
+export const setupInput = ({ input, hintDiv, onSubmit }) => {
   let typingTimer;
 
   /*input.addEventListener('focus', () => {
@@ -26,9 +26,12 @@ export const setupInput = ({ input, error, onSubmit }) => {
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
+      clearError(hintDiv);
       onSubmit();
     }
   });
+
+  let lastValue = '';
 
   input.addEventListener('input', () => {
     clearTimeout(typingTimer);
@@ -36,7 +39,11 @@ export const setupInput = ({ input, error, onSubmit }) => {
     const formatted = formatTicket(input.value);
     input.value = formatted;
 
-    clearError(error);
+    if (formatted !== lastValue) {
+      clearError(hintDiv);
+    }
+
+    lastValue = formatted;
 
     if (!isValidTicket(formatted)) return;
 
@@ -47,11 +54,12 @@ export const setupInput = ({ input, error, onSubmit }) => {
     setTimeout(() => {
       const formatted = formatTicket(input.value);
       input.value = formatted;
+      clearError(hintDiv);
 
       if (isValidTicket(formatted)) {
         onSubmit(true);
       } else {
-        showError(error, 'Código inválido ✨');
+        showError(hintDiv, 'Código inválido ✨');
       }
     }, 0);
   });

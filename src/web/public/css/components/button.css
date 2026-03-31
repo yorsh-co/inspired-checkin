@@ -11,6 +11,7 @@ button {
   position: relative;
   display: inline-flex;
   align-items: center;
+  gap: 5px;
   justify-content: center;
   transition: all 0.25s ease;
   -webkit-tap-highlight-color: transparent;

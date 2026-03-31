@@ -1,7 +1,7 @@
 import { setupInput } from './input.js';
-import { handleSubmit } from './submit.js';
+import { handleTicketNumber } from './submit.js';
 import { startTyping } from './typing.js';
-import { handleQRScan } from './qr.js';
+import { verifyEventQR } from './qr.js';
 import { setupQR } from '../../modules/qr.js';
 import { attachScrollOnResize } from '../../components/container/resize-scroll.js';
 
@@ -19,8 +19,8 @@ window.addEventListener('load', () => {
 // modules
 setupInput({
   input: ticketInput,
-  error: document.querySelector('[data-checkin="error-div"]'),
-  onSubmit: handleSubmit,
+  hintDiv: document.querySelector('[data-checkin="form-hint-div"]'),
+  onSubmit: handleTicketNumber,
 });
 
 startTyping(ticketInput);
@@ -28,8 +28,8 @@ startTyping(ticketInput);
 setupQR(
   'checkin-qr-reader',
   document.querySelector('[data-checkin="start-camera-btn"]'),
-  document.querySelector('[data-checkin="hint-div"]'),
-  handleQRScan,
+  document.querySelector('[data-checkin="qr-hint-div"]'),
+  verifyEventQR,
 );
 
 // resize scroll

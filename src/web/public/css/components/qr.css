@@ -45,7 +45,7 @@
 
   transition:
     max-height 0.3s ease,
-    opacity 0.4s ease;
+    opacity 0.1s ease;
 }
 
 .qr-reader.open {

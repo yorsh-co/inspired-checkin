@@ -1,10 +1,6 @@
 import { formatTicket, isValidTicket } from './utils.js';
-import {
-  startLoading,
-  stopLoading,
-  showError,
-  transitionToQR
-} from '../../modules/ui.js';
+import * as ui from '../../modules/ui.js';
+import * as utils from '../../modules/utils.js';
 
 let isSubmitting = false;
 
@@ -12,9 +8,9 @@ const fakeRequest = () =>
   new Promise(
     (res, rej) =>
       setTimeout(
-        () => (/*Math.random() > 0.4*/ true ? res(200) : rej(500)),
-        1800
-      ) // FIXME:
+        () => (/*Math.random() > 0.4*/ true ? res(309) : rej(500)),
+        1800,
+      ), // FIXME:
   );
 
 /**
@@ -22,7 +18,7 @@ const fakeRequest = () =>
  * @param {boolean} fromPaste
  * @returns
  */
-export const handleSubmit = async (fromPaste = false) => {
+export const handleTicketNumber = async (fromPaste = false) => {
   if (isSubmitting) return;
   console.log('form submitted');
 
@@ -31,52 +27,64 @@ export const handleSubmit = async (fromPaste = false) => {
   input.value = value;
   console.log('ticket', input.value);
 
-  const errorDiv = document.querySelector('[data-checkin="error-div"]');
-  errorDiv.textContent = '';
+  const hintDiv = document.querySelector('[data-checkin="form-hint-div"]');
   input.classList.remove('error');
 
   if (!value) {
     if (!fromPaste) {
       console.error('input is empty');
-      showError(errorDiv, 'Digite seu código de ingresso ✨');
+      ui.showError(hintDiv, 'Digite seu código de ingresso ✨');
     }
     return;
   }
 
   if (!isValidTicket(value)) {
     console.error('input is invalid');
-    showError(errorDiv, 'O código deve ter 5 letras ou números ✨');
+    ui.showError(hintDiv, 'O código deve ter 5 letras ou números ✨');
     return;
   }
   console.log('input is valid');
 
   isSubmitting = true;
+  ui.clear(hintDiv);
+  ui.showHint(hintDiv, 'Validando seu ingresso... ⏳');
   input.blur();
 
   const inputWrapper = document.querySelector('[data-checkin="input-wrapper"]');
-  startLoading(inputWrapper);
+  ui.startLoading(inputWrapper);
 
   try {
     input.disabled = true;
 
     console.log('submitting to server');
     const res = await fakeRequest(); // TODO:
-
     console.log(res);
+    ui.clear(hintDiv);
 
-    // TODO: if the ticket is valid, prompt for qr validation
-    // if the ticket is invalid, return to the input
-    transitionToQR(
-      document.querySelector('[data-checkin="checkin-form"]'),
-      document.querySelector('[data-checkin="qr-step"]')
-    );
+    if (res === 309) {
+      // TODO: if the ticket is valid, prompt for qr validation
+      ui.showHint(hintDiv, 'Ingresso ok! Agora escaneia o QR code 📷');
+      await utils.sleep(1500);
+
+      ui.transitionToQR(
+        document.querySelector('[data-checkin="checkin-form"]'),
+        document.querySelector('[data-checkin="qr-step"]'),
+      );
+    } else if (res === 200) {
+      // TODO: go to the app
+      ui.showHint(hintDiv, 'Entrada liberada! Aproveita 🎉');
+      await utils.sleep(1500);
+    } else {
+      // TODO: if the ticket is invalid, return to the input
+      throw new Error('Invalid');
+    }
   } catch (err) {
     console.error(err);
 
-    stopLoading(inputWrapper);
+    ui.stopLoading(inputWrapper);
     isSubmitting = false;
 
-    showError(errorDiv, 'Código inválido — tenta de novo ✨');
+    ui.showError(hintDiv, 'Código inválido — tenta de novo ✨');
 
     input.disabled = false;
     input.focus();

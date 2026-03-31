@@ -9,13 +9,34 @@ export const clearError = (el) => {
 };
 
 export const showHint = (el, msg) => {
-  el.textContent = msg;
-  el.classList.add('hint');
+  if (el.textContent === msg && el.classList.contains('hint')) return;
+  el.classList.add('changing');
+
+  setTimeout(() => {
+    el.textContent = msg;
+    el.classList.add('hint');
+    el.classList.remove('changing');
+  }, 120);
 };
 
 export const clearHint = (el) => {
-  el.textContent = '';
-  el.classList.remove('hint');
+  el.classList.add('changing');
+
+  setTimeout(() => {
+    el.textContent = '';
+    el.classList.remove('hint');
+    el.classList.remove('changing');
+  }, 120);
+};
+
+export const clear = (el) => {
+  el.classList.add('changing');
+
+  setTimeout(() => {
+    el.textContent = '';
+    el.classList.remove('hint', 'error');
+    el.classList.remove('changing');
+  }, 120);
 };
 
 export const startLoading = (wrapper) => {
@@ -38,10 +59,10 @@ export const show = (el) => {
 
 /**
  *
- * @param {HTMLDivElement} form
+ * @param {HTMLDivElement} oldEl
  * @param {HTMLDivElement} qrStep
  */
-export const transitionToQR = (form, qrStep) => {
-  form.style.display = 'none';
+export const transitionToQR = (oldEl, qrStep) => {
+  oldEl.style.display = 'none';
   qrStep.classList.add('open');
 };

@@ -21,7 +21,7 @@ let isSubmitting = false;
  */
 export const handleTicketNumber = async (fromPaste = false) => {
   if (isSubmitting) return;
-  console.log('form submitted');
+  console.log('ticket submitted');
 
   // validate input
   const input = document.querySelector('[data-checkin="ticket-input"]');

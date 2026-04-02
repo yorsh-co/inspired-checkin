@@ -1,7 +1,7 @@
 import { formatTicket, isValidTicket } from './utils.js';
 import * as ui from '../../modules/ui.js';
 import * as utils from '../../modules/utils.js';
-import { runSuccessFlow } from './success';
+import { runSuccessFlow } from './success.js';
 
 const fakeRequest = () =>
   new Promise(

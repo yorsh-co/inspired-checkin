@@ -1,14 +1,15 @@
 import { formatTicket, isValidTicket } from './utils.js';
 import * as ui from '../../modules/ui.js';
 import * as utils from '../../modules/utils.js';
+import { runSuccessFlow } from './success';
 
 const fakeRequest = () =>
   new Promise(
     (res, rej) =>
       setTimeout(
         () => (/*Math.random() > 0.4*/ true ? res(200) : rej(500)),
-        1800,
-      ), // FIXME:
+        1800
+      ) // FIXME:
   );
 
 let isSubmitting = false;
@@ -72,7 +73,7 @@ export const handleTicketNumber = async (fromPaste = false) => {
 
       ui.transitionToQR(
         document.querySelector('[data-checkin="form"]'),
-        document.querySelector('[data-checkin="qr-step"]'),
+        document.querySelector('[data-checkin="qr-step"]')
       );
     } else if (res === 200) {
       // go to the app
@@ -80,13 +81,15 @@ export const handleTicketNumber = async (fromPaste = false) => {
 
       await utils.sleep(800);
 
+      runSuccessFlow(document.querySelector('[data-checkin="form"]'));
+      /*
       ui.transitionToSuccess(
         document.querySelector('[data-checkin="form"]'),
-        document.querySelector('[data-checkin="success"]'),
+        document.querySelector('[data-checkin="success"]')
       );
 
       const successMessage = document.querySelector(
-        '[data-checkin="success-message"]',
+        '[data-checkin="success-message"]'
       );
       //successMessage.textContent = 'Check-in feito! ✨';
       ui.change(successMessage, 'Check-in feito! ✨');
@@ -100,6 +103,7 @@ export const handleTicketNumber = async (fromPaste = false) => {
       console.log('redirecting to app...');
 
       window.location.href = '/';
+*/
     } else {
       // TODO: if the ticket is invalid, return to the input
       ui.showError(hintDiv, 'Código inválido 😕 Tenta de novo');

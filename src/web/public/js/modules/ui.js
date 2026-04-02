@@ -44,6 +44,18 @@ export const clear = async (el) => {
   }, 120);
 };
 
+export const change = async (el, msg) => {
+  el.classList.add('changing');
+
+  setTimeout(() => {
+    el.textContent = msg;
+
+    requestAnimationFrame(() => {
+      el.classList.remove('changing');
+    });
+  }, 120);
+};
+
 export const startLoading = async (wrapper) => {
   wrapper.classList.add('loading');
   wrapper.disabled = true;
@@ -70,4 +82,14 @@ export const show = (el) => {
 export const transitionToQR = (oldEl, qrStep) => {
   oldEl.style.display = 'none';
   qrStep.classList.add('open');
+};
+
+/**
+ *
+ * @param {HTMLElement} oldEl
+ * @param {HTMLElement} success
+ */
+export const transitionToSuccess = (oldEl, success) => {
+  oldEl.classList.add('fade-out');
+  success.classList.add('show');
 };

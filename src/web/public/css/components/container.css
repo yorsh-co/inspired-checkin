@@ -26,7 +26,11 @@ body {
   position: absolute;
   width: 200px;
   height: 200px;
-  background: radial-gradient(circle, rgba(255,255,255,0.25), transparent 60%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.25),
+    transparent 60%
+  );
   opacity: 0;
   top: var(--y);
   left: var(--x);

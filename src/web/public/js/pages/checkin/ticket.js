@@ -6,9 +6,9 @@ const fakeRequest = () =>
   new Promise(
     (res, rej) =>
       setTimeout(
-        () => (/*Math.random() > 0.4*/ true ? res(309) : rej(500)),
-        1800
-      ) // FIXME:
+        () => (/*Math.random() > 0.4*/ true ? res(200) : rej(500)),
+        1800,
+      ), // FIXME:
   );
 
 let isSubmitting = false;
@@ -71,13 +71,35 @@ export const handleTicketNumber = async (fromPaste = false) => {
       await utils.sleep(1000);
 
       ui.transitionToQR(
-        document.querySelector('[data-checkin="checkin-form"]'),
-        document.querySelector('[data-checkin="qr-step"]')
+        document.querySelector('[data-checkin="form"]'),
+        document.querySelector('[data-checkin="qr-step"]'),
       );
     } else if (res === 200) {
-      // TODO: go to the app
-      ui.showHint(hintDiv, 'Tudo certo! Pode entrar 🎉');
-      await utils.sleep(1500);
+      // go to the app
+      ui.showHint(hintDiv, 'Ingresso ok! 🎉');
+
+      await utils.sleep(800);
+
+      ui.transitionToSuccess(
+        document.querySelector('[data-checkin="form"]'),
+        document.querySelector('[data-checkin="success"]'),
+      );
+
+      const successMessage = document.querySelector(
+        '[data-checkin="success-message"]',
+      );
+      //successMessage.textContent = 'Check-in feito! ✨';
+      ui.change(successMessage, 'Check-in feito! ✨');
+      navigator.vibrate?.(50);
+      await utils.sleep(1000);
+
+      //successMessage.textContent = 'Indo pro app... 🚀';
+      ui.change(successMessage, 'Indo pro app... 🚀');
+      await utils.sleep(1200);
+
+      console.log('redirecting to app...');
+
+      window.location.href = '/';
     } else {
       // TODO: if the ticket is invalid, return to the input
       ui.showError(hintDiv, 'Código inválido 😕 Tenta de novo');

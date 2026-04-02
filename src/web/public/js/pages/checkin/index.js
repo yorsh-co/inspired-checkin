@@ -32,8 +32,8 @@ setupQR(
   verifyEventQR,
 );
 
-// resize scroll
-const container = document.querySelector('[data-checkin="checkin-container"]');
+// scroll on resize
+const container = document.querySelector('[data-checkin="container"]');
 attachScrollOnResize(container);
 
 // cursor glow

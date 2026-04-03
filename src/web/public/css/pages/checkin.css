@@ -1,1 +1,10 @@
+/*  */
+.ticket-step {
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
 
+.ticket-step.fade-out {
+  animation: fadeOut 0.3s ease forwards;
+}

@@ -29,7 +29,7 @@ export const handleTicketNumber = async (fromPaste = false) => {
   input.value = value;
   console.log('ticket', input.value);
 
-  const hintDiv = document.querySelector('[data-checkin="form-hint-div"]');
+  const hintDiv = document.querySelector('[data-checkin="ticket-hint-div"]');
   input.classList.remove('error');
 
   if (!value) {
@@ -72,7 +72,7 @@ export const handleTicketNumber = async (fromPaste = false) => {
       await utils.sleep(1000);
 
       ui.transitionToQR(
-        document.querySelector('[data-checkin="form"]'),
+        document.querySelector('[data-checkin="ticket-step"]'),
         document.querySelector('[data-checkin="qr-step"]')
       );
     } else if (res === 200) {
@@ -81,29 +81,8 @@ export const handleTicketNumber = async (fromPaste = false) => {
 
       await utils.sleep(800);
 
-      runSuccessFlow(document.querySelector('[data-checkin="form"]'));
-      /*
-      ui.transitionToSuccess(
-        document.querySelector('[data-checkin="form"]'),
-        document.querySelector('[data-checkin="success"]')
-      );
-
-      const successMessage = document.querySelector(
-        '[data-checkin="success-message"]'
-      );
-      //successMessage.textContent = 'Check-in feito! ✨';
-      ui.change(successMessage, 'Check-in feito! ✨');
-      navigator.vibrate?.(50);
-      await utils.sleep(1000);
-
-      //successMessage.textContent = 'Indo pro app... 🚀';
-      ui.change(successMessage, 'Indo pro app... 🚀');
-      await utils.sleep(1200);
-
-      console.log('redirecting to app...');
-
-      window.location.href = '/';
-*/
+      runSuccessFlow(document.querySelector('[data-checkin="ticket-step"]'));
+      // TODO: handle failures
     } else {
       // TODO: if the ticket is invalid, return to the input
       ui.showError(hintDiv, 'Código inválido 😕 Tenta de novo');

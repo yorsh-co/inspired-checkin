@@ -5,6 +5,8 @@ import { verifyEventQR } from './qr.js';
 import { setupQR } from '../../modules/qr.js';
 import { attachScrollOnResize } from '../../components/container/resize-scroll.js';
 
+// FIXME: add error handling
+
 const ticketInput = document.querySelector('[data-checkin="ticket-input"]');
 
 // UX setup
@@ -19,8 +21,8 @@ window.addEventListener('load', () => {
 // modules
 setupInput({
   input: ticketInput,
-  hintDiv: document.querySelector('[data-checkin="form-hint-div"]'),
-  onSubmit: handleTicketNumber,
+  hintDiv: document.querySelector('[data-checkin="ticket-hint-div"]'),
+  onSubmit: handleTicketNumber
 });
 
 startTyping(ticketInput);
@@ -29,7 +31,7 @@ setupQR(
   'checkin-qr-reader',
   document.querySelector('[data-checkin="start-camera-btn"]'),
   document.querySelector('[data-checkin="qr-hint-div"]'),
-  verifyEventQR,
+  verifyEventQR
 );
 
 // scroll on resize
@@ -37,7 +39,7 @@ const container = document.querySelector('[data-checkin="container"]');
 attachScrollOnResize(container);
 
 // cursor glow
-container.addEventListener('mousemove', (e) => {
+container.addEventListener('mousemove', e => {
   const rect = container.getBoundingClientRect();
 
   container.style.setProperty('--x', `${e.clientX - rect.left}px`);

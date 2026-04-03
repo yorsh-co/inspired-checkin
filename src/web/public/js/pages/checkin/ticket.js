@@ -1,16 +1,9 @@
+import * as test from '../../test.js';
+
 import { formatTicket, isValidTicket } from './utils.js';
 import * as ui from '../../modules/ui.js';
 import * as utils from '../../modules/utils.js';
 import { runSuccessFlow } from './success.js';
-
-const fakeRequest = () =>
-  new Promise(
-    (res, rej) =>
-      setTimeout(
-        () => (/*Math.random() > 0.4*/ true ? res(309) : rej(500)),
-        1800
-      ) // FIXME:
-  );
 
 let isSubmitting = false;
 
@@ -61,7 +54,7 @@ export const handleTicketNumber = async (fromPaste = false) => {
     console.log('submitting to server');
 
     // validate ticket number with the server
-    const res = await fakeRequest(); // TODO:
+    const res = await test.fakeRequest(309); // TODO:
     console.log(res);
     ui.clear(hintDiv);
 

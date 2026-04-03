@@ -101,7 +101,7 @@ export const setupQR = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
 
       // display the scanner
       clearTimeout(permissionTimeout);
-      //ui.showHint(hintDiv, defaultHint);
+      ui.showHint(hintDiv, defaultHint);
 
       await waitForVideoReady(qrReader);
       ui.stopLoading(qrWrapper);

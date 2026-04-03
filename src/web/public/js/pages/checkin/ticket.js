@@ -7,7 +7,7 @@ const fakeRequest = () =>
   new Promise(
     (res, rej) =>
       setTimeout(
-        () => (/*Math.random() > 0.4*/ true ? res(200) : rej(500)),
+        () => (/*Math.random() > 0.4*/ true ? res(309) : rej(500)),
         1800
       ) // FIXME:
   );

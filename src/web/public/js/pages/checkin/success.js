@@ -24,6 +24,6 @@ export const runSuccessFlow = async stepEl => {
   await utils.sleep(1200);
 
   console.log('redirecting to app...');
-  return;
+  return; // FIXME:
   window.location.href = '/';
 };

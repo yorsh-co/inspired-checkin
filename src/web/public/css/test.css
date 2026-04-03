@@ -4,10 +4,16 @@ button.test {
   left: 50%;
   transform: translateX(-50%);
   width: 200px;
+  font-size: 0.9em;
   z-index: 99;
-  opacity: 0.5;
+  opacity: 0.2;
   background: #000;
   color: #fff;
-  border: 1px solid green;
+  border: 2px solid red;
   transition: all 0.5s ease;
+}
+
+button.test.available {
+  opacity: 0.6;
+  border: 2px solid green;
 }

@@ -1,6 +1,14 @@
 export const fakeRequest = code =>
   new Promise((res, rej) => setTimeout(() => res(code || 200), 1800));
 
+export const setupButton = async handler => {
+  const testButton = document.getElementById('skip-button');
+  if (testButton) {
+    testButton.classList.add('available');
+    testButton.addEventListener('click', handler);
+  }
+};
+
 export const log = async (level, ...args) => {
   try {
     await fetch('/__log', {

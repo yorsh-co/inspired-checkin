@@ -1,3 +1,5 @@
+import * as test from '../test.js';
+
 import * as ui from './ui.js';
 
 /**
@@ -109,13 +111,7 @@ export const setupQR = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
       console.log('qr scanner started');
 
       // FIXME: test
-      const testButton = document.querySelector('[data-test="skip-qr-button"]');
-      if (testButton) {
-        testButton.style.display = 'flex';
-        testButton.addEventListener('click', async () =>
-          handleScan('qr-test', hintDiv)
-        );
-      }
+      test.setupButton(() => handleScan('test'));
     } catch (err) {
       console.error(err);
       clearTimeout(helpTimeout);

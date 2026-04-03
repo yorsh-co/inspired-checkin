@@ -115,6 +115,7 @@ export const setupQR = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
       // FIXME: test
       const testButton = document.querySelector('[data-test="skip-qr-button"]');
       if (testButton) {
+        testButton.style.display = 'flex';
         testButton.addEventListener('click', async () =>
           handleScan('qr-test', hintDiv)
         );

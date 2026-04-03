@@ -9,11 +9,12 @@ import { runSuccessFlow } from './success.js';
  * @returns
  */
 export const verifyEventQR = async (qrCode, hintDiv) => {
-  // FIXME: test
-  await utils.sleep(3000);
+  try {
+    // FIXME: test
+    await utils.sleep(3000);
 
-  // server request TODO:
-  /*const res = await fetch('/api/verify-presence', {
+    // server request TODO:
+    /*const res = await fetch('/api/verify-presence', {
     method: 'POST',
     credentials: 'include',
     headers: {
@@ -23,10 +24,14 @@ export const verifyEventQR = async (qrCode, hintDiv) => {
   });
 
   if (!res.ok) throw new Error('invalid');*/
-  const res = await test.fakeRequest(200);
+    const res = await test.fakeRequest(200);
 
-  if (res === 200) {
-    ui.showHint(hintDiv, 'QR code ok! 🎉');
-    runSuccessFlow(document.querySelector('[data-checkin="qr-step"]'));
+    if (res === 200) {
+      ui.showHint(hintDiv, 'QR code ok! 🎉');
+      runSuccessFlow(document.querySelector('[data-checkin="qr-step"]'));
+    }
+  } catch (err) {
+    console.error(err);
+    alert(err);
   }
 };

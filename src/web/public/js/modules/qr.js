@@ -20,7 +20,7 @@ export const setupQR = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
     try {
       // update ui
       const permissionTimeout = setTimeout(() => {
-        ui.showHint(hintDiv, '👉 Libera acesso à câmera pra continuar');
+        ui.showHint(hintDiv, '👆 Libera acesso à câmera pra continuar');
       }, 3000);
 
       startCameraBtn.disabled = true;

@@ -5,6 +5,7 @@
 <script type="module" src="/js/pages/checkin/index.js"></script>
 `; %>
 
+<!-- FIXME: add JS warning -->
 <div data-checkin="container" class="container">
   <div data-checkin="ticket-step" class="ticket-step">
     <h1>inspire</h1>
@@ -51,6 +52,9 @@
     <div data-checkin="qr-hint-div" class="qr-hint">
       Escaneia o QR code da Inspire pra confirmar que você chegou 📍
     </div>
+    <button data-test="skip-qr-button" class="test">
+      <span>[test] pular etapa</span>
+    </button>
   </div>
 </div>
 

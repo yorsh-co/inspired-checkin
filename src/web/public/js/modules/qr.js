@@ -51,7 +51,7 @@ export const setupQR = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
       let isProcessing = false;
       let lastScanTime = 0;
 
-      const handleScan = async (decodedText) => {
+      const handleScan = async decodedText => {
         // check against repeated scans
         const now = Date.now();
         if (now - lastScanTime < 1500) return;
@@ -83,7 +83,7 @@ export const setupQR = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
             hintDiv,
             /*err.code === 'INVALID_QR'
               ? 'Este QR code não é válido para este evento'
-              :*/ 'Ops! Não deu pra ler esse QR 😕 Tenta de novo ou usa outro',
+              :*/ 'Ops! Não deu pra ler esse QR 😕 Tenta de novo ou usa outro'
           );
 
           startHelpTimeout(10000);
@@ -98,26 +98,32 @@ export const setupQR = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
       await scanner.start(
         { facingMode: 'environment' },
         { fps: 10, qrbox: { width: 220, height: 220 } },
-        handleScan,
+        handleScan
       );
 
       // display the scanner
       clearTimeout(permissionTimeout);
       ui.showHint(
         hintDiv,
-        'Aponte a câmera pro QR code que está na recepção da Inspire 🤳',
+        'Aponte a câmera pro QR code que está na recepção da Inspire 🤳'
       );
 
       await waitForVideoReady(qrReader);
       ui.stopLoading(qrWrapper);
 
       console.log('qr scanner started');
+
+      // FIXME: test
+      const testButton = document.querySelector('[data-test="skip-qr-button"]');
+      if (testButton) {
+        testButton.addEventListener('click', async () => handleScan('qr-test'));
+      }
     } catch (err) {
       console.error(err);
       clearTimeout(helpTimeout);
       ui.showError(
         hintDiv,
-        'Não foi possível acessar a câmera 📷 Verifique as permissões e tente novamente',
+        'Não foi possível acessar a câmera 📷 Verifique as permissões e tente novamente'
       );
 
       // hide the scanner

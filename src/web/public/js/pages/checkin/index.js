@@ -1,5 +1,3 @@
-import * as test from '../../test.js';
-
 import { setupInput } from './input.js';
 import { handleTicketNumber } from './ticket.js';
 import { startTyping } from './typing.js';
@@ -49,5 +47,13 @@ try {
   });
 } catch (err) {
   alert(err);
-  test.log('err', err).then(logRes => ui.alert(logRes));
+
+  let test;
+  try {
+    test = await import('../../test.js');
+  } catch (err) {
+    alert('Failed to load test module', err);
+  }
+
+  test?.log('err', err).then(logRes => ui.alert(logRes));
 }

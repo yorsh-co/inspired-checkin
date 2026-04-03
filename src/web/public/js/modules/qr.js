@@ -75,7 +75,7 @@ export const setupQR = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
           ui.startLoading(qrWrapper);
           qrReader.style.opacity = 0;
 
-          await onScan(decodedText);
+          await onScan(decodedText, hintDiv);
           // FIXME: handle errors or invalid QR code
         } catch (err) {
           console.error(err);

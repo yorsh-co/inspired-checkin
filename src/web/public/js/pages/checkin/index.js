@@ -1,14 +1,15 @@
-import * as test from '../../test.js';
-
-import { setupInput } from './input.js';
-import { handleTicketNumber } from './ticket.js';
-import { startTyping } from './typing.js';
-import { verifyEventQR } from './qr.js';
-import { setupQR } from '../../modules/qr.js';
-import { attachScrollOnResize } from '../../components/container/resize-scroll.js';
-
-// FIXME: add error handling
 try {
+  import * as test from '../../test.js';
+
+  import { setupInput } from './input.js';
+  import { handleTicketNumber } from './ticket.js';
+  import { startTyping } from './typing.js';
+  import { verifyEventQR } from './qr.js';
+  import { setupQR } from '../../modules/qr.js';
+  import { attachScrollOnResize } from '../../components/container/resize-scroll.js';
+
+  // FIXME: add error handling
+  //try {
   const ticketInput = document.querySelector('[data-checkin="ticket-input"]');
 
   // UX setup

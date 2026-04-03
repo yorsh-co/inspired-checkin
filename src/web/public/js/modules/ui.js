@@ -7,7 +7,7 @@ export const showError = async (el, msg) => {
   el.classList.add('error');
 };
 
-export const clearError = async (el) => {
+export const clearError = async el => {
   el.textContent = '';
   el.classList.remove('error');
 };
@@ -24,7 +24,7 @@ export const showHint = async (el, msg) => {
   }, 120);
 };
 
-export const clearHint = async (el) => {
+export const clearHint = async el => {
   el.classList.add('changing');
 
   setTimeout(() => {
@@ -34,7 +34,7 @@ export const clearHint = async (el) => {
   }, 120);
 };
 
-export const clear = async (el) => {
+export const clear = async el => {
   el.classList.add('changing');
 
   setTimeout(() => {
@@ -45,6 +45,7 @@ export const clear = async (el) => {
 };
 
 export const change = async (el, msg) => {
+  if (el.textContent === msg) return;
   el.classList.add('changing');
 
   setTimeout(() => {
@@ -56,21 +57,21 @@ export const change = async (el, msg) => {
   }, 120);
 };
 
-export const startLoading = async (wrapper) => {
+export const startLoading = async wrapper => {
   wrapper.classList.add('loading');
   wrapper.disabled = true;
 };
 
-export const stopLoading = async (wrapper) => {
+export const stopLoading = async wrapper => {
   wrapper.classList.remove('loading');
   wrapper.disabled = false;
 };
 
-export const hide = (el) => {
+export const hide = el => {
   el.classList.add('display-none');
 };
 
-export const show = (el) => {
+export const show = el => {
   el.classList.remove('display-none');
 };
 

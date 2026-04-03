@@ -9,11 +9,11 @@ button.test {
   opacity: 0.2;
   background: #000;
   color: #fff;
-  border: 2px solid red;
+  border: 3px solid red;
   transition: all 0.5s ease;
 }
 
 button.test.available {
-  opacity: 0.6;
-  border: 2px solid green;
+  opacity: 0.8;
+  border: 3px solid green;
 }

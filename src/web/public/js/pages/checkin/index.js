@@ -48,5 +48,7 @@ try {
     container.style.setProperty('--y', `${e.clientY - rect.top}px`);
   });
 } catch (err) {
-  test.log('err', err);
+  alert(err);
+  const logRes = await test.log('err', err);
+  ui.alert(logRes);
 }

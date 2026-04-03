@@ -5,6 +5,7 @@ body {
   justify-content: center;
   background: var(--bg-gradient);
   min-height: 100dvh;
+  position: relative;
 }
 
 .container {

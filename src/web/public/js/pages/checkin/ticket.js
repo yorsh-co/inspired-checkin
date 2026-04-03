@@ -62,7 +62,7 @@ export const handleTicketNumber = async (fromPaste = false) => {
     if (res === 309) {
       // TODO: if the ticket is valid, prompt for qr validation
       ui.showHint(hintDiv, 'Ingresso ok! Agora escaneia o QR code 📷');
-      await utils.sleep(1000);
+      await utils.sleep(1200);
 
       ui.transitionToQR(
         document.querySelector('[data-checkin="ticket-step"]'),

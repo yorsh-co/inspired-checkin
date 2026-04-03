@@ -9,10 +9,7 @@ import * as ui from './ui.js';
  */
 export const setupQR = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
   startCameraBtn.addEventListener('click', async () => {
-    /*ui.showHint(
-      hintDiv,
-      'Use o QR code da Inspire para confirmar que você chegou 📍',
-    );*/
+    const defaultHint = hintDiv.textContent;
     const qrReader = document.getElementById(qrReaderId);
     const qrWrapper = qrReader.closest('.qr-reader-wrapper');
     let helpTimeout;
@@ -104,10 +101,7 @@ export const setupQR = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
 
       // display the scanner
       clearTimeout(permissionTimeout);
-      ui.showHint(
-        hintDiv,
-        'Aponte a câmera pro QR code que está na recepção da Inspire 🤳'
-      );
+      ui.showHint(hintDiv, defaultHint);
 
       await waitForVideoReady(qrReader);
       ui.stopLoading(qrWrapper);

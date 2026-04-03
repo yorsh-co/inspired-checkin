@@ -26,6 +26,7 @@ export const verifyEventQR = async (qrCode, hintDiv) => {
   const res = await test.fakeRequest(200);
 
   if (res === 200) {
+    ui.showHint(hintDiv, 'QR code ok! 🎉');
     runSuccessFlow(document.querySelector('[data-checkin="qr-step"]'));
   }
 };

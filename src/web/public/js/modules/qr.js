@@ -112,6 +112,8 @@ export const setupQR = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
       await waitForVideoReady(qrReader);
       ui.stopLoading(qrWrapper);
 
+      console.log('qr scanner started');
+
       // FIXME: test
       const testButton = document.querySelector('[data-test="skip-qr-button"]');
       if (testButton) {
@@ -120,8 +122,6 @@ export const setupQR = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
           handleScan('qr-test', hintDiv)
         );
       }
-
-      console.log('qr scanner started');
     } catch (err) {
       console.error(err);
       clearTimeout(helpTimeout);

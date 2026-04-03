@@ -54,7 +54,7 @@ export const handleTicketNumber = async (fromPaste = false) => {
     console.log('submitting to server');
 
     // validate ticket number with the server
-    const res = await test.fakeRequest(309); // TODO:
+    const res = await test.fakeRequest(200); // TODO:
     console.log(res);
     ui.clear(hintDiv);
 

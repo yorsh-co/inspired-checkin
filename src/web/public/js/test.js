@@ -1,5 +1,5 @@
 export const fakeRequest = code =>
-  new Promise((res, rej) => setTimeout(() => code || 200, 1800));
+  new Promise((res, rej) => setTimeout(() => res(code || 200), 1800));
 
 export const log = async (level, ...args) => {
   try {

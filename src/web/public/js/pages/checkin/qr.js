@@ -1,3 +1,5 @@
+import * as test from '../../test.js';
+
 import * as ui from '../../modules/ui.js';
 import * as utils from '../../modules/utils.js';
 import { runSuccessFlow } from './success.js';

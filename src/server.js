@@ -14,7 +14,7 @@ app.use(express.static('src/web/public'));
 
 app.get('/', (req, res) => {
   res.render('pages/checkin', {
-    title: 'Check-in',
+    title: 'Check-in'
   });
 });
 
@@ -24,4 +24,12 @@ app.get('/', (req, res) => {
   });
 });*/
 
+// FIXME: test
+app.post('/__log', express.json(), (req, res) => {
+  const { level, args } = req.body;
+  console[level]('[BROWSER]', ...args);
+  res.sendStatus(200);
+});
+
+// listen
 app.listen(3000);

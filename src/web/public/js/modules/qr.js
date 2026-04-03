@@ -95,6 +95,13 @@ export const setupQR = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
         }
       };
 
+      // FIXME: test
+      const testButton = document.querySelector('[data-test="skip-qr-button"]');
+      if (testButton) {
+        testButton.addEventListener('click', async () => handleScan('qr-test'));
+      }
+
+      // start
       await scanner.start(
         { facingMode: 'environment' },
         { fps: 10, qrbox: { width: 220, height: 220 } },
@@ -112,12 +119,6 @@ export const setupQR = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
       ui.stopLoading(qrWrapper);
 
       console.log('qr scanner started');
-
-      // FIXME: test
-      const testButton = document.querySelector('[data-test="skip-qr-button"]');
-      if (testButton) {
-        testButton.addEventListener('click', async () => handleScan('qr-test'));
-      }
     } catch (err) {
       console.error(err);
       clearTimeout(helpTimeout);

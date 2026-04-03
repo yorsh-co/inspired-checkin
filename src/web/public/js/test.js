@@ -6,7 +6,8 @@ export const setupButton = async handler => {
   if (testButton) {
     testButton.classList.add('available');
     testButton.addEventListener('click', () => {
-      handler().then(() => testButton.classList.remove('available'));
+      handler();
+      setTimeout(() => testButton.classList.remove('available'), 500);
     });
   }
 };

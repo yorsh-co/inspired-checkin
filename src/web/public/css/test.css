@@ -2,7 +2,7 @@ button.test {
   position: fixed;
   bottom: 10px;
   left: 50%;
-  /*transform: translateX(-50%);*/
+  transform: translateX(-50%);
   width: 200px;
   font-size: 0.9em;
   z-index: 99;

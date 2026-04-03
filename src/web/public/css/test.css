@@ -1,7 +1,9 @@
 button.test {
-  position: absolute;
-  bottom: 10;
-  width: 300px;
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
   z-index: 99;
   opacity: 0.5;
   background: #000;

@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const QR_SECRET = 'qr-secret';
 
 // Generate QR token (used when creating QR codes)
-const generateQrToken = ({ eventId }) => {
+const generate = ({ eventId }) => {
   return jwt.sign(
     { eventId },
     QR_SECRET,
@@ -12,7 +12,7 @@ const generateQrToken = ({ eventId }) => {
 };
 
 // Verify QR token (used in /scan)
-const verifyQrToken = token => {
+const verify = token => {
   try {
     return jwt.verify(token, QR_SECRET);
   } catch (err) {

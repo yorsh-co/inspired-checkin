@@ -5,12 +5,11 @@ import { verifyEventQR } from './qr.js';
 import { setupQR } from '../../modules/qr.js';
 import { attachScrollOnResize } from '../../components/container/resize-scroll.js';
 
-// FIXME: add error handling
 try {
   const ticketInput = document.querySelector('[data-checkin="ticket-input"]');
 
   // UX setup
-  window.history.replaceState(null, '', '/');
+  window.history.replaceState(null, '', '/'); // FIXME: DO I NEED TO CHANGE IF CHRCKIN MOVES TO /checkin ?
 
   window.addEventListener('load', () => {
     if (window.innerWidth >= 768) {
@@ -46,14 +45,6 @@ try {
     container.style.setProperty('--y', `${e.clientY - rect.top}px`);
   });
 } catch (err) {
-  alert(err);
-
-  let test;
-  try {
-    test = await import('../../test.js');
-  } catch (err) {
-    alert('Failed to load test module', err);
-  }
-
-  test?.log('err', err).then(logRes => ui.alert(logRes));
+  console.error(err);
+  alert(err); // FIXME:
 }

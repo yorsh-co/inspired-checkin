@@ -1,9 +1,9 @@
-export const verifyTicket = async (ticket) => {
-  const res = await fetch('/api/checkin', {
+export const verifyTicket = async ticket => {
+  const res = await fetch('/api/checkin/ticket', {
     method: 'POST',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ticket }),
+    body: JSON.stringify({ ticket })
   });
 
   if (!res.ok) throw new Error('invalid');
@@ -11,12 +11,12 @@ export const verifyTicket = async (ticket) => {
   return res.json();
 };
 
-export const verifyQR = async (qrCode) => {
-  const res = await fetch('/api/verify-presence', {
+export const verifyQr = async qrCode => {
+  const res = await fetch('/api/checkin/qr', {
     method: 'POST',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ qrCode }),
+    body: JSON.stringify({ qrCode })
   });
 
   if (!res.ok) throw new Error('invalid');

@@ -4,6 +4,7 @@ import { formatTicket, isValidTicket } from './utils.js';
 import * as ui from '../../modules/ui.js';
 import * as utils from '../../modules/utils.js';
 import { runSuccessFlow } from './success.js';
+import { api } from '../../core/api/index.js';
 
 let isSubmitting = false;
 
@@ -54,6 +55,7 @@ export const handleTicketNumber = async (fromPaste = false) => {
     console.log('submitting to server');
 
     // validate ticket number with the server
+    //const res = await api.checkin.verifyTicket(value);
     const res = await test.fakeRequest(309); // TODO:
     console.log(res);
     ui.clear(hintDiv);

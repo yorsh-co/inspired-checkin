@@ -1,4 +1,4 @@
-import * as checkin from './checkin.api.js';
+import * as checkin from './api.checkin.js';
 
 export const api = {
   checkin,

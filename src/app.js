@@ -47,7 +47,7 @@ app.use((err, req, res, next) => {
   res.status(500).send('Server error');
 });
 
-module.exports = app;
+export default app;
 
 // TODO:
 // --- HELPERS ---

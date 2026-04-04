@@ -7,7 +7,7 @@ import expressLayouts from 'express-ejs-layouts';
 import cookieParser from 'cookie-parser';
 
 // internal
-import { requireAuth } from './middleware/auth.middleware.js';
+import { requireApiAuth } from './middleware/auth.middleware.js';
 import checkinRoutes from './modules/checkin/checkin.routes.js';
 import apiRoutes from './api/index.js';
 import webRoutes from './web/routes/web.routes.js';
@@ -31,7 +31,7 @@ app.use(express.static('src/web/public'));
 
 // api
 app.use('/api/v1/checkin', checkinRoutes);
-app.use('/api/v1', requireAuth, apiRoutes);
+app.use('/api/v1', requireApiAuth, apiRoutes);
 
 // web
 app.use('/', webRoutes);

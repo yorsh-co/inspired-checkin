@@ -1,20 +1,30 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = 'super-secret';
-
-const requireAuth = (req, res, next) => {
-  const token = req.cookies.auth_token;
-
-  if (!token) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-
+export const requireApiAuth = (req, res, next) => {
   try {
-    req.user = jwt.verify(token, JWT_SECRET);
+    const token = req.cookies?.token;
+    if (!token) return res.status(401).json({ error: 'Unauthorized' });
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+
     next();
   } catch {
     return res.status(401).json({ error: 'Invalid token' });
   }
 };
 
-module.exports = requireAuth;
+export const requireWebAuth = (req, res, next) => {
+  try {
+    const token = req.cookies?.token;
+    if (!token) return res.redirect('/checkin');
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    res.locals.user = decoded;
+
+    next();
+  } catch {
+    return res.redirect('/checkin');
+  }
+};

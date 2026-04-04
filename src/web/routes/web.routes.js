@@ -1,16 +1,18 @@
 import express from 'express';
 
+import { requireWebAuth } from './middleware/auth.middleware.js';
+
 const router = express.Router();
 
-app.get('/', (req, res) => {
-  res.render('pages/app', {
-    title: 'Inspire'
+router.get('/checkin', (req, res) => {
+  res.render('pages/checkin', {
+    title: 'Check-in'
   });
 });
 
-app.get('/checkin', (req, res) => {
-  res.render('pages/checkin', {
-    title: 'Check-in'
+router.get('/', requireWebAuth, (req, res) => {
+  res.render('pages/app', {
+    title: 'Inspire'
   });
 });
 

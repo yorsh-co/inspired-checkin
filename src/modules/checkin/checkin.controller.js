@@ -5,12 +5,8 @@ export const validateTicket = async (req, res) => {
   return res.status(200).json({
     ok: true,
     message: 'Ticket endpoint working',
-    body: {
-      req: req.body,
-      ticketValidated: true,
-      qrValidated: false
-    },
-    headers: req.headers
+    request: { body: req.body, headers: req.headers },
+    data: { ticketValidated: true, qrValidated: false }
   });
 
   // TODO:
@@ -21,12 +17,8 @@ export const validateQr = async (req, res) => {
   return res.status(200).json({
     ok: true,
     message: 'QR endpoint working',
-    body: {
-      req: req.body,
-      ticketValidated: true,
-      qrValidated: true
-    },
-    headers: req.headers
+    request: { body: req.body, headers: req.headers },
+    data: { ticketValidated: true, qrValidated: true }
   });
 
   // TODO:

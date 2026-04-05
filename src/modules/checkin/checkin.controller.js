@@ -1,7 +1,7 @@
 import * as qr from '../qr/qr.service.js';
 
 export const validateTicket = async (req, res) => {
-  console.log(req.json());
+  console.log(req.body);
   return res.status(200).json({
     ok: true,
     message: 'Ticket endpoint working',
@@ -13,7 +13,7 @@ export const validateTicket = async (req, res) => {
 };
 
 export const validateQr = async (req, res) => {
-  console.log(req.json());
+  console.log(req.body);
   return res.status(200).json({
     ok: true,
     message: 'QR endpoint working',

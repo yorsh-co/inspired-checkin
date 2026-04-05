@@ -19,4 +19,4 @@ const verify = token => {
   }
 };
 
-export { generateQrToken, verifyQrToken };
+export { generate, verify };

@@ -11,13 +11,13 @@ import api from '../../core/api/index.js';
  * @param {HTMLDivElement} hintDiv
  * @returns
  */
-export const verifyEventQR = async (qrCode, hintDiv) => {
+export const verifyEventQr = async (qrCode, hintDiv) => {
   try {
     // FIXME: test
     await utils.sleep(3000);
 
     // server request TODO:
-    const res = await api.checkin.verifyQR(qrCode);
+    const res = await api.checkin.verifyQr(qrCode);
 
     if (res.ok) {
       ui.showHint(hintDiv, 'QR code ok! 🎉');

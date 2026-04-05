@@ -30,7 +30,7 @@ try {
     'checkin-qr-reader',
     document.querySelector('[data-checkin="start-camera-btn"]'),
     document.querySelector('[data-checkin="qr-hint-div"]'),
-    verifyEventQR
+    verifyEventQr
   );
 
   // scroll on resize

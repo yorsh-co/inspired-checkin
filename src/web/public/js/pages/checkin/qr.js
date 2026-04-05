@@ -3,7 +3,7 @@ import * as test from '../../test.js';
 import * as ui from '../../modules/ui.js';
 import * as utils from '../../modules/utils.js';
 import { runSuccessFlow } from './success.js';
-import { api } from '../../core/api/index.js';
+import api from '../../core/api/index.js';
 
 /**
  * TODO:

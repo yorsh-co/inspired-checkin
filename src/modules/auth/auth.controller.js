@@ -1,7 +1,7 @@
 import * as sessionService from '../session/session.service.js';
 import * as ticketService from '../ticket/ticket.service.js';
 import { issueToken } from '../auth/auth.service.js';
-import { verifyQrToken } from '../qr/qr.service.js';
+import { verify } from '../qr/qr.service.js';
 
 const attachSessionCookie = (res, sessionId) => {
   res.cookie('session_id', sessionId, {

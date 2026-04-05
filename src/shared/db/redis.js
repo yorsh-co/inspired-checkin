@@ -3,7 +3,8 @@ import { env } from '../../config/env.js';
 
 const redis = new Redis({
   host: env.redisHost,
-  port: env.redisPort
+  port: env.redisPort,
+  lazyConnect: true
 });
 
 export default redis;

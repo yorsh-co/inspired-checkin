@@ -1,8 +1,9 @@
-const Redis = require('ioredis');
+import Redis from 'ioredis';
+import { env } from '../config/env.js';
 
 const redis = new Redis({
-  host: 'localhost',
-  port: 6379
+  host: env.redisHost,
+  port: env.redisPort
 });
 
-module.exports = redis;
+export default redis;

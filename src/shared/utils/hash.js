@@ -1,7 +1,7 @@
-const crypto = require('crypto');
+import crypto from 'crypto';
 
-const hashUA = ua => {
-  return crypto.createHash('sha256').update(ua || '').digest('hex');
-};
-
-module.exports = { hashUA };
+export const hashUA = ua =>
+  crypto
+    .createHash('sha256')
+    .update(ua || '')
+    .digest('hex');

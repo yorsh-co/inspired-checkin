@@ -1,13 +1,13 @@
-const sessionService = require('../services/sessionService');
-const ticketService = require('../services/ticketService');
-const { issueToken } = require('../services/authService');
-const { verifyQrToken } = require('../services/qrService');
+import sessionService from '../services/sessionService.js';
+import ticketService from '../services/ticketService.js';
+import { issueToken } from '../services/authService.js';
+import { verifyQrToken } from '../services/qrService.js';
 
 const attachSessionCookie = (res, sessionId) => {
   res.cookie('session_id', sessionId, {
     httpOnly: true,
     sameSite: 'lax',
-    secure: false,
+    secure: false
   });
 };
 
@@ -18,13 +18,13 @@ const finalize = async (req, res, sessionId, session) => {
 
   const token = issueToken({
     ticketId: session.ticketId,
-    eventId: session.eventId,
+    eventId: session.eventId
   });
 
   res.cookie('auth_token', token, {
     httpOnly: true,
     sameSite: 'lax',
-    secure: false,
+    secure: false
   });
 
   return res.json({ success: true });
@@ -100,7 +100,7 @@ const scan = async (req, res) => {
     res.cookie('session_id', sessionId, {
       httpOnly: true,
       sameSite: 'lax',
-      secure: false,
+      secure: false
     });
   }
 
@@ -150,8 +150,4 @@ const validateTicket = async (req, res) => {
   res.json({ message: 'Ticket valid. Scan QR.' });
 };
 
-module.exports = {
-  start,
-  scan,
-  validateTicket,
-};
+export { start, scan, validateTicket };

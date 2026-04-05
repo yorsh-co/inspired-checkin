@@ -1,8 +1,8 @@
-const redis = require('../db/redis');
-const { v4: uuidv4 } = require('uuid');
-const { hashUA } = require('../utils/hash');
+import redis from '../db/redis.js';
+import { v4 as uuidv4 } from 'uuid';
+import { hashUA } from '../utils/hash.js';
 
-const SESSION_TTL = 600;
+import { env } from '../config/env.js';
 
 const getKey = id => `session:${id}`;
 
@@ -17,7 +17,12 @@ const createSession = async req => {
     ua: hashUA(req.headers['user-agent'])
   };
 
-  await redis.set(getKey(sessionId), JSON.stringify(session), 'EX', SESSION_TTL);
+  await redis.set(
+    getKey(sessionId),
+    JSON.stringify(session),
+    'EX',
+    SESSION_TTL
+  );
 
   return { sessionId, session };
 };
@@ -38,16 +43,16 @@ const getSession = async (sessionId, req) => {
 };
 
 const saveSession = async (sessionId, session) => {
-  await redis.set(getKey(sessionId), JSON.stringify(session), 'EX', SESSION_TTL);
+  await redis.set(
+    getKey(sessionId),
+    JSON.stringify(session),
+    'EX',
+    SESSION_TTL
+  );
 };
 
 const destroySession = async sessionId => {
   await redis.del(getKey(sessionId));
 };
 
-module.exports = {
-  createSession,
-  getSession,
-  saveSession,
-  destroySession
-};
+export { createSession, getSession, saveSession, destroySession };

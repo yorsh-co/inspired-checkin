@@ -1,4 +1,4 @@
-const pg = require('../db/postgres');
+import pg from '../../shared/db/postgres.js';
 
 const validateTicket = async ticketId => {
   const result = await pg.query(
@@ -48,7 +48,6 @@ const checkInTicket = async (ticketId, eventId) => {
     );
 
     await client.query('COMMIT');
-
   } catch (err) {
     await client.query('ROLLBACK');
     throw err;
@@ -57,7 +56,4 @@ const checkInTicket = async (ticketId, eventId) => {
   }
 };
 
-module.exports = {
-  validateTicket,
-  checkInTicket
-};
+export { validateTicket, checkInTicket };

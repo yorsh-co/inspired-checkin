@@ -1,7 +1,7 @@
-const { generateQrToken } = require('./services/qrService');
+import { generateQrToken } from './qr.service.js';
 
-const token = generateQrToken({
+export const token = generateQrToken({
   eventId: 'abc123'
 });
 
-const qrUrl = `https://yourdomain.com/scan?token=${token}`;
+export const qrUrl = `https://yourdomain.com/scan?token=${token}`;

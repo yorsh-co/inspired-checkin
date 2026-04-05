@@ -1,6 +1,5 @@
-const jwt = require('jsonwebtoken');
-
-const JWT_SECRET = 'super-secret';
+import jwt from 'jsonwebtoken';
+import { env } from '../config/env.js';
 
 const issueToken = payload => {
   return jwt.sign(payload, JWT_SECRET, {
@@ -8,4 +7,4 @@ const issueToken = payload => {
   });
 };
 
-module.exports = { issueToken };
+export { issueToken };

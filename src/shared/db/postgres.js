@@ -1,7 +1,10 @@
-const { Pool } = require('pg');
+import pkg from 'pg';
+import { env } from '../config/env.js';
+
+const { Pool } = pkg;
 
 const pg = new Pool({
-  connectionString: 'postgres://user:password@localhost:5432/db'
+  connectionString: env.databaseUrl
 });
 
-module.exports = pg;
+export default pg;

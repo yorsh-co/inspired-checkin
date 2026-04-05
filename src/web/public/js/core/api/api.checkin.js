@@ -6,11 +6,14 @@ export const verifyTicket = async ticket => {
     body: JSON.stringify({ ticket })
   });
 
-  alert(res);
-  if (!res.ok) throw new Error('invalid');
   const data = await res.json();
 
-  alert(data);
+  if (!res.ok) {
+    throw new Error(data.error || 'Request failed');
+  }
+
+  alert(data.message);
+
   return data;
 };
 
@@ -21,10 +24,14 @@ export const verifyQr = async qrCode => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ qrCode })
   });
-  alert(res);
-  if (!res.ok) throw new Error('invalid');
+
   const data = await res.json();
 
-  alert(data);
+  if (!res.ok) {
+    throw new Error(data.error || 'Request failed');
+  }
+
+  alert(data.message);
+
   return data;
 };

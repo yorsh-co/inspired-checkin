@@ -12,7 +12,7 @@ export const verifyTicket = async ticket => {
     throw new Error(data.error || 'Request failed');
   }
 
-  alert(data.message);
+  console.log(data.code);
 
   return data;
 };
@@ -31,7 +31,7 @@ export const verifyQr = async qrCode => {
     throw new Error(data.error || 'Request failed');
   }
 
-  alert(data.message);
+  console.log(data.code);
 
   return data;
 };

@@ -14,9 +14,9 @@ import api from '../../core/api/index.js';
 export const verifyEventQr = async (qrCode, hintDiv) => {
   try {
     // FIXME: test
-    await utils.sleep(3000);
+    //await utils.sleep(3000);
 
-    // server request TODO:
+    // server request
     const res = await api.checkin.verifyQr(qrCode);
 
     // handle server response

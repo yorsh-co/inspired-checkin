@@ -9,7 +9,7 @@ import * as ui from './ui.js';
  * @param {HTMLDivElement} hintDiv
  * @param {(qrText: string) => Promise<void>|void} onScan
  */
-export const setupQR = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
+export const setupQr = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
   startCameraBtn.addEventListener('click', async () => {
     const defaultHint = hintDiv.textContent;
     const qrReader = document.getElementById(qrReaderId);

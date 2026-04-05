@@ -1,8 +1,8 @@
 import { setupInput } from './input.js';
 import { handleTicketNumber } from './ticket.js';
 import { startTyping } from './typing.js';
-import { verifyEventQR } from './qr.js';
-import { setupQR } from '../../modules/qr.js';
+import { verifyEventQr } from './qr.js';
+import { setupQr } from '../../modules/qr.js';
 import { attachScrollOnResize } from '../../components/container/resize-scroll.js';
 
 try {

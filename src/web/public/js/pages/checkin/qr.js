@@ -17,8 +17,7 @@ export const verifyEventQR = async (qrCode, hintDiv) => {
     await utils.sleep(3000);
 
     // server request TODO:
-    //const res = await api.checkin.verifyQR(qrCode);
-    const res = await test.fakeRequest(200);
+    const res = await api.checkin.verifyQR(qrCode);
 
     if (res.ok) {
       ui.showHint(hintDiv, 'QR code ok! 🎉');

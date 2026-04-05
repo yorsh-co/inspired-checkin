@@ -8,6 +8,7 @@ export const verifyTicket = async ticket => {
 
   if (!res.ok) throw new Error('invalid');
 
+  alert(res.json());
   return res.json();
 };
 
@@ -21,5 +22,6 @@ export const verifyQr = async qrCode => {
 
   if (!res.ok) throw new Error('invalid');
 
+  alert(res.json());
   return res.json();
 };

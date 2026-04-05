@@ -55,13 +55,12 @@ export const handleTicketNumber = async (fromPaste = false) => {
     console.log('submitting to server');
 
     // validate ticket number with the server
-    //const res = await api.checkin.verifyTicket(value);
-    const res = await test.fakeRequest(309); // TODO:
+    const res = await api.checkin.verifyTicket(value);
     console.log(res);
     ui.clear(hintDiv);
 
     // handle server response
-    if (res === 309) {
+    if (res.status === 309) {
       // TODO: if the ticket is valid, prompt for qr validation
       ui.showHint(hintDiv, 'Ingresso ok! Agora escaneia o QR code 📷');
       await utils.sleep(1200);
@@ -70,7 +69,7 @@ export const handleTicketNumber = async (fromPaste = false) => {
         document.querySelector('[data-checkin="ticket-step"]'),
         document.querySelector('[data-checkin="qr-step"]')
       );
-    } else if (res === 200) {
+    } else if (res.status === 200) {
       // go to the app
       ui.showHint(hintDiv, 'Ingresso ok! 🎉');
 

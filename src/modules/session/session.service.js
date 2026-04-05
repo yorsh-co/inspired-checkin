@@ -1,7 +1,6 @@
 import redis from '../../shared/db/redis.js';
 import { v4 as uuidv4 } from 'uuid';
 import { hashUA } from '../../shared/utils/hash.js';
-
 import { env } from '../../config/env.js';
 
 const getKey = id => `session:${id}`;

@@ -1,5 +1,5 @@
 export const verifyTicket = async ticket => {
-  const res = await fetch('/api/checkin/ticket', {
+  const res = await fetch('/api/v1/checkin/ticket', {
     method: 'POST',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
@@ -15,7 +15,7 @@ export const verifyTicket = async ticket => {
 };
 
 export const verifyQr = async qrCode => {
-  const res = await fetch('/api/checkin/qr', {
+  const res = await fetch('/api/v1/checkin/qr', {
     method: 'POST',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },

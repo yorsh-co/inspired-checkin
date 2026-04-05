@@ -8,8 +8,10 @@ export const verifyTicket = async ticket => {
 
   //if (!res.ok) throw new Error('invalid');
 
-  alert(res.json());
-  return res.json();
+  const data = await res.json();
+
+  alert(data);
+  return data;
 };
 
 export const verifyQr = async qrCode => {
@@ -22,6 +24,8 @@ export const verifyQr = async qrCode => {
 
   //if (!res.ok) throw new Error('invalid');
 
-  alert(res.json());
-  return res.json();
+  const data = await res.json();
+
+  alert(data);
+  return data;
 };

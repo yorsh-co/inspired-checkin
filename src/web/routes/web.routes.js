@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { requireWebAuth } from './middleware/auth.middleware.js';
+import { requireWebAuth } from '../../middleware/auth.middleware.js';
 
 const router = express.Router();
 

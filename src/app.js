@@ -1,5 +1,6 @@
 // core
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 // third-party
 import express from 'express';
@@ -16,7 +17,7 @@ const app = express();
 
 // framework
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, './web/views'));
+app.set('views', fileURLToPath(new URL('./web/views', import.meta.url)));
 
 app.use(expressLayouts);
 app.set('layout', 'layouts/main');
@@ -27,7 +28,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // static
-app.use(express.static('src/web/public'));
+app.use(
+  express.static(fileURLToPath(new URL('./web/public', import.meta.url)))
+);
 
 // api
 app.use('/api/v1/checkin', checkinRoutes);

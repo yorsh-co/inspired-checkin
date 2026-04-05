@@ -60,7 +60,7 @@ export const handleTicketNumber = async (fromPaste = false) => {
     ui.clear(hintDiv);
 
     // handle server response
-    if (res.status === 309) {
+    if (res.ticketValidated && res.qrValidated === false) {
       // TODO: if the ticket is valid, prompt for qr validation
       ui.showHint(hintDiv, 'Ingresso ok! Agora escaneia o QR code 📷');
       await utils.sleep(1200);
@@ -69,7 +69,7 @@ export const handleTicketNumber = async (fromPaste = false) => {
         document.querySelector('[data-checkin="ticket-step"]'),
         document.querySelector('[data-checkin="qr-step"]')
       );
-    } else if (res.status === 200) {
+    } else if (res.ticketValidated && res.qrValidated) {
       // go to the app
       ui.showHint(hintDiv, 'Ingresso ok! 🎉');
 

@@ -67,8 +67,6 @@ const start = async (req, res) => {
 };
 
 // --- /scan ---
-const sessionService = require('../services/sessionService');
-const { verifyQrToken } = require('../services/qrService');
 
 // ...
 

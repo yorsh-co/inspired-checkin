@@ -5,7 +5,10 @@ export const validateTicket = async (req, res) => {
   return res.status(200).json({
     ok: true,
     message: 'Ticket endpoint working',
-    body: req.body,
+    body: {
+      req: req.body,
+      qrValidated: false
+    },
     headers: req.headers
   });
 
@@ -17,7 +20,7 @@ export const validateQr = async (req, res) => {
   return res.status(200).json({
     ok: true,
     message: 'QR endpoint working',
-    body: req.body,
+    body: { req: req.body, ticketValidated: true },
     headers: req.headers
   });
 

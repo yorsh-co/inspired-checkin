@@ -1,10 +1,15 @@
 import 'dotenv/config';
 
-if (!process.env.JWT_SECRET) {
-  throw new Error('Missing JWT_SECRET');
+const required = ['JWT_SECRET'];
+
+for (const key of required) {
+  if (!process.env[key]) {
+    throw new Error(`Missing environment variable: ${key}`);
+  }
 }
 
 export const env = {
+  port: process.env.PORT || 3000,
   jwtSecret: process.env.JWT_SECRET,
-  port: process.env.PORT || 3000
+  nodeEnv: process.env.NODE_ENV || 'development'
 };

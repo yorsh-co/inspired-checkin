@@ -57,6 +57,7 @@ export const handleTicketNumber = async (fromPaste = false) => {
     // validate ticket number with the server
     const res = await api.checkin.verifyTicket(value);
     console.log(res);
+    alert(JSON.stringify(res));
     ui.clear(hintDiv);
 
     // handle server response

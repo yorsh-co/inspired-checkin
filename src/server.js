@@ -1,35 +1,7 @@
-const path = require('path');
-const express = require('express');
-const expressLayouts = require('express-ejs-layouts');
+import './config/env.js';
+import app from './app.js';
+import { env } from './config/env.js';
 
-const app = express();
-
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, './web/views'));
-
-app.use(expressLayouts);
-app.set('layout', 'layouts/main');
-
-app.use(express.static('src/web/public'));
-
-app.get('/', (req, res) => {
-  res.render('pages/checkin', {
-    title: 'Check-in'
-  });
+app.listen(env.port || 3000, () => {
+  console.log('Server running');
 });
-
-/*app.get('/', (req, res) => {
-  res.render('index', {
-    title: 'Check-in',
-  });
-});*/
-
-// FIXME: test
-app.post('/__log', express.json(), (req, res) => {
-  const { level, args } = req.body;
-  console[level]('[BROWSER]', ...args);
-  res.sendStatus(200);
-});
-
-// listen
-app.listen(3000);

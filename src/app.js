@@ -53,6 +53,7 @@ app.use((err, req, res, next) => {
 export default app;
 
 // TODO:
+/*
 // --- HELPERS ---
 const getSessionKey = sessionId => `session:${sessionId}`;
 
@@ -374,3 +375,4 @@ const finalizeAuth = async (req, res, session, sessionId) => {
     success: true
   });
 };
+*/

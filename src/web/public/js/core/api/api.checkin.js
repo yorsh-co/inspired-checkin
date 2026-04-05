@@ -7,7 +7,7 @@ export const verifyTicket = async ticket => {
   });
 
   //if (!res.ok) throw new Error('invalid');
-
+  alert(res);
   const data = await res.json();
 
   alert(data);
@@ -23,7 +23,7 @@ export const verifyQr = async qrCode => {
   });
 
   //if (!res.ok) throw new Error('invalid');
-
+  alert(res);
   const data = await res.json();
 
   alert(data);

@@ -8,7 +8,7 @@ div.error {
   margin-top: 10px;
   font-size: 0.9rem;
   color: var(--error);
-  min-height: 35px;
+  min-height: 18px;
   transition: opacity 0.2s;
   animation: shake 0.3s;
 }
@@ -18,10 +18,14 @@ div.hint {
   font-size: 0.9rem;
   color: var(--text);
   opacity: 0.9;
-  min-height: 35px;
+  min-height: 18px;
   transition:
     opacity 0.2s ease,
     transform 0.2s ease;
+}
+
+.qr-step div.hint {
+  min-height: 35px;
 }
 
 div.changing {

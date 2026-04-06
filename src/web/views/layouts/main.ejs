@@ -39,5 +39,17 @@ rel="stylesheet"
 <%
 } %>
 
+<!-- dev -->
+<script>
+if (window.matchMedia('(max-width: 1024px)').matches) {
+const script = document.createElement('script');
+script.src = 'https://cdn.jsdelivr.net/npm/eruda';
+document.body.appendChild(script);
+script.onload = function () {
+eruda.init();
+};
+}
+</script>
+
 </body>
 </html>

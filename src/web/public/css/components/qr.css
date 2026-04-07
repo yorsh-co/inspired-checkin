@@ -1,0 +1,77 @@
+.qr-step {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+
+  transition:
+    max-height 0.5s ease,
+    opacity 0.4s ease,
+    transform 0.3s ease;
+}
+
+.qr-step.open {
+  max-height: 500px;
+  opacity: 1;
+  animation: fadeIn 0.4s ease;
+}
+
+.qr-step.fade-out {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+.qr-reader-wrapper {
+  position: relative;
+}
+
+.qr-reader-wrapper.loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+}
+
+.qr-reader {
+  opacity: 0;
+  width: 100%;
+  border-radius: 12px;
+
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition:
+    max-height 0.3s ease,
+    opacity 0.1s ease;
+}
+
+.qr-reader.open {
+  max-height: 300px;
+  aspect-ratio: 1 / 1;
+  opacity: 1;
+  animation: fadeIn 0.4s ease;
+}
+
+.qr-reader video {
+  animation: fadeIn 0.4s ease;
+  transition: opacity 0.4s ease;
+}
+
+/* override Html5Qrcode */
+#qr-shaded-region {
+  border-width: 40px !important;
+  border-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+.qr-hint {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}

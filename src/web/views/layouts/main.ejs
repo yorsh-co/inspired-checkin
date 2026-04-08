@@ -44,8 +44,6 @@ rel="stylesheet"
 <!-- dev tools on mobile -->
 <script>
 (function initErudaDebugMode() {
-try {
-
 const params = new URLSearchParams(window.location.search);
 const host = location.hostname;
 
@@ -75,10 +73,6 @@ script.src = 'https://cdn.jsdelivr.net/npm/eruda';
 script.onload = () => eruda.init();
 
 document.body.appendChild(script);
-
-} catch (err) {
-alert(err)
-}
 })();
 </script>
 

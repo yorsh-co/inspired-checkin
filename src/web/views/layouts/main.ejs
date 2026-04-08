@@ -12,7 +12,7 @@ try {
 
 const params = new URLSearchParams(window.location.search);
 const host = location.hostname;
-alert(host)
+
 const isAllowedHost =
 host === 'localhost' ||
 host === '127.0.0.1' ||
@@ -29,9 +29,6 @@ localStorage.setItem('debug', 'true');
 if (params.get('debug') === 'false') {
 localStorage.removeItem('debug');
 }
-
-alert(localhost)
-alert(isDebug)
 
 const isDebug = localStorage.getItem('debug') === 'true';
 

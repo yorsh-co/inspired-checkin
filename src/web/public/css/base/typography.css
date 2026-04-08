@@ -2,3 +2,10 @@ body {
   font-family: 'Inter', sans-serif;
   color: var(--text);
 }
+
+.txt-center {
+  text-align: center;
+}
+.txt-left {
+  text-align: left;
+}

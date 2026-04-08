@@ -2,8 +2,8 @@ import { setupInput } from './input.js';
 import { handleTicketNumber } from './ticket.js';
 import { startTyping } from './typing.js';
 import { verifyEventQr } from './qr.js';
-import { setupQr } from '../../modules/qr.js';
-import { attachScrollOnResize } from '../../components/container/resize-scroll.js';
+import { setupQr } from '../../../modules/qr.js';
+import { attachScrollOnResize } from '../../../components/container/resize-scroll.js';
 
 try {
   const ticketInput = document.querySelector('[data-checkin="ticket-input"]');
@@ -34,7 +34,7 @@ try {
   );
 
   // scroll on resize
-  const container = document.querySelector('[data-checkin="container"]');
+  const container = document.querySelector('[data-checkin="main-container"]');
   attachScrollOnResize(container);
 
   // cursor glow

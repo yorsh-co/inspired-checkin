@@ -1,14 +1,4 @@
-body {
-  height: 100dvh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-gradient);
-  min-height: 100dvh;
-  position: relative;
-}
-
-.container {
+.main-container {
   position: relative;
   width: 90%;
   max-width: 400px;
@@ -17,12 +7,11 @@ body {
   border-radius: 20px;
   backdrop-filter: blur(20px);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  text-align: center;
   transition: opacity 0.3s ease;
 }
 
 /* glow */
-.container::before {
+.main-container::before {
   content: '';
   position: absolute;
   width: 200px;
@@ -40,6 +29,6 @@ body {
   transition: opacity 0.2s;
 }
 
-.container:hover::before {
+.main-container:hover::before {
   opacity: 1;
 }

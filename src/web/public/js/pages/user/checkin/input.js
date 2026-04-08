@@ -1,9 +1,9 @@
 import { formatTicket, isValidTicket } from './utils.js';
-import * as ui from '../../modules/ui.js';
+import * as ui from '../../../modules/ui.js';
 import {
   attachScrollOnFocus,
   attachScrollOnBlur
-} from '../../components/input/focus-scroll.js';
+} from '../../../components/input/focus-scroll.js';
 
 /**
  *

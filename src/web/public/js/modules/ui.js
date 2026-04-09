@@ -80,9 +80,12 @@ export const show = (el) => {
  * @param {HTMLDivElement} nextStep
  * @param {HTMLDivElement} currentStep
  */
-export const showStep = (nextStep, currentStep = null) => {
-  currentStep.classList.add('fade-out');
-  nextStep.classList.add('show');
+export const showStep = async (nextStep, currentStep = null) => {
+  if (currentStep) currentStep.classList.remove('show');
+
+  setTimeout(() => {
+    nextStep.classList.add('show');
+  }, 300);
 };
 
 /**
@@ -104,3 +107,9 @@ export const showStep = (nextStep, currentStep = null) => {
   oldEl.classList.add('fade-out');
   success.classList.add('show');
 };*/
+
+export const focusInput = ({ input = null, q = '' }) => {
+  if (input) input.focus();
+  else if (q) document.querySelector(q).focus();
+  else console.error('`focusInput` failed: missing arguments');
+};

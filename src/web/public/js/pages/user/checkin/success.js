@@ -3,16 +3,13 @@ import * as utils from '../../../modules/utils.js';
 
 /**
  *
- * @param {HTMLDivElement} stepEl
+ * @param {HTMLDivElement} step
  */
-export const runSuccessFlow = async stepEl => {
-  ui.transitionToSuccess(
-    stepEl,
-    document.querySelector('[data-checkin="success"]')
-  );
+export const runSuccessFlow = async (step) => {
+  ui.showStep(document.querySelector('[data-checkin="success"]'), step);
 
   const successMessage = document.querySelector(
-    '[data-checkin="success-message"]'
+    '[data-checkin="success-message"]',
   );
 
   ui.change(successMessage, 'Check-in feito! ✨');

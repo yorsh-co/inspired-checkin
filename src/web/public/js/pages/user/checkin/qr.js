@@ -23,16 +23,19 @@ export const onQrScan = async (qrCode, hintDiv) => {
         ui.showHint(hintDiv, 'QR ok! Agora valide seu ingresso 🎟️');
         await utils.sleep(1200);
 
-        ui.transitionToNextStep(
-          document.querySelector('[data-checkin="qr-step"]'),
+        ui.showStep(
           document.querySelector('[data-checkin="ticket-step"]'),
+          document.querySelector('[data-checkin="qr-step"]'),
         );
+
+        break;
       }
       case 'success': {
         ui.showHint(hintDiv, 'QR code ok! 🎉');
         await utils.sleep(800);
 
         runSuccessFlow(document.querySelector('[data-checkin="qr-step"]'));
+
         break;
       }
       default: {

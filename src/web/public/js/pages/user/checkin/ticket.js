@@ -1,7 +1,8 @@
 import { formatTicket, isValidTicket } from './utils.js';
+
 import * as ui from '../../../modules/ui.js';
 import * as utils from '../../../modules/utils.js';
-import { runSuccessFlow } from './success.js';
+
 import api from '../../../core/api/index.js';
 
 let isSubmitting = false;
@@ -39,26 +40,27 @@ export const onTicketInput = async (fromPaste = false) => {
 
     ui.showError(
       hintDiv,
-      fromPaste
+      fromPaste && value.length === 5
         ? 'Código inválido 😕'
         : 'O código precisa ter 5 letras ou números',
     );
     return;
   }
+
   console.log('input is valid');
 
   // submit input
-  isSubmitting = true;
-  ui.clear(hintDiv);
-  ui.showHint(hintDiv, 'Validando seu ingresso... ⏳');
-  input.blur();
-
-  const inputWrapper = document.querySelector(
-    '[data-checkin="ticket-input-wrapper"]',
-  );
-  ui.startLoading(inputWrapper);
-
   try {
+    isSubmitting = true;
+    ui.clear(hintDiv);
+    ui.showHint(hintDiv, 'Buscando seu ingresso... ⏳');
+    input.blur();
+
+    const inputWrapper = document.querySelector(
+      '[data-checkin="ticket-input-wrapper"]',
+    );
+    ui.startLoading(inputWrapper);
+
     input.disabled = true;
     console.log('submitting to server');
 
@@ -74,10 +76,15 @@ export const onTicketInput = async (fromPaste = false) => {
         ui.showHint(hintDiv, 'Ingresso ok! Agora escaneia o QR code 📷');
         await utils.sleep(1200);
 
-        ui.transitionToNextStep(
-          document.querySelector('[data-checkin="ticket-step"]'),
+        await ui.showStep(
           document.querySelector('[data-checkin="verification-step"]'),
+          document.querySelector('[data-checkin="ticket-step"]'),
         );
+        if (utils.isDesktop()) {
+          ui.focusInput({ q: '[data-checkin="verification-input"]' });
+        }
+
+        break;
       }
       default: {
         ui.showError(hintDiv, 'Código inválido 😕 Tenta de novo');

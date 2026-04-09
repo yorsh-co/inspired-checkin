@@ -1,6 +1,9 @@
+import { formatVerificationCode, isValidVerificationCode } from './utils.js';
+import { runSuccessFlow } from './success.js';
+
 import * as ui from '../../../modules/ui.js';
 import * as utils from '../../../modules/utils.js';
-import { runSuccessFlow } from './success.js';
+
 import api from '../../../core/api/index.js';
 
 let isSubmitting = false;
@@ -14,50 +17,52 @@ export const onVerificationInput = async (fromPaste = false) => {
   if (isSubmitting) return;
   console.log('verification code submitted');
 
-  // validate input TODO:
+  // validate input
   const input = document.querySelector('[data-checkin="verification-input"]');
-  const value = input.value;
+  input.classList.remove('error');
+
+  const value = formatVerificationCode(input.value);
+  input.value = value;
   console.log('verification input', value);
 
   const hintDiv = document.querySelector(
     '[data-checkin="verification-hint-div"]',
   );
   const defaultHint = hintDiv.textContent;
-  input.classList.remove('error');
 
   if (!value) {
     if (!fromPaste) {
       console.error('input is empty');
-      ui.showError(hintDiv, 'Digite os 4 últimos digitos do seu telefone 👆'); // or `defaultHint`
+      ui.showError(hintDiv, defaultHint);
     }
     return;
   }
 
-  if (!isValidTicket(value)) {
-    // TODO:
+  if (!isValidVerificationCode(value)) {
     console.error('input is invalid');
-    ui.showError(hintDiv, 'Digite os 4 últimos digitos do seu telefone 👆'); // or `defaultHint`
+    ui.showError(hintDiv, defaultHint);
     return;
   }
+
   console.log('input is valid');
 
   // submit input
-  isSubmitting = true;
-  ui.clear(hintDiv);
-  ui.showHint(hintDiv, 'Confirmando seu ingresso... ⏳');
-  input.blur();
-
-  const backButton = document.querySelector(
-    '[data-checkin="verification-back-btn"]',
-  );
-  ui.startLoading(backButton);
-  backButton.disabled = true;
-
   try {
+    isSubmitting = true;
+    ui.clear(hintDiv);
+    ui.showHint(hintDiv, 'Confirmando seu ingresso... ⏳');
+    input.blur();
+
+    const backButton = document.querySelector(
+      '[data-checkin="verification-back-btn"]',
+    );
+    ui.startLoading(backButton);
+    backButton.disabled = true;
+
     input.disabled = true;
     console.log('submitting to server');
 
-    // validate ticket number with the server
+    // verify user with the server
     const res = await api.checkin.submitVerification(value);
     console.log(res.checkinStatus);
 
@@ -69,10 +74,12 @@ export const onVerificationInput = async (fromPaste = false) => {
         ui.showHint(hintDiv, 'Ingresso ok! Agora escaneia o QR code 📷');
         await utils.sleep(1200);
 
-        ui.transitionToQR(
-          document.querySelector('[data-checkin="verification-step"]'),
+        ui.showStep(
           document.querySelector('[data-checkin="qr-step"]'),
+          document.querySelector('[data-checkin="verification-step"]'),
         );
+
+        break;
       }
       case 'success': {
         ui.showHint(hintDiv, 'Ingresso ok! 🎉');
@@ -81,6 +88,7 @@ export const onVerificationInput = async (fromPaste = false) => {
         runSuccessFlow(
           document.querySelector('[data-checkin="verification-step"]'),
         );
+
         break;
       }
       default: {

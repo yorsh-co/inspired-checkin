@@ -1,17 +1,21 @@
-import { onTicketInput } from './ticket.js';
-import { formatTicket, isValidTicket } from './utils.js';
-import * as ui from '../../../modules/ui.js';
+import {
+  formatTicket,
+  isValidTicket,
+  formatVerificationCode,
+  isValidVerificationCode,
+} from './utils.js';
 import {
   attachScrollOnFocus,
   attachScrollOnBlur,
 } from '../../../components/input/focus-scroll.js';
+import { onTicketInput } from './ticket.js';
+import { onVerificationInput } from './verification.js';
 
 /**
  *
  */
 export const setupTicketInput = () => {
   const input = document.querySelector('[data-checkin="ticket-input"]');
-  const hintDiv = document.querySelector('[data-checkin="ticket-hint-div"]');
 
   attachScrollOnFocus(input);
   attachScrollOnBlur(input);
@@ -46,12 +50,6 @@ export const setupTicketInput = () => {
       input.value = formatted;
 
       onTicketInput(true);
-
-      /*if (isValidTicket(formatted)) {
-        onTicketInput(true);
-      } else {
-        ui.showError(hintDiv, 'Código inválido 😕');
-      }*/
     }, 0);
   });
 };
@@ -61,45 +59,36 @@ export const setupTicketInput = () => {
  */
 export const setupVerificationInput = () => {
   const input = document.querySelector('[data-checkin="verification-input"]');
-  const hintDiv = document.querySelector(
-    '[data-checkin="verification-hint-div"]',
-  );
 
   attachScrollOnFocus(input);
   attachScrollOnBlur(input);
 
+  // handle enter keydown
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      ui.clearError(hintDiv);
+
       onVerificationInput();
     }
   });
 
-  let typingTimer;
-
+  // handle input
   input.addEventListener('input', () => {
-    clearTimeout(typingTimer);
-
-    const formatted = formatTicket(input.value);
+    const formatted = formatVerificationCode(input.value);
     input.value = formatted;
 
-    if (!isValidTicket(formatted)) return;
+    if (!isValidVerificationCode(formatted)) return;
 
-    typingTimer = setTimeout(onSubmit, 300);
+    onVerificationInput();
   });
 
+  // handle paste
   input.addEventListener('paste', () => {
     setTimeout(() => {
-      const formatted = formatTicket(input.value);
+      const formatted = formatVerificationCode(input.value);
       input.value = formatted;
-      ui.clearError(hintDiv);
 
-      if (isValidTicket(formatted)) {
-        onTicketInput(true);
-      } else {
-        ui.showError(hintDiv, 'Código inválido 😕');
-      }
+      onVerificationInput(true);
     }, 0);
   });
 };

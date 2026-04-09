@@ -7,3 +7,11 @@ body {
   min-height: 100dvh;
   position: relative;
 }
+
+.no-js-warning {
+  background: #ffdddd;
+  color: #900;
+  padding: 16px;
+  text-align: center;
+  font-weight: 600;
+}

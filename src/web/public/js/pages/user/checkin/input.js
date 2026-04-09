@@ -16,6 +16,7 @@ import { onVerificationInput } from './verification.js';
  */
 export const setupTicketInput = () => {
   const input = document.querySelector('[data-checkin="ticket-input"]');
+  input.value = '';
 
   attachScrollOnFocus(input);
   attachScrollOnBlur(input);
@@ -59,6 +60,7 @@ export const setupTicketInput = () => {
  */
 export const setupVerificationInput = () => {
   const input = document.querySelector('[data-checkin="verification-input"]');
+  input.value = '';
 
   attachScrollOnFocus(input);
   attachScrollOnBlur(input);

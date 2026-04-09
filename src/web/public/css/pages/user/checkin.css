@@ -1,5 +1,11 @@
-/*  */
-.ticket-step {
+.checkin-container input,
+.checkin-container button {
+  margin-bottom: 0;
+}
+
+/* ticket */
+.checkin-container .ticket-step,
+.checkin-container .confirm-step {
   opacity: 0;
   animation: fadeIn 0.6s ease forwards;
   animation-delay: 0.4s;
@@ -9,14 +15,50 @@
     transform 0.3s ease;
 }
 
-.ticket-step.fade-out {
+.checkin-container .ticket-step.fade-out {
   animation: fadeOut 0.3s ease forwards;
 }
 
-.ticket-step input {
-  margin-bottom: 0;
+/* confirm step */
+.checkin-container .tel-input {
+  width: auto;
+  max-width: 70px;
+  padding: 5px;
+  text-align: center;
+  margin-left: 5px;
 }
 
-.qr-step button {
-  margin-bottom: 0;
+.checkin-container table {
+  width: 100%;
+  margin: auto;
+  margin-top: 16px;
+  margin-bottom: 24px;
+
+  padding: 12px;
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+
+}
+
+.checkin-container th, .checkin-container td {
+  padding: 8px 4px;
+}
+
+.checkin-container th {
+  text-align: left;
+}
+
+.checkin-container td {
+  text-align: right;
+}
+
+.checkin-container button {
+  margin-top: 16px;
 }

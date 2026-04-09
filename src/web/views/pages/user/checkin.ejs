@@ -6,10 +6,55 @@
 `; %>
 
 <!-- FIXME: add JS warning -->
-<main data-checkin="main-container" class="main-container txt-center">
-  <div data-checkin="ticket-step" class="ticket-step">
-    <h1>inspire</h1>
+<main data-checkin="main-container" class="main-container checkin-container txt-center">
+  <h1>inspire</h1>
 
+  <!-- ticket confirmation -->
+  <div data-checkin="confirm-step" class="confirm-step">
+    <div>Verifique os dados do seu ingresso</div>
+    <table class="">
+      <tr>
+        <th>🎟️ Ingresso</th>
+        <td data-checkin="ticket-number">t35t3</td>
+      </tr>
+      <tr>
+        <th>👤 Nome</th>
+        <td data-checkin="user-name">João ... Bastos</td>
+      </tr>
+      <tr>
+        <th>📞 Telefone</th>
+        <td>
+          <div data-checkin="input-wrapper" class="input-wrapper">
+            (11) 912••
+            <input
+              id="checkin-tel-input"
+              data-checkin="tel-input"
+              class="tel-input"
+              type="text"
+              placeholder="••••"
+              inputmode="text"
+              pattern="[0-9]{4}"
+              autocomplete="one-time-code"
+              autocorrect="on"
+              autocapitalize="sentences"
+              enterkeyhint="send"
+            />
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <div data-checkin="confirm-hint-div" class="hint">Digite os 4 últimos digitos do seu telefone 👆</div>
+
+    <button  data-checkin="back-btn" class="ghost">
+      <!--<span class="material-symbols-outlined btn-label"> arrow_back </span>-->
+      <span class="btn-label">Voltar</span>
+      <span class="btn-spinner"></span>
+    </button>
+  </div>
+
+  <!-- ticket step -->
+  <div data-checkin="ticket-step" class="ticket-step" hidden>
     <div data-checkin="input-wrapper" class="input-wrapper">
       <input
         id="checkin-ticket-input"
@@ -27,12 +72,11 @@
     </div>
     <%- include('../../components/privacy-notice') %>
 
-    <div data-checkin="ticket-hint-div"></div>
+    <div data-checkin="ticket-hint-div" class="hint"></div>
   </div>
 
   <!-- TODO: turn this into a component -->
   <div data-checkin="qr-step" class="qr-step">
-    <h1>inspire</h1>
 
     <div class="qr-reader-wrapper">
       <div id="checkin-qr-reader" class="qr-reader"></div>
@@ -53,7 +97,6 @@
 
   <!-- success -->
   <div data-checkin="success" class="success">
-    <h1>inspire</h1>
     <div class="check"></div>
     <div data-checkin="success-message" class="success-message"></div>
   </div>

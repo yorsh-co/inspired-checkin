@@ -17,6 +17,11 @@ button {
   -webkit-tap-highlight-color: transparent;
 }
 
+button.ghost {
+  background: transparent;
+  color: var(--text);
+}
+
 button:hover {
   transform: translateY(-3px);
 }

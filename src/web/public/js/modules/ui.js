@@ -85,7 +85,7 @@ export const showStep = async (nextStep, currentStep = null) => {
 
   setTimeout(() => {
     nextStep.classList.add('show');
-  }, 300);
+  }, 400);
 };
 
 /**

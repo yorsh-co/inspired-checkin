@@ -9,3 +9,28 @@ body {
 .txt-left {
   text-align: left;
 }
+
+/* small print */
+.privacy-notice {
+  min-width: 100%;
+  text-align: center;
+  margin-top: 8px;
+  margin-bottom: 6px;
+  font-size: 0.7em;
+  color: var(--muted);
+}
+
+.privacy-notice a {
+  font-weight: 600;
+}
+
+.small-print a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.small-print a:hover {
+  color: white;
+}
+

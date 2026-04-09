@@ -8,3 +8,11 @@
 .ticket-step.fade-out {
   animation: fadeOut 0.3s ease forwards;
 }
+
+.ticket-step input {
+  margin-bottom: 0;
+}
+
+.qr-step button {
+  margin-bottom: 0;
+}

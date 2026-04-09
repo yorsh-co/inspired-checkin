@@ -1,7 +1,7 @@
 .qr-step {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  /*gap: 15px;*/
 
   max-height: 0;
   opacity: 0;

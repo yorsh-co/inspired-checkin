@@ -2,25 +2,23 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title><%= title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
 
-<!-- global fonts -->
-<link
-href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap"
-rel="stylesheet"
-/>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <!-- global fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 
-<!-- global styles -->
-<link rel="stylesheet" href="/css/main.css" />
+  <!-- global styles -->
+  <link rel="stylesheet" href="/css/main.css" />
 
-<!-- page-specific styles -->
-<% if (styles) {
-%>
-<%- styles %>
-<%
-} %>
+  <!-- page-specific styles -->
+  <% if (styles) { %>
+  <%-  styles %>
+  <% } %>
 </head>
 <body>
 
@@ -37,56 +35,56 @@ rel="stylesheet"
     </div>
   </noscript>
 
-<%- body %>
+  <!-- main injection -->
+  <%- body %>
 
-<button id="skip-button" class="test">
-<span>[test] pular etapa</span>
-</button>
+  <!-- test button to skip steps -->
+  <button id="skip-button" class="test">
+    <span>[test] pular etapa</span>
+  </button>
 
-<!-- global scripts -->
+  <!-- global scripts -->
 
-<!-- page-specific scripts -->
-<% if (scripts) {
-%>
-<%- scripts %>
-<%
-} %>
+  <!-- page-specific scripts -->
+  <% if (scripts) { %>
+  <%-  scripts %>
+  <% } %>
 
 </body>
 
 <!-- dev tools on mobile -->
 <script>
-(function initErudaDebugMode() {
-const params = new URLSearchParams(window.location.search);
-const host = location.hostname;
+  (function initErudaDebugMode() {
+    const params = new URLSearchParams(window.location.search);
+    const host = location.hostname;
 
-const isAllowedHost =
-host === 'localhost' ||
-host === '127.0.0.1' ||
-host.startsWith('192.168.') ||
-host.startsWith('100.') ||
-host.endsWith('.trycloudflare.com');
+    const isAllowedHost =
+      host === 'localhost' ||
+      host === '127.0.0.1' ||
+      host.startsWith('192.168.') ||
+      host.startsWith('100.') ||
+      host.endsWith('.trycloudflare.com');
 
-if (!isAllowedHost) return;
+    if (!isAllowedHost) return;
 
-if (params.get('debug') === 'true') {
-localStorage.setItem('debug', 'true');
-}
+    if (params.get('debug') === 'true') {
+      localStorage.setItem('debug', 'true');
+    }
 
-if (params.get('debug') === 'false') {
-localStorage.removeItem('debug');
-}
+    if (params.get('debug') === 'false') {
+      localStorage.removeItem('debug');
+    }
 
-const isDebug = localStorage.getItem('debug') === 'true';
+    const isDebug = localStorage.getItem('debug') === 'true';
 
-if (!isDebug) return;
+    if (!isDebug) return;
 
-const script = document.createElement('script');
-script.src = 'https://cdn.jsdelivr.net/npm/eruda';
-script.onload = () => eruda.init();
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/eruda';
+    script.onload = () => eruda.init();
 
-document.body.appendChild(script);
-})();
+    document.body.appendChild(script);
+  })();
 </script>
 
 </html>

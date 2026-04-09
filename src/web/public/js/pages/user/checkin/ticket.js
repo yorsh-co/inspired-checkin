@@ -17,12 +17,14 @@ export const onTicketInput = async (fromPaste = false) => {
 
   // validate input
   const input = document.querySelector('[data-checkin="ticket-input"]');
+  input.classList.remove('error');
+
   const value = formatTicket(input.value);
   input.value = value;
   console.log('ticket', input.value);
 
   const hintDiv = document.querySelector('[data-checkin="ticket-hint-div"]');
-  input.classList.remove('error');
+  ui.clearError(hintDiv);
 
   if (!value) {
     if (!fromPaste) {
@@ -34,7 +36,13 @@ export const onTicketInput = async (fromPaste = false) => {
 
   if (!isValidTicket(value)) {
     console.error('input is invalid');
-    ui.showError(hintDiv, 'O código precisa ter 5 letras ou números');
+
+    ui.showError(
+      hintDiv,
+      fromPaste
+        ? 'Código inválido 😕'
+        : 'O código precisa ter 5 letras ou números',
+    );
     return;
   }
   console.log('input is valid');
@@ -56,7 +64,7 @@ export const onTicketInput = async (fromPaste = false) => {
 
     // validate ticket number with the server
     const res = await api.checkin.submitTicket(value);
-    console.log(res.code, res.checkinStatus);
+    console.log(res.checkinStatus);
 
     ui.clear(hintDiv);
 

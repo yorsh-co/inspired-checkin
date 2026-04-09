@@ -3,23 +3,41 @@
   margin-bottom: 0;
 }
 
-/* ticket */
+/* step */
 .checkin-container .ticket-step,
-.checkin-container .verification-step {
+.checkin-container .verification-step,
+.checkin-container .qr-step,
+.checkin-container .success-step {
   opacity: 0;
-  animation: fadeIn 0.6s ease forwards;
-  animation-delay: 0.4s;
+  max-height: 0;
+  overflow: hidden;
+
+  /*animation: fadeIn 0.6s ease forwards;*/
+  /*animation-delay: 0.4s;*/
 
   transition:
-    opacity 0.3s ease,
+    max-height 0.5s ease,
+    opacity 0.4s ease,
     transform 0.3s ease;
 }
 
-.checkin-container .ticket-step.fade-out {
+.checkin-container .ticket-step.show,
+.checkin-container .verification-step.show,
+.checkin-container .qr-step.show,
+.checkin-container .success-step.show {
+  max-height: 500px;
+  opacity: 1;
+  animation: fadeIn 0.4s ease;
+}
+
+.checkin-container .ticket-step.fade-out,
+.checkin-container .verification-step.fade-out,
+.checkin-container .qr-step.fade-out,
+.checkin-container .success-step.fadeout {
   animation: fadeOut 0.3s ease forwards;
 }
 
-/* confirm step */
+/* verification step */
 .checkin-container .tel-input {
   width: auto;
   max-width: 70px;
@@ -44,10 +62,10 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-
 }
 
-.checkin-container th, .checkin-container td {
+.checkin-container th,
+.checkin-container td {
   padding: 8px 4px;
 }
 
@@ -61,4 +79,59 @@
 
 .checkin-container button {
   margin-top: 16px;
+}
+
+/* success */
+.success-step {
+  /*display: none;
+  opacity: 0;*/
+  transform: scale(0.95);
+  /*transition: all 0.4s ease;*/
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.success-step.show {
+  /*display: flex;
+  opacity: 1;*/
+  transform: scale(1);
+  /*animation: fadeIn 0.4s ease;*/
+}
+
+.success-step.show .check {
+  animation: pop 0.4s ease;
+}
+
+.check {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  /*border: 2px solid #4ade80;*/
+  background: #4caf50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.check::after {
+  content: '✔';
+  color: #fff;
+  font-size: 28px;
+}
+
+.success-message {
+  opacity: 0.95;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.success-message.changing {
+  opacity: 0;
+  transform: translateY(4px);
 }

@@ -9,11 +9,11 @@ import api from '../../../core/api/index.js';
  * @param {HTMLDivElement} hintDiv
  * @returns
  */
-export const verifyEventQr = async (qrCode, hintDiv) => {
+export const onQrScan = async (qrCode, hintDiv) => {
   try {
     // server request
     const res = await api.checkin.submitQrCode(qrCode);
-    console.log(res.code, res.checkinStatus);
+    console.log(res.checkinStatus);
 
     ui.clear(hintDiv);
 

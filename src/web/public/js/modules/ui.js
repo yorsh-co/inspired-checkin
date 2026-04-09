@@ -7,7 +7,7 @@ export const showError = async (el, msg) => {
   el.classList.add('error');
 };
 
-export const clearError = async el => {
+export const clearError = async (el) => {
   el.textContent = '';
   el.classList.remove('error');
 };
@@ -24,7 +24,7 @@ export const showHint = async (el, msg) => {
   }, 120);
 };
 
-export const clearHint = async el => {
+export const clearHint = async (el) => {
   el.classList.add('changing');
 
   setTimeout(() => {
@@ -34,7 +34,7 @@ export const clearHint = async el => {
   }, 120);
 };
 
-export const clear = async el => {
+export const clear = async (el) => {
   el.classList.add('changing');
 
   setTimeout(() => {
@@ -57,40 +57,40 @@ export const change = async (el, msg) => {
   }, 120);
 };
 
-export const startLoading = async wrapper => {
+export const startLoading = async (wrapper) => {
   wrapper.classList.add('loading');
   wrapper.disabled = true;
 };
 
-export const stopLoading = async wrapper => {
+export const stopLoading = async (wrapper) => {
   wrapper.classList.remove('loading');
   wrapper.disabled = false;
 };
 
-export const hide = el => {
+export const hide = (el) => {
   el.classList.add('display-none');
 };
 
-export const show = el => {
+export const show = (el) => {
   el.classList.remove('display-none');
 };
 
 /**
- * 
- * @param {HTMLDivElement} oldEl 
- * @param {HTMLDivElement} nextStep 
+ *
+ * @param {HTMLDivElement} nextStep
+ * @param {HTMLDivElement} currentStep
  */
-export const transitionToNextStep = (oldEl, nextStep) => {
-  oldEl.classList.add('fade-out');
-  nextStep.classList.add('open');
-}
+export const showStep = (nextStep, currentStep = null) => {
+  currentStep.classList.add('fade-out');
+  nextStep.classList.add('show');
+};
 
 /**
  *
  * @param {HTMLDivElement} oldEl
  * @param {HTMLDivElement} qrStep
  */
-export const transitionToQR = (oldEl, qrStep) => {
+/*export const transitionToQR = (oldEl, qrStep) => {
   oldEl.style.display = 'none';
   qrStep.classList.add('open');
 };
@@ -100,7 +100,7 @@ export const transitionToQR = (oldEl, qrStep) => {
  * @param {HTMLElement} oldEl
  * @param {HTMLElement} success
  */
-export const transitionToSuccess = (oldEl, success) => {
+/*export const transitionToSuccess = (oldEl, success) => {
   oldEl.classList.add('fade-out');
   success.classList.add('show');
-};
+};*/

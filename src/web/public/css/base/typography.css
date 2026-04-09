@@ -3,6 +3,11 @@ body {
   color: var(--text);
 }
 
+h1 {
+  margin-bottom: 25px;
+}
+
+/* alignment */
 .txt-center {
   text-align: center;
 }
@@ -33,4 +38,3 @@ body {
 .small-print a:hover {
   color: white;
 }
-

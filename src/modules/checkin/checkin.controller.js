@@ -7,7 +7,7 @@ export const validateTicket = async (req, res) => {
     nextStep: 'verification',
     checkinStatus: 'pending_verification',
     data: {
-      user: { ticket, name, telStart },
+      user: { ticket: 't35t3', name: 'João ... Barros', telStart: '11912' },
     },
   });
 

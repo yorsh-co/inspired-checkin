@@ -5,11 +5,11 @@ import * as utils from '../../../modules/utils.js';
  *
  * @param {HTMLDivElement} step
  */
-export const runSuccessFlow = async (step) => {
-  ui.showStep(document.querySelector('[data-checkin="success"]'), step);
+export const runSuccessFlow = async step => {
+  ui.showStep(document.querySelector('[data-checkin="success-step"]'), step);
 
   const successMessage = document.querySelector(
-    '[data-checkin="success-message"]',
+    '[data-checkin="success-message"]'
   );
 
   ui.change(successMessage, 'Check-in feito! ✨');

@@ -38,14 +38,9 @@ try {
   attachScrollOnResize(container);
 
   // cursor glow
-  /*container.addEventListener('mousemove', e => {
+  container.addEventListener('mousemove', e => {
     const rect = container.getBoundingClientRect();
 
-    container.style.setProperty('--x', `${e.clientX - rect.left}px`);
-    container.style.setProperty('--y', `${e.clientY - rect.top}px`);
-  });*/
-  container.addEventListener('pointermove', (e) => {
-    const rect = container.getBoundingClientRect();
     container.style.setProperty('--x', `${e.clientX - rect.left}px`);
     container.style.setProperty('--y', `${e.clientY - rect.top}px`);
   });

@@ -14,13 +14,12 @@ export const runSuccessFlow = async stepEl => {
   const successMessage = document.querySelector(
     '[data-checkin="success-message"]'
   );
-  //successMessage.textContent = 'Check-in feito! ✨';
+
   ui.change(successMessage, 'Check-in feito! ✨');
   navigator.vibrate?.(50);
   await utils.sleep(1000);
 
-  //successMessage.textContent = 'Indo pro app... 🚀';
-  ui.change(successMessage, 'Indo pro app... 🚀');
+  ui.change(successMessage, 'Indo pro app...');
   await utils.sleep(1200);
 
   console.log('redirecting to app...');

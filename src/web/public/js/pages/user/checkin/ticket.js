@@ -73,7 +73,7 @@ export const onTicketInput = async (fromPaste = false) => {
     // handle server response
     switch (res.nextStep) {
       case 'verification': {
-        ui.showHint(hintDiv, 'Ingresso ok! Agora escaneia o QR code 📷');
+        ui.showHint(hintDiv, 'Encontrado! Agora confirme seu ingresso 🎫');
         await utils.sleep(1200);
 
         await ui.showStep(

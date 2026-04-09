@@ -67,11 +67,19 @@
 
 .checkin-container th,
 .checkin-container td {
-  padding: 8px 4px;
+  padding: 0 4px;
+  height: 40px;
 }
 
 .checkin-container th {
   text-align: left;
+}
+
+.checkin-container th div {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 8px;
 }
 
 .checkin-container td {

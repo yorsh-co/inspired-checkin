@@ -6,7 +6,10 @@
 `; %>
 
 <!-- FIXME: add JS warning -->
-<main data-checkin="main-container" class="main-container checkin-container txt-center">
+<main
+  data-checkin="main-container"
+  class="main-container checkin-container txt-center"
+>
   <h1>inspire</h1>
 
   <!-- ticket step -->
@@ -36,15 +39,30 @@
     <div>Verifique os dados do seu ingresso</div>
     <table class="">
       <tr>
-        <th>🎟️ Ingresso</th>
+        <th>
+          <div>
+            <span class="material-symbols-outlined"> numbers </span>
+            Ingresso
+          </div>
+        </th>
         <td data-checkin="verification-ticket-number">t35t3</td>
       </tr>
       <tr>
-        <th>👤 Nome</th>
+        <th>
+          <div>
+            <span class="material-symbols-outlined"> id_card </span>
+            Nome
+          </div>
+        </th>
         <td data-checkin="verification-user-name">João ... Bastos</td>
       </tr>
       <tr>
-        <th>📞 Telefone</th>
+        <th>
+          <div>
+            <span class="material-symbols-outlined"> call </span>
+            Telefone
+          </div>
+        </th>
         <td>
           <div data-checkin="verification-input-wrapper" class="input-wrapper">
             (11) 912••
@@ -66,9 +84,11 @@
       </tr>
     </table>
 
-    <div data-checkin="verification-hint-div" class="hint">Digite os 4 últimos digitos do seu telefone 👆</div>
+    <div data-checkin="verification-hint-div" class="hint">
+      Digite os 4 últimos digitos do seu telefone 👆
+    </div>
 
-    <button  data-checkin="verification-back-btn" class="ghost">
+    <button data-checkin="verification-back-btn" class="ghost">
       <span class="btn-label">Voltar</span>
       <span class="btn-spinner"></span>
     </button>
@@ -77,7 +97,6 @@
   <!-- TODO: turn this into a component -->
   <!-- qr step -->
   <div data-checkin="qr-step" class="qr-step">
-
     <div class="qr-reader-wrapper">
       <div id="checkin-qr-reader" class="qr-reader"></div>
       <div class="div-spinner"></div>

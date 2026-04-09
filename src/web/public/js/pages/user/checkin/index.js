@@ -21,7 +21,7 @@ try {
   setupInput({
     input: ticketInput,
     hintDiv: document.querySelector('[data-checkin="ticket-hint-div"]'),
-    onSubmit: handleTicketNumber
+    onSubmit: handleTicketNumber,
   });
 
   startTyping(ticketInput);
@@ -30,7 +30,7 @@ try {
     'checkin-qr-reader',
     document.querySelector('[data-checkin="start-camera-btn"]'),
     document.querySelector('[data-checkin="qr-hint-div"]'),
-    verifyEventQr
+    verifyEventQr,
   );
 
   // scroll on resize
@@ -38,9 +38,14 @@ try {
   attachScrollOnResize(container);
 
   // cursor glow
-  container.addEventListener('mousemove', e => {
+  /*container.addEventListener('mousemove', e => {
     const rect = container.getBoundingClientRect();
 
+    container.style.setProperty('--x', `${e.clientX - rect.left}px`);
+    container.style.setProperty('--y', `${e.clientY - rect.top}px`);
+  });*/
+  container.addEventListener('pointermove', (e) => {
+    const rect = container.getBoundingClientRect();
     container.style.setProperty('--x', `${e.clientX - rect.left}px`);
     container.style.setProperty('--y', `${e.clientY - rect.top}px`);
   });

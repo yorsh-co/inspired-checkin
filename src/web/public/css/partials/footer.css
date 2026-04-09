@@ -8,8 +8,8 @@
   gap: 6px;
 
   opacity: 0;
-  animation: fadeIn 0.6s ease forwards;
-  animation-delay: 0.4s;
+  animation: fadeIn 0.4s ease forwards;
+  animation-delay: 0.3s;
 }
 
 .footer-top {

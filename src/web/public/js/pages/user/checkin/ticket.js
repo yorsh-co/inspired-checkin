@@ -11,7 +11,7 @@ let isSubmitting = false;
  * @param {boolean} fromPaste
  * @returns
  */
-export const handleTicketNumber = async (fromPaste = false) => {
+export const onTicketInput = async (fromPaste = false) => {
   if (isSubmitting) return;
   console.log('ticket submitted');
 
@@ -45,7 +45,9 @@ export const handleTicketNumber = async (fromPaste = false) => {
   ui.showHint(hintDiv, 'Validando seu ingresso... ⏳');
   input.blur();
 
-  const inputWrapper = document.querySelector('[data-checkin="input-wrapper"]');
+  const inputWrapper = document.querySelector(
+    '[data-checkin="ticket-input-wrapper"]',
+  );
   ui.startLoading(inputWrapper);
 
   try {
@@ -53,31 +55,26 @@ export const handleTicketNumber = async (fromPaste = false) => {
     console.log('submitting to server');
 
     // validate ticket number with the server
-    const res = await api.checkin.verifyTicket(value);
+    const res = await api.checkin.submitTicket(value);
+    console.log(res.code, res.checkinStatus);
+
     ui.clear(hintDiv);
 
     // handle server response
-    if (res.data.checkinComplete) {
-      // go to the app
-      ui.showHint(hintDiv, 'Ingresso ok! 🎉');
+    switch (res.nextStep) {
+      case 'verification': {
+        ui.showHint(hintDiv, 'Ingresso ok! Agora escaneia o QR code 📷');
+        await utils.sleep(1200);
 
-      await utils.sleep(800);
-
-      runSuccessFlow(document.querySelector('[data-checkin="ticket-step"]'));
-      // TODO: handle failures
-    } else if (res.data.ticketValidated) {
-      // TODO: if the ticket is valid, prompt for qr validation
-      ui.showHint(hintDiv, 'Ingresso ok! Agora escaneia o QR code 📷');
-      await utils.sleep(1200);
-
-      ui.transitionToQR(
-        document.querySelector('[data-checkin="ticket-step"]'),
-        document.querySelector('[data-checkin="qr-step"]')
-      );
-    } else {
-      // TODO: if the ticket is invalid, return to the input
-      ui.showError(hintDiv, 'Código inválido 😕 Tenta de novo');
-      throw new Error('Invalid');
+        ui.transitionToNextStep(
+          document.querySelector('[data-checkin="ticket-step"]'),
+          document.querySelector('[data-checkin="verification-step"]'),
+        );
+      }
+      default: {
+        ui.showError(hintDiv, 'Código inválido 😕 Tenta de novo');
+        throw new Error('Invalid');
+      }
     }
   } catch (err) {
     console.error(err);

@@ -76,6 +76,16 @@ export const show = el => {
 };
 
 /**
+ * 
+ * @param {HTMLDivElement} oldEl 
+ * @param {HTMLDivElement} nextStep 
+ */
+export const transitionToNextStep = (oldEl, nextStep) => {
+  oldEl.classList.add('fade-out');
+  nextStep.classList.add('open');
+}
+
+/**
  *
  * @param {HTMLDivElement} oldEl
  * @param {HTMLDivElement} qrStep

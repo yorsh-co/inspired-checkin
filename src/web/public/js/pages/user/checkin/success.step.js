@@ -2,7 +2,7 @@ import * as ui from '../../../modules/ui.js';
 import * as utils from '../../../modules/utils.js';
 
 /**
- *
+ * FIXME:
  * @param {HTMLDivElement} step
  */
 export const runSuccessFlow = async step => {

@@ -1,6 +1,8 @@
+import { goToStep } from './navigation.js';
+
 import * as ui from '../../../modules/ui.js';
 import * as utils from '../../../modules/utils.js';
-import { runSuccessFlow } from './success.step.js';
+
 import api from '../../../core/api/index.js';
 
 /**
@@ -12,7 +14,6 @@ import api from '../../../core/api/index.js';
 export const onQrScan = async (qrCode, hintDiv) => {
   // server request
   const res = await api.checkin.submitQrCode(qrCode);
-  console.log(res.meta.checkinStatus);
 
   ui.clear(hintDiv);
 

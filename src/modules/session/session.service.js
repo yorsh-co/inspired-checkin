@@ -18,6 +18,9 @@ const createSession = async (req) => {
     ticketId: null,
     eventId: null,
 
+    phoneHash: null,
+    phoneLast4Hash: null,
+
     ua: hashUA(req.headers['user-agent']),
 
     createdAt: Date.now(),

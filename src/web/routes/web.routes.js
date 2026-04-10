@@ -27,8 +27,7 @@ router.get('/checkin', async (req, res, next) => {
       title: 'Check-in',
 
       initialData: {
-        nextStep: result.meta.nextStep,
-        ...(result.data && { data: result.data }),
+        ...result,
       },
     });
   } catch (err) {

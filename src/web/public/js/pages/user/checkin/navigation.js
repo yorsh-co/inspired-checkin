@@ -1,5 +1,6 @@
 import * as ui from '../../../modules/ui.js';
 import * as utils from '../../../modules/utils.js';
+import { store } from './store.js';
 
 const stepMap = {
   qr: '[data-checkin="qr-step"]',

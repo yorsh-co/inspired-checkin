@@ -1,4 +1,6 @@
 import { formatTicket, isValidTicket } from './utils.js';
+import { goToStep } from './navigation.js';
+import { populateVerificationValues } from './verification.step.js';
 
 import * as ui from '../../../modules/ui.js';
 import * as utils from '../../../modules/utils.js';
@@ -67,7 +69,6 @@ export const onTicketInput = async (fromPaste = false) => {
 
     // validate ticket number with the server
     const res = await api.checkin.submitTicket(value);
-    console.log(res.meta.checkinStatus);
 
     ui.clear(hintDiv);
 
@@ -75,6 +76,8 @@ export const onTicketInput = async (fromPaste = false) => {
     if (res.success) {
       ui.showHint(hintDiv, 'Encontrado! Agora confirme seu ingresso 🎫');
       await utils.sleep(1200);
+
+      populateVerificationValues(res.data.user);
 
       await goToStep(res.meta.nextStep);
     } else {

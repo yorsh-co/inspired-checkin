@@ -1,4 +1,5 @@
 import { formatVerificationCode, isValidVerificationCode } from './utils.js';
+import { goToStep } from './navigation.js';
 
 import * as ui from '../../../modules/ui.js';
 import * as utils from '../../../modules/utils.js';
@@ -68,7 +69,6 @@ export const onVerificationInput = async (fromPaste = false) => {
 
     // verify user with the server
     const res = await api.checkin.submitVerification(value);
-    console.log(res.meta.checkinStatus);
 
     ui.clear(hintDiv);
 
@@ -88,35 +88,6 @@ export const onVerificationInput = async (fromPaste = false) => {
       );
       throw new Error('Invalid');
     }
-    /*
-    switch (res.meta.nextStep) {
-      case 'qr': {
-        ui.showHint(hintDiv, 'Ingresso ok! Agora escaneia o QR code 📷');
-        await utils.sleep(1200);
-
-        ui.showStep(
-          document.querySelector('[data-checkin="qr-step"]'),
-          document.querySelector('[data-checkin="verification-step"]'),
-        );
-
-        break;
-      }
-      case 'success': {
-        ui.showHint(hintDiv, 'Ingresso ok! 🎉');
-        await utils.sleep(800);
-
-        runSuccessFlow(
-          document.querySelector('[data-checkin="verification-step"]'),
-        );
-
-        break;
-      }
-      default: {
-        ui.showError(hintDiv, 'Telefone inválido 😕 Tenta de novo');
-        throw new Error('Invalid');
-      }
-    }
-*/
   } catch (err) {
     console.error(err);
 
@@ -135,8 +106,28 @@ export const onVerificationInput = async (fromPaste = false) => {
  *
  */
 export const populateVerificationValues = async (userData = {}) => {
-  for (const key of userData) {
+  const values = { ...userData };
+
+  // store values
+  for (const key in values) {
     const el = document.querySelector(`[data-checkin="verification-${key}"]`);
-    if (el) el.textContent = userData[key] || '';
+    el.dataset.checkinValue = userData[key];
+  }
+
+  // format phone number
+  if (values.phoneStart) {
+    let value = values.phoneStart;
+    if (value.startsWith('55')) {
+      value = value.slice(2);
+
+      value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+      values.phoneStart = value;
+    }
+  }
+
+  // display values
+  for (const key in values) {
+    const el = document.querySelector(`[data-checkin="verification-${key}"]`);
+    if (el) el.textContent = values[key] || '';
   }
 };

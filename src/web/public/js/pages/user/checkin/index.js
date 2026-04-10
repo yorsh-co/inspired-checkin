@@ -16,13 +16,15 @@ try {
 
   // load step
   window.addEventListener('load', async () => {
-    const data = JSON.parse(
+    const checkinData = JSON.parse(
       document.getElementById('checkin-data').textContent,
     );
 
-    const initialStep = data?.nextStep || 'ticket';
-    
-    if (initialStep === 'verification') populateVerificationValues(data.user);
+    const initialStep = checkinData?.meta?.nextStep || 'ticket';
+
+    if (initialStep === 'verification' && checkinData?.data?.user) {
+      populateVerificationValues(checkinData.data.user);
+    }
 
     store.setState({ currentStep: null });
 

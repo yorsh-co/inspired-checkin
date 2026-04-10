@@ -26,6 +26,10 @@ export class CheckinService {
 
     let data = {};
 
+    if (this.session.userPreview) {
+      data.user = this.session.userPreview;
+    }
+
     if (ticketCode && !this.session.progress.ticket) {
       const result = await this._processTicket(ticketCode);
       this.session = result.session;
@@ -122,9 +126,10 @@ export class CheckinService {
         ...updated,
         phoneHash: result.security.phoneHash,
         phoneLast4Hash: result.security.phoneLast4Hash,
+        userPreview: result.userPreview,
       },
       data: {
-        user: result.user,
+        userPreview: result.userPreview,
       },
     };
   }
@@ -152,6 +157,39 @@ export class CheckinService {
       data: {},
     };
   }
+
+  // =========================
+  // DEBUG
+  // =========================
+  async debug() {
+    await this._initSession();
+
+    const getDebugLabel = (progress) => {
+      if (!progress.ticket) return 'WAITING_FOR_TICKET';
+      if (!progress.verified) return 'WAITING_FOR_VERIFICATION';
+      if (!progress.qr) return 'WAITING_FOR_QR';
+      return 'COMPLETE';
+    };
+
+    return {
+      status: getDebugLabel(this.session.progress),
+
+      sessionId: this.sessionId,
+
+      progress: this.session.progress,
+      nextStep: getNextStep(this.session.progress),
+
+      currentStep: this.session.currentStep,
+
+      ticketId: this.session.ticketId,
+      eventId: this.session.eventId,
+
+      source: this.session.source,
+
+      createdAt: this.session.createdAt,
+      lastUpdatedAt: this.session.lastUpdatedAt,
+    };
+  }
 }
 
 /**
@@ -169,13 +207,13 @@ const validateTicket = async (ticketCode) => {
   const last4 = fullPhone.slice(-4);
 
   return {
-    ticketId: record.ticketId,
+    ticketId: record.ticket_id,
     security: {
       phoneHash: hash(fullPhone),
       phoneLast4Hash: hash(last4),
     },
 
-    user: {
+    userPreview: {
       ticketCode: ticketCode,
       name: maskName(record.user_name),
       phoneStart: maskPhone(fullPhone),

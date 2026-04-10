@@ -8,8 +8,8 @@ import {
   attachScrollOnFocus,
   attachScrollOnBlur,
 } from '../../../components/input/focus-scroll.js';
-import { onTicketInput } from './ticket.js';
-import { onVerificationInput } from './verification.js';
+import { onTicketInput } from './ticket.step.js';
+import { onVerificationInput } from './verification.step.js';
 
 /**
  *

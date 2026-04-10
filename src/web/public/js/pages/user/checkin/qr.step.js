@@ -1,6 +1,6 @@
 import * as ui from '../../../modules/ui.js';
 import * as utils from '../../../modules/utils.js';
-import { runSuccessFlow } from './success.js';
+import { runSuccessFlow } from './success.step.js';
 import api from '../../../core/api/index.js';
 
 /**

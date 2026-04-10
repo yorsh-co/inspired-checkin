@@ -1,10 +1,18 @@
 import pg from '../../shared/db/postgres.js';
 
 export const getTicketByCode = async (ticketCode) => {
+  // FIXME: test only
+  return {
+    ticketId: '5386c2ec-7a17-4774-9450-2a286dd5c03c',
+    user_phone: '5511912341234',
+    name: 'João Lucas dos Santos',
+  };
+
   const result = await pg.query(
     'SELECT ticket_id, scanned_at FROM tickets WHERE ticket_code = $1',
     [ticketCode],
   );
+
   return result.rows[0] || null;
 };
 

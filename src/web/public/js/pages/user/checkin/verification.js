@@ -45,6 +45,13 @@ export const onVerificationInput = async (fromPaste = false) => {
   }
 
   console.log('input is valid');
+  
+  const inputWrapper = document.querySelector(
+      '[data-checkin="verification-input-wrapper"]',
+    );
+    const backButton = document.querySelector(
+      '[data-checkin="verification-back-btn"]',
+    );
 
   // submit input
   try {
@@ -52,14 +59,11 @@ export const onVerificationInput = async (fromPaste = false) => {
     ui.clear(hintDiv);
     ui.showHint(hintDiv, 'Confirmando seu ingresso... ⏳');
     input.blur();
-
-    const backButton = document.querySelector(
-      '[data-checkin="verification-back-btn"]',
-    );
-    ui.startLoading(backButton);
+    
+    ui.startLoading(inputWrapper);
     backButton.disabled = true;
-
     input.disabled = true;
+    
     console.log('submitting to server');
 
     // verify user with the server
@@ -99,7 +103,7 @@ export const onVerificationInput = async (fromPaste = false) => {
   } catch (err) {
     console.error(err);
 
-    ui.stopLoading(backButton);
+    ui.stopLoading(inputWrapper);
     backButton.disabled = false;
     isSubmitting = false;
 

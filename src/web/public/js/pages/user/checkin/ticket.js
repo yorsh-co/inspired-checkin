@@ -48,6 +48,10 @@ export const onTicketInput = async (fromPaste = false) => {
   }
 
   console.log('input is valid');
+  
+  const inputWrapper = document.querySelector(
+      '[data-checkin="ticket-input-wrapper"]',
+    );
 
   // submit input
   try {
@@ -56,12 +60,9 @@ export const onTicketInput = async (fromPaste = false) => {
     ui.showHint(hintDiv, 'Buscando seu ingresso... ⏳');
     input.blur();
 
-    const inputWrapper = document.querySelector(
-      '[data-checkin="ticket-input-wrapper"]',
-    );
     ui.startLoading(inputWrapper);
-
     input.disabled = true;
+    
     console.log('submitting to server');
 
     // validate ticket number with the server

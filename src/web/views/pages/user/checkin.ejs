@@ -66,6 +66,7 @@
         <td>
           <div data-checkin="verification-input-wrapper" class="input-wrapper">
             <span>(11) 91234-••••</span>
+            <!--
             <input
               id="checkin-verification-input"
               data-checkin="verification-input"
@@ -79,10 +80,27 @@
               autocapitalize="sentences"
               enterkeyhint="send"
             />
+            -->
           </div>
         </td>
       </tr>
     </table>
+    
+    <div data-checkin="verification-input-wrapper" class="input-wrapper">
+      <input
+              id="checkin-verification-input"
+              data-checkin="verification-input"
+              class="tel-input-test"
+              type="text"
+              placeholder="----"
+              inputmode="text"
+              pattern="[0-9]{4}"
+              autocomplete="one-time-code"
+              autocorrect="on"
+              autocapitalize="sentences"
+              enterkeyhint="send"
+            />
+    </div>
 
     <div data-checkin="verification-hint-div" class="hint">
       Digite os 4 últimos digitos do seu telefone 👆

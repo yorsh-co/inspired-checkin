@@ -27,7 +27,7 @@ export class CheckinService {
     let data = {};
 
     if (this.session.userPreview) {
-      data.user = this.session.userPreview;
+      data.userPreview = this.session.userPreview;
     }
 
     if (ticketCode && !this.session.progress.ticket) {

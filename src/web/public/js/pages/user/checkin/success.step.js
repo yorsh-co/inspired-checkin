@@ -2,14 +2,11 @@ import * as ui from '../../../modules/ui.js';
 import * as utils from '../../../modules/utils.js';
 
 /**
- * FIXME:
- * @param {HTMLDivElement} step
+ *
  */
-export const runSuccessFlow = async step => {
-  ui.showStep(document.querySelector('[data-checkin="success-step"]'), step);
-
+export const runSuccessFlow = async () => {
   const successMessage = document.querySelector(
-    '[data-checkin="success-message"]'
+    '[data-checkin="success-message"]',
   );
 
   ui.change(successMessage, 'Check-in feito! ✨');

@@ -54,3 +54,33 @@ export const submitQrCode = async (qrCode) => {
 
   return data;
 };
+
+export const debugSession = async () => {
+  const res = await fetch('/api/v1/checkin/debug', {
+    method: 'GET',
+    credentials: 'include',
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.error || 'Request failed');
+  }
+
+  console.log(data);
+};
+
+export const resetSession = async () => {
+  const res = await fetch('/api/v1/checkin/debug/reset', {
+    method: 'POST',
+    credentials: 'include',
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.error || 'Request failed');
+  }
+
+  console.log(data);
+};

@@ -7,6 +7,13 @@ router.post('/ticket', controller.submitTicket);
 router.post('/verification', controller.submitVerification);
 router.post('/qr', controller.submitQrCode);
 
+// =========================
+// DEBUG
+// =========================
+
+import { env } from '../../config/env.js';
+import { destroySession } from '../session/session.service.js';
+
 router.get('/debug', async (req, res) => {
   try {
     if (env.nodeEnv === 'production') {
@@ -41,35 +48,3 @@ router.post('/debug/reset', async (req, res) => {
 });
 
 export default router;
-
-/*
-router.post('/api/v1/checkin/ticket', async (req, res) => {
-  const service = new CheckinService({ req, res });
-
-  const result = await service.submitTicket(req.body.ticket);
-
-  res.json(result);
-});
-
-router.post('/api/v1/checkin/verification', async (req, res) => {
-  const service = new CheckinService({ req, res });
-
-  const result = await service.submitVerification(
-    req.body.verificationCode
-  );
-
-  res.json(result);
-});
-
-router.post('/api/v1/checkin/qr', async (req, res) => {
-  const service = new CheckinService({ req, res });
-
-  const result = await service.scanQr(req.body.qrCode);
-
-  res.json(result);
-});
-
-
-
-
-*/

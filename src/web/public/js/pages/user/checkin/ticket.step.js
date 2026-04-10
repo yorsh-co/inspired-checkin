@@ -1,6 +1,6 @@
 import { formatTicket, isValidTicket } from './utils.js';
 import { goToStep } from './navigation.js';
-import { populateVerificationValues } from './verification.step.js';
+import { store } from './store.js';
 
 import * as ui from '../../../modules/ui.js';
 import * as utils from '../../../modules/utils.js';
@@ -77,7 +77,9 @@ export const onTicketInput = async (fromPaste = false) => {
       ui.showHint(hintDiv, 'Encontrado! Agora confirme seu ingresso 🎫');
       await utils.sleep(1200);
 
-      populateVerificationValues(res.data.user);
+      store.setState({
+        userData: res.data.userPreview,
+      });
 
       await goToStep(res.meta.nextStep);
     } else {

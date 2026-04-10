@@ -9,7 +9,9 @@ import {
 import { onQrScan } from './qr.step.js';
 import { goToStep } from './navigation.js';
 import { store } from './store.js';
-import { populateVerificationValues } from './verification.step.js';
+import { initCheckinEffects } from './effects.js';
+import { setupButton } from '../../../test.js';
+import api from '../../../core/api/index.js';
 
 try {
   window.history.replaceState(null, '', '/checkin');
@@ -22,14 +24,15 @@ try {
 
     const initialStep = checkinData?.meta?.nextStep || 'ticket';
 
-    if (initialStep === 'verification' && checkinData?.data?.user) {
-      populateVerificationValues(checkinData.data.user);
-    }
-
-    store.setState({ currentStep: null });
+    store.setState({
+      currentStep: null,
+      userData: checkinData?.data?.userPreview || null,
+    });
 
     await goToStep(initialStep);
   });
+
+  initCheckinEffects();
 
   // modules
   setupTicketInput();
@@ -72,6 +75,10 @@ try {
     container.style.setProperty('--x', `${e.clientX - rect.left}px`);
     container.style.setProperty('--y', `${e.clientY - rect.top}px`);
   });
+
+
+  // debug
+  setupButton(api.checkin.resetSession);
 } catch (err) {
   console.error(err);
   alert(err); // FIXME:

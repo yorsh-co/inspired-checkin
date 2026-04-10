@@ -112,6 +112,7 @@
 
 .success-step.show .check {
   animation: pop 0.4s ease;
+  /*animation-delay: 0.2s;*/
 }
 
 .check {
@@ -126,9 +127,10 @@
 }
 
 .check::after {
-  content: '✔';
+  content: 'check';
   color: #fff;
-  font-size: 28px;
+  font-size: 36px;
+  font-weight: 900;
 }
 
 .success-message {

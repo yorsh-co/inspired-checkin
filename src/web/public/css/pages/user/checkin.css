@@ -39,14 +39,6 @@
 }
 
 /* verification step */
-.checkin-container .tel-input {
-  width: auto;
-  max-width: 70px;
-  padding: 5px;
-  text-align: center;
-  margin-left: 5px;
-}
-
 .checkin-container table {
   width: 100%;
   margin: auto;

@@ -5,11 +5,8 @@ import { checkinSession } from './checkin.session.adapter.js';
 import { getTicketByCode } from '../ticket/ticket.service.js';
 import { maskName, maskPhone } from '../../shared/utils/mask.js';
 import { hash } from '../../shared/utils/hash.js';
-
-const validateQr = async (qr) => {
-  if (!qr) throw new Error('Invalid QR');
-  // FIXME:
-};
+import { qrService } from '../qr/qr.service.js';
+import { env } from '../../config/env.js';
 
 export class CheckinService {
   constructor({ req, res }) {
@@ -145,11 +142,11 @@ export class CheckinService {
     };
   }
 
-  async _processQr(qrCode) {
-    await validateQr(qrCode);
+  async _processQr(qrToken) {
+    const result = await validateQrCode(qrToken);
 
     const updated = applyStep(this.session, CheckinSteps.QR, {
-      eventId: qrCode, // TODO:
+      eventId: result.eventId,
     });
 
     return {
@@ -238,4 +235,54 @@ const verifyUser = async (session, code) => {
   }
 
   return true;
+};
+
+/**
+ *
+ * @param {*} qrToken
+ * @returns
+ */
+const validateQrCode = async (qrToken) => {
+  if (!qrToken) throw new Error('Invalid QR');
+
+  const payload = qrService.verify(qrToken, {
+    audience: 'qr',
+    issuer: env.JWT_ISSUER,
+    clockTolerance: 60,
+  });
+
+  // ===== Required structure =====
+  if (!payload || payload.type !== 'event_checkin') {
+    throw new Error('Invalid QR payload');
+  }
+
+  if (!payload.eventId) {
+    throw new Error('QR missing eventId');
+  }
+
+  // ===== Event validation =====
+  if (payload.eventId !== env.eventId) {
+    throw new Error('Invalid eventId');
+  }
+
+  // ===== Scope validation =====
+  if (payload.scope !== 'public_qr') {
+    throw new Error('Invalid QR scope');
+  }
+
+  // ===== Versioning (future-proofing) =====
+  if (payload.version !== 1) {
+    throw new Error('Unsupported QR version');
+  }
+
+  // ===== Optional: time sanity check =====
+  // (nbf & exp are already enforced by jwt.verify, but this protects bad configs)
+  if (payload.nbf && payload.nbf > Math.floor(Date.now() / 1000)) {
+    throw new Error('QR not active yet');
+  }
+
+  return {
+    eventId: payload.eventId,
+    payload,
+  };
 };

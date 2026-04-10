@@ -28,7 +28,7 @@ export const onVerificationInput = async (fromPaste = false) => {
   const hintDiv = document.querySelector(
     '[data-checkin="verification-hint-div"]',
   );
-  const defaultHint = hintDiv.textContent || 'Digite os 4 últimos digitos do seu telefone 👆';
+  const defaultHint = hintDiv.textContent || 'Digite os 4 últimos digitos do seu celular 👆';
 
   if (!value) {
     if (!fromPaste) {

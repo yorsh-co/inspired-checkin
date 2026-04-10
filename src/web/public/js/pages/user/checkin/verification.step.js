@@ -68,12 +68,12 @@ export const onVerificationInput = async (fromPaste = false) => {
 
     // verify user with the server
     const res = await api.checkin.submitVerification(value);
-    console.log(res.checkinStatus);
+    console.log(res.meta.checkinStatus);
 
     ui.clear(hintDiv);
 
     // handle server response
-    switch (res.nextStep) {
+    switch (res.meta.nextStep) {
       case 'qr': {
         ui.showHint(hintDiv, 'Ingresso ok! Agora escaneia o QR code 📷');
         await utils.sleep(1200);

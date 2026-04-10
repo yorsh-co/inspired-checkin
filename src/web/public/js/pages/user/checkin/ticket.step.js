@@ -67,12 +67,12 @@ export const onTicketInput = async (fromPaste = false) => {
 
     // validate ticket number with the server
     const res = await api.checkin.submitTicket(value);
-    console.log(res.checkinStatus);
+    console.log(res.meta.checkinStatus);
 
     ui.clear(hintDiv);
 
     // handle server response
-    switch (res.nextStep) {
+    switch (res.meta.nextStep) {
       case 'verification': {
         ui.showHint(hintDiv, 'Encontrado! Agora confirme seu ingresso 🎫');
         await utils.sleep(1200);

@@ -13,12 +13,12 @@ export const onQrScan = async (qrCode, hintDiv) => {
   try {
     // server request
     const res = await api.checkin.submitQrCode(qrCode);
-    console.log(res.checkinStatus);
+    console.log(res.meta.checkinStatus);
 
     ui.clear(hintDiv);
 
     // handle server response
-    switch (res.nextStep) {
+    switch (res.meta.nextStep) {
       case 'ticket': {
         ui.showHint(hintDiv, 'QR ok! Agora valide seu ingresso 🎟️');
         await utils.sleep(1200);

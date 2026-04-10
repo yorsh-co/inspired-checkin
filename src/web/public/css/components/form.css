@@ -51,7 +51,6 @@ input:not(.error):valid {
 .input-spinner {
   position: absolute;
   right: 14px;
-  /*top: 20px;*/
   top: calc(50% - 8px);
   width: 16px;
   height: 16px;

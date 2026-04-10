@@ -63,7 +63,7 @@ export const onVerificationInput = async (fromPaste = false) => {
     ui.startLoading(inputWrapper);
     backButton.disabled = true;
     input.disabled = true;
-  return;
+    
     console.log('submitting to server');
 
     // verify user with the server

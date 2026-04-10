@@ -4,8 +4,10 @@
 <script src="https://unpkg.com/html5-qrcode"></script>
 <script type="module" src="/js/pages/user/checkin/index.js"></script>
 `; %>
+<script id="checkin-data" type="application/json">
+  <%- JSON.stringify(initialData).replace(/</g, '\\u003c') %>
+</script>
 
-<!-- FIXME: add JS warning -->
 <main
   data-checkin="main-container"
   class="main-container checkin-container txt-center"
@@ -45,7 +47,7 @@
             Ingresso
           </div>
         </th>
-        <td data-checkin="verification-ticket-number">t35t3</td>
+        <td><span data-checkin="verification-ticketCode"></span></td>
       </tr>
       <tr>
         <th>
@@ -54,7 +56,7 @@
             Nome
           </div>
         </th>
-        <td data-checkin="verification-user-name">João ... Bastos</td>
+        <td><span data-checkin="verification-name"></span></td>
       </tr>
       <tr>
         <th>
@@ -65,22 +67,7 @@
         </th>
         <td>
           <div data-checkin="verification-input-wrapper" class="input-wrapper">
-            <span>(11) 91234-••••</span>
-            <!--
-            <input
-              id="checkin-verification-input"
-              data-checkin="verification-input"
-              class="tel-input"
-              type="text"
-              placeholder="----"
-              inputmode="text"
-              pattern="[0-9]{4}"
-              autocomplete="one-time-code"
-              autocorrect="on"
-              autocapitalize="sentences"
-              enterkeyhint="send"
-            />
-            -->
+            <span data-checkin="verification-phoneStart"></span>-••••
           </div>
         </td>
       </tr>

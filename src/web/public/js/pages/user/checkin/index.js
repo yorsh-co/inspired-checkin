@@ -1,26 +1,32 @@
+import { setupQr } from '../../../modules/qr.js';
+import { attachScrollOnResize } from '../../../components/container/resize-scroll.js';
+
 import {
   setupTicketInput,
   setupVerificationInput,
   startPlaceholderTyping,
-} from './input.js';
-import { onQrScan } from './qr.js';
-
-import { setupQr } from '../../../modules/qr.js';
-import { attachScrollOnResize } from '../../../components/container/resize-scroll.js';
-
-import * as ui from '../../../modules/ui.js';
-import * as utils from '../../../modules/utils.js';
+} from './inputs.js';
+import { onQrScan } from './qr.step.js';
+import { goToStep } from './navigation.js';
+import { store } from './store.js';
+import { populateVerificationValues } from './verification.step.js';
 
 try {
-  // UX setup
   window.history.replaceState(null, '', '/checkin');
 
-  // FIXME: load depending on what was processed in the link
+  // load step
   window.addEventListener('load', async () => {
-    await ui.showStep(document.querySelector('[data-checkin="ticket-step"]'));
-    if (utils.isDesktop()) {
-      ui.focusInput({ q: '[data-checkin="ticket-input"]' });
-    }
+    const data = JSON.parse(
+      document.getElementById('checkin-data').textContent,
+    );
+
+    const initialStep = data?.nextStep || 'ticket';
+    
+    if (initialStep === 'verification') populateVerificationValues(data.user);
+
+    store.setState({ currentStep: null });
+
+    await goToStep(initialStep);
   });
 
   // modules
@@ -46,13 +52,12 @@ try {
     ],
   );
 
-  setupQr(
-    // FIXME: review this
-    'checkin-qr-reader',
-    document.querySelector('[data-checkin="start-camera-btn"]'),
-    document.querySelector('[data-checkin="qr-hint-div"]'),
-    onQrScan,
-  );
+  setupQr({
+    qrReaderId: 'checkin-qr-reader',
+    startCameraBtn: document.querySelector('[data-checkin="start-camera-btn"]'),
+    hintDiv: document.querySelector('[data-checkin="qr-hint-div"]'),
+    onScan: onQrScan,
+  });
 
   // scroll on resize
   const container = document.querySelector('[data-checkin="main-container"]');

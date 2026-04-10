@@ -48,10 +48,10 @@ export const onTicketInput = async (fromPaste = false) => {
   }
 
   console.log('input is valid');
-  
+
   const inputWrapper = document.querySelector(
-      '[data-checkin="ticket-input-wrapper"]',
-    );
+    '[data-checkin="ticket-input-wrapper"]',
+  );
 
   // submit input
   try {
@@ -62,7 +62,7 @@ export const onTicketInput = async (fromPaste = false) => {
 
     ui.startLoading(inputWrapper);
     input.disabled = true;
-    
+
     console.log('submitting to server');
 
     // validate ticket number with the server
@@ -72,6 +72,17 @@ export const onTicketInput = async (fromPaste = false) => {
     ui.clear(hintDiv);
 
     // handle server response
+    if (res.success) {
+      ui.showHint(hintDiv, 'Encontrado! Agora confirme seu ingresso 🎫');
+      await utils.sleep(1200);
+
+      await goToStep(res.meta.nextStep);
+    } else {
+      ui.showError(hintDiv, 'Código inválido 😕 Tenta de novo');
+      throw new Error('Invalid');
+    }
+
+    /*
     switch (res.meta.nextStep) {
       case 'verification': {
         ui.showHint(hintDiv, 'Encontrado! Agora confirme seu ingresso 🎫');
@@ -92,6 +103,7 @@ export const onTicketInput = async (fromPaste = false) => {
         throw new Error('Invalid');
       }
     }
+      */
   } catch (err) {
     console.error(err);
 

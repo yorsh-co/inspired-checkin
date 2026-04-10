@@ -1,5 +1,4 @@
 import { formatVerificationCode, isValidVerificationCode } from './utils.js';
-import { runSuccessFlow } from './success.step.js';
 
 import * as ui from '../../../modules/ui.js';
 import * as utils from '../../../modules/utils.js';
@@ -28,7 +27,8 @@ export const onVerificationInput = async (fromPaste = false) => {
   const hintDiv = document.querySelector(
     '[data-checkin="verification-hint-div"]',
   );
-  const defaultHint = hintDiv.textContent || 'Digite os 4 últimos digitos do seu celular 👆';
+  const defaultHint =
+    hintDiv.textContent || 'Digite os 4 últimos digitos do seu celular 👆';
 
   if (!value) {
     if (!fromPaste) {
@@ -45,13 +45,13 @@ export const onVerificationInput = async (fromPaste = false) => {
   }
 
   console.log('input is valid');
-  
+
   const inputWrapper = document.querySelector(
-      '[data-checkin="verification-input-wrapper"]',
-    );
-    const backButton = document.querySelector(
-      '[data-checkin="verification-back-btn"]',
-    );
+    '[data-checkin="verification-input-wrapper"]',
+  );
+  const backButton = document.querySelector(
+    '[data-checkin="verification-back-btn"]',
+  );
 
   // submit input
   try {
@@ -59,11 +59,11 @@ export const onVerificationInput = async (fromPaste = false) => {
     ui.clear(hintDiv);
     ui.showHint(hintDiv, 'Confirmando seu ingresso... ⏳');
     input.blur();
-    
+
     ui.startLoading(inputWrapper);
     backButton.disabled = true;
     input.disabled = true;
-    
+
     console.log('submitting to server');
 
     // verify user with the server
@@ -73,6 +73,22 @@ export const onVerificationInput = async (fromPaste = false) => {
     ui.clear(hintDiv);
 
     // handle server response
+    if (res.success) {
+      ui.showHint(
+        hintDiv,
+        `Ingresso ok!${res.meta.nextStep === 'qr' ? ' Agora escaneia o QR code 📷' : ' 🎉'}`,
+      );
+      await utils.sleep(1200);
+
+      await goToStep(res.meta.nextStep);
+    } else {
+      ui.showError(
+        hintDiv,
+        'Celular inválido 😕 Confirma que o número do ingresso está certo e tenta de novo',
+      );
+      throw new Error('Invalid');
+    }
+    /*
     switch (res.meta.nextStep) {
       case 'qr': {
         ui.showHint(hintDiv, 'Ingresso ok! Agora escaneia o QR code 📷');
@@ -100,6 +116,7 @@ export const onVerificationInput = async (fromPaste = false) => {
         throw new Error('Invalid');
       }
     }
+*/
   } catch (err) {
     console.error(err);
 
@@ -111,5 +128,15 @@ export const onVerificationInput = async (fromPaste = false) => {
 
     input.disabled = false;
     input.focus();
+  }
+};
+
+/**
+ *
+ */
+export const populateVerificationValues = async (userData = {}) => {
+  for (const key of userData) {
+    const el = document.querySelector(`[data-checkin="verification-${key}"]`);
+    if (el) el.textContent = userData[key] || '';
   }
 };

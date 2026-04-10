@@ -1,23 +1,15 @@
 import pg from '../../shared/db/postgres.js';
 
-const validateTicket = async ticketId => {
+export const getTicketByCode = async (ticketCode) => {
   const result = await pg.query(
-    'SELECT id, scanned_at FROM tickets WHERE id = $1',
-    [ticketId]
+    'SELECT ticket_id, scanned_at FROM tickets WHERE ticket_code = $1',
+    [ticketCode],
   );
-
-  if (result.rows.length === 0) {
-    throw new Error('Invalid ticket');
-  }
-
-  if (result.rows[0].scanned_at) {
-    throw new Error('Ticket already used');
-  }
-
-  return result.rows[0];
+  return result.rows[0] || null;
 };
 
-const checkInTicket = async (ticketId, eventId) => {
+// TODO:
+export const checkInTicket = async (ticketId, eventId) => {
   const client = await pg.connect();
 
   try {
@@ -28,7 +20,7 @@ const checkInTicket = async (ticketId, eventId) => {
        FROM tickets
        WHERE id = $1
        FOR UPDATE`,
-      [ticketId]
+      [ticketId],
     );
 
     if (result.rows.length === 0) {
@@ -44,7 +36,7 @@ const checkInTicket = async (ticketId, eventId) => {
        SET scanned_at = NOW(),
            event_id = $1
        WHERE id = $2`,
-      [eventId, ticketId]
+      [eventId, ticketId],
     );
 
     await client.query('COMMIT');
@@ -55,5 +47,3 @@ const checkInTicket = async (ticketId, eventId) => {
     client.release();
   }
 };
-
-export { validateTicket, checkInTicket };

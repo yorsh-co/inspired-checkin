@@ -1,34 +1,52 @@
-import * as qr from '../qr/qr.service.js';
+import { CheckinService } from './checkin.service.js';
 
-export const validateTicket = async (req, res) => {
-  console.log(req.body);
-  return res.status(200).json({
-    code: 'TICKET_VALIDATED',
-    meta: { nextStep: 'verification', checkinStatus: 'pending_verification' },
-    data: {
-      user: { ticket: 't35t3', name: 'João ... Barros', telStart: '11912' },
-    },
-  });
+export const submitTicket = async (req, res, next) => {
+  try {
+    const service = new CheckinService({ req, res });
 
-  // TODO:
+    const result = await service.submitTicket(req.body.ticket);
+
+    return res.json({
+      success: true,
+      code: 'TICKET_VALIDATED',
+      meta: result.meta,
+      data: result.data || {},
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
-export const verifyUser = async (req, res) => {
-  console.log(req.body);
-  return res.status(200).json({
-    code: 'USER_VERIFIED',
-    meta: { nextStep: 'qr', checkinStatus: 'pending_qr' },
-  });
+export const submitVerification = async (req, res, next) => {
+  try {
+    const service = new CheckinService({ req, res });
 
-  // TODO:
+    const result = await service.submitVerification(req.body.verificationCode);
+
+    return res.json({
+      success: true,
+      code: 'USER_VERIFIED',
+      meta: result.meta,
+      data: result.data || {},
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
-export const processQrCode = async (req, res) => {
-  console.log(req.body);
-  return res.status(200).json({
-    code: 'QR_PROCESSED',
-    meta: { nextStep: 'success', checkinStatus: 'checked_in' },
-  });
+export const submitQrCode = async (req, res, next) => {
+  try {
+    const service = new CheckinService({ req, res });
 
-  // TODO:
+    const result = await service.submitQr(req.body.qrCode);
+
+    return res.json({
+      success: true,
+      code: 'QR_PROCESSED',
+      meta: result.meta,
+      data: result.data || {},
+    });
+  } catch (err) {
+    next(err);
+  }
 };

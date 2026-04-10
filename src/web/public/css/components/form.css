@@ -64,10 +64,6 @@ input:not(.error):valid {
   transition: opacity 0.2s;
 }
 
-.input-spinner.right {
-  right: -4px;
-}
-
 .input-wrapper.loading .input-spinner {
   opacity: 1;
 }

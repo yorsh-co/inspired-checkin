@@ -18,8 +18,9 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "dev:https": "concurrently \"npm:dev:app\" \"npm:dev:tunnel\"",
+    "dev:https": "concurrently \"npm:dev:redis\" \"npm:dev:app\" \"npm:dev:tunnel\"",
     "dev:app": "nodemon src/server.js",
+    "dev:redis": "docker run --rm -p 6379:6379 redis",
     "dev:tunnel": "cloudflared tunnel --url http://localhost:3000 --loglevel info 2>&1 | grep --line-buffered -o 'https://[-a-zA-Z0-9\\.]*trycloudflare.com'"
   },
   "devDependencies": {

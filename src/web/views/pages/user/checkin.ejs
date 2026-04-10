@@ -36,12 +36,12 @@
 
   <!-- ticket verification -->
   <div data-checkin="verification-step" class="verification-step">
-    <div>Verifique os dados do seu ingresso</div>
+    <div>Confirma que o ingresso é seu</div>
     <table class="">
       <tr>
         <th>
           <div>
-            <span class="material-symbols-outlined"> numbers </span>
+            <span class="material-symbols-outlined"> confirmation_number </span>
             Ingresso
           </div>
         </th>
@@ -85,25 +85,27 @@
         </td>
       </tr>
     </table>
-    
+
     <div data-checkin="verification-input-wrapper" class="input-wrapper">
       <input
-              id="checkin-verification-input"
-              data-checkin="verification-input"
-              class="tel-input txt-center"
-              type="text"
-              placeholder="Confirme seu celular..."
-              inputmode="text"
-              pattern="[0-9]{4}"
-              autocomplete="one-time-code"
-              autocorrect="on"
-              autocapitalize="sentences"
-              enterkeyhint="send"
-            />
-            <div class="input-spinner"></div>
+        id="checkin-verification-input"
+        data-checkin="verification-input"
+        class="tel-input txt-center"
+        type="text"
+        placeholder="Confirme seu celular..."
+        inputmode="text"
+        pattern="[0-9]{4}"
+        autocomplete="one-time-code"
+        autocorrect="on"
+        autocapitalize="sentences"
+        enterkeyhint="send"
+      />
+      <div class="input-spinner"></div>
     </div>
 
-    <div data-checkin="verification-hint-div" class="hint"></div>
+    <div data-checkin="verification-hint-div" class="hint">
+      Insira apenas os últimos 4 dígitos
+    </div>
 
     <button data-checkin="verification-back-btn" class="ghost">
       <span class="btn-label">Voltar</span>

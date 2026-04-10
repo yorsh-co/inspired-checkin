@@ -26,7 +26,7 @@
 .checkin-container .qr-step.show,
 .checkin-container .success-step.show {
   opacity: 1;
-  max-height: 600px;
+  max-height: 700px;
   overflow: visible;
   animation: fadeIn 0.4s ease;
 }
@@ -36,6 +36,11 @@
 .checkin-container .qr-step.fade-out,
 .checkin-container .success-step.fadeout {
   animation: fadeOut 0.3s ease forwards;
+}
+
+/* ticket step */
+.ticket-step .hint {
+  min-height: 0;
 }
 
 /* verification step */

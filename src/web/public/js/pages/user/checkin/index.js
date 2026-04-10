@@ -1,7 +1,7 @@
 import {
   setupTicketInput,
   setupVerificationInput,
-  startTicketInputPlaceholderTyping,
+  startPlaceholderTyping,
 } from './input.js';
 import { onQrScan } from './qr.js';
 
@@ -25,8 +25,26 @@ try {
 
   // modules
   setupTicketInput();
-  startTicketInputPlaceholderTyping();
+  startPlaceholderTyping(
+    document.querySelector('[data-checkin="ticket-input"]'),
+    [
+      { text: 'Digite seu código de ingresso...', pause: 1200 },
+      { text: 'Cola seu ID do ticket aqui...', pause: 1000 },
+      { text: 'Pronto pra a Inspire?', pause: 1400 },
+      { text: 'Vamos fazer seu check-in ✨', pause: 1500 },
+    ],
+  );
+
   setupVerificationInput();
+  startPlaceholderTyping(
+    document.querySelector('[data-checkin="verification-input"]'),
+    [
+      { text: 'Confirme seu celular...', pause: 1200 },
+      { text: 'Digite os últimos 4 dígitos...', pause: 1000 },
+      { text: 'Digite o final do seu telefone...', pause: 1400 },
+      //{ text: 'Vamos fazer seu check-in ✨', pause: 1500 },
+    ],
+  );
 
   setupQr(
     // FIXME: review this

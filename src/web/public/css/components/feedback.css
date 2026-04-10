@@ -5,7 +5,7 @@
 
 /* div */
 div.error {
-  margin-top: 10px;
+  padding-top: 10px;
   font-size: 0.9rem;
   color: var(--error);
   min-height: 18px;
@@ -14,7 +14,7 @@ div.error {
 }
 
 div.hint {
-  margin-top: 10px;
+  padding-top: 10px;
   font-size: 0.9rem;
   color: var(--text);
   opacity: 0.9;

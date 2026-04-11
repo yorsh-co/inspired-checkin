@@ -1,18 +1,17 @@
 import { setupQr } from '../../../modules/qr.js';
 import { attachScrollOnResize } from '../../../components/container/resize-scroll.js';
-
-import {
-  setupTicketInput,
-  setupVerificationInput,
-  startPlaceholderTyping,
-} from './inputs.js';
-import { onQrScan } from './qr.step.js';
-import { goToStep } from './navigation.js';
-import { store } from './store.js';
-import { initCheckinEffects } from './effects.js';
-import { setupButton } from '../../../test.js';
 import api from '../../../core/api/index.js';
 import { setupDebugButton } from '../../../debug/debug.js';
+
+import { inputs } from './ui/inputs.js';
+import { onQrScan } from './steps/qr.step.js';
+import { goToStep } from './ui/navigation.js';
+import { store } from './state/store.js';
+import {
+  initCheckinEffects,
+  setupStepHandlers,
+} from './state/step-handlers.js';
+import { dom } from './dom.js';
 
 try {
   window.history.replaceState(null, '', '/checkin');
@@ -33,43 +32,13 @@ try {
     await goToStep(initialStep);
   });
 
-  initCheckinEffects();
-
-  // modules
-  setupTicketInput();
-  startPlaceholderTyping(
-    document.querySelector('[data-checkin="ticket-input"]'),
-    [
-      { text: 'Digite seu código de ingresso...', pause: 1200 },
-      { text: 'Cola seu ID do ticket aqui...', pause: 1000 },
-      { text: 'Pronto pra a Inspire?', pause: 1400 },
-      { text: 'Vamos fazer seu check-in ✨', pause: 1500 },
-    ],
-  );
-
-  setupVerificationInput();
-  startPlaceholderTyping(
-    document.querySelector('[data-checkin="verification-input"]'),
-    [
-      { text: 'Confirme seu celular...', pause: 1200 },
-      { text: 'Digite os últimos 4 dígitos...', pause: 1000 },
-      { text: 'Digite o final do seu telefone...', pause: 1400 },
-      //{ text: 'Vamos fazer seu check-in ✨', pause: 1500 },
-    ],
-  );
-
-  setupQr({
-    qrReaderId: 'checkin-qr-reader',
-    startCameraBtn: document.querySelector('[data-checkin="start-camera-btn"]'),
-    hintDiv: document.querySelector('[data-checkin="qr-hint-div"]'),
-    onScan: onQrScan,
-  });
+  setupStepHandlers();
 
   // scroll on resize
-  const container = document.querySelector('[data-checkin="main-container"]');
-  attachScrollOnResize(container);
+  attachScrollOnResize(dom.main.container);
 
   // cursor glow
+  const container = dom.main.container;
   container.addEventListener('mousemove', (e) => {
     const rect = container.getBoundingClientRect();
 

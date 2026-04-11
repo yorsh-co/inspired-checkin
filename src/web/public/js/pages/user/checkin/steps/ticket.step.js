@@ -1,11 +1,11 @@
-import { formatTicket, isValidTicket } from './utils.js';
-import { goToStep } from './navigation.js';
-import { store } from './store.js';
+import { formatTicket, isValidTicket } from '../ui/formatters.js';
+import { goToStep } from '../ui/navigation.js';
+import { store } from '../state/store.js';
 
-import * as ui from '../../../modules/ui.js';
-import * as utils from '../../../modules/utils.js';
+import * as ui from '../../../../modules/ui.js';
+import * as utils from '../../../../modules/utils.js';
 
-import api from '../../../core/api/index.js';
+import api from '../../../../core/api/index.js';
 
 let isSubmitting = false;
 
@@ -87,28 +87,6 @@ export const onTicketInput = async (fromPaste = false) => {
       throw new Error('Invalid');
     }
 
-    /*
-    switch (res.meta.nextStep) {
-      case 'verification': {
-        ui.showHint(hintDiv, 'Encontrado! Agora confirme seu ingresso 🎫');
-        await utils.sleep(1200);
-
-        await ui.showStep(
-          document.querySelector('[data-checkin="verification-step"]'),
-          document.querySelector('[data-checkin="ticket-step"]'),
-        );
-        if (utils.isDesktop()) {
-          ui.focusInput({ q: '[data-checkin="verification-input"]' });
-        }
-
-        break;
-      }
-      default: {
-        ui.showError(hintDiv, 'Código inválido 😕 Tenta de novo');
-        throw new Error('Invalid');
-      }
-    }
-      */
   } catch (err) {
     console.error(err);
 

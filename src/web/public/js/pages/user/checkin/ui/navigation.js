@@ -1,6 +1,13 @@
-import * as ui from '../../../modules/ui.js';
-import * as utils from '../../../modules/utils.js';
-import { store } from './store.js';
+import * as ui from '../../../../modules/ui.js';
+import * as utils from '../../../../modules/utils.js';
+import { store } from '../state/store.js';
+
+export const stepNames = {
+  qr: 'qr',
+  ticket: 'ticket',
+  verification: 'verification',
+  success: 'success',
+};
 
 const stepMap = {
   qr: '[data-checkin="qr-step"]',
@@ -9,9 +16,9 @@ const stepMap = {
   success: '[data-checkin="success-step"]',
 };
 
-const inputMap = {
-  ticket: '[data-checkin="ticket-input"]',
-  verification: '[data-checkin="verification-input"]',
+export const inputMap = {
+  ticket: '[data-checkin="ticket-code-input"]',
+  verification: '[data-checkin="verification-code-input"]',
 };
 
 export const goToStep = async (nextStep) => {

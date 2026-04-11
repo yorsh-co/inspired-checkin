@@ -10,3 +10,14 @@ export const formatVerificationCode = (value) =>
   value.replace(/[^0-9]/g, '').slice(0, 4);
 
 export const isValidVerificationCode = (value) => /^[0-9]{4}$/.test(value);
+
+export const formatter = {
+  ticketCode: {
+    format: formatTicket,
+    isValid: isValidTicket,
+  },
+  verificationCode: {
+    format: formatVerificationCode,
+    isValid: isValidVerificationCode,
+  },
+};

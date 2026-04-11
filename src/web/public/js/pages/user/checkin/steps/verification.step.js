@@ -1,10 +1,10 @@
-import { formatVerificationCode, isValidVerificationCode } from './utils.js';
-import { goToStep } from './navigation.js';
+import { formatVerificationCode, isValidVerificationCode } from '../ui/formatters.js';
+import { goToStep } from '../ui/navigation.js';
 
-import * as ui from '../../../modules/ui.js';
-import * as utils from '../../../modules/utils.js';
+import * as ui from '../../../../modules/ui.js';
+import * as utils from '../../../../modules/utils.js';
 
-import api from '../../../core/api/index.js';
+import api from '../../../../core/api/index.js';
 
 let isSubmitting = false;
 
@@ -103,7 +103,7 @@ export const onVerificationInput = async (fromPaste = false) => {
 };
 
 /**
- *
+ * FIXME: use DOM?
  */
 export const populateVerificationValues = async (userData = {}) => {
   const values = { ...userData };

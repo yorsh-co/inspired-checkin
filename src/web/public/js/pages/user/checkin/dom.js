@@ -1,0 +1,48 @@
+const qs = (selector, { required = true } = {}) => {
+  const el = document.querySelector(selector);
+
+  if (!el && required) {
+    console.error(`[DOM] Missing required element: ${selector}`);
+  }
+
+  return el;
+};
+
+export const dom = {
+  main: {
+    container: qs('[data-checkin="main-container"]'),
+  },
+
+  steps: {
+    qr: qs('[data-checkin="qr-step"]'),
+    ticket: qs('[data-checkin="ticket-step"]'),
+    verification: qs('[data-checkin="verification-step"]'),
+    success: qs('[data-checkin="success-step"]'),
+  },
+
+  inputs: {
+    ticket: qs('[data-checkin="ticket-code-input"]'),
+    verification: qs('[data-checkin="verification-code-input"]'),
+  },
+
+  ticket: {
+    hint: qs('[data-checkin="ticket-hint-div"]'),
+    inputWrapper: qs('[data-checkin="ticket-input-wrapper"]'),
+  },
+
+  verification: {
+    hint: qs('[data-checkin="verification-hint-div"]'),
+    inputWrapper: qs('[data-checkin="verification-input-wrapper"]'),
+    backBtn: qs('[data-checkin="verification-back-btn"]'),
+  },
+
+  qr: {
+    reader: qs('#checkin-qr-reader'),
+    startBtn: qs('[data-checkin="start-camera-btn"]'),
+    hint: qs('[data-checkin="qr-hint-div"]'),
+  },
+
+  success: {
+    message: qs('[data-checkin="success-message"]'),
+  },
+};

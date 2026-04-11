@@ -36,7 +36,11 @@ export const goToStep = async (nextStepKey) => {
       await nextStep.onEnter(store.getState());
     }
 
-    if (utils.isDesktop() && nextStep.focusTarget) {
+    if (
+      utils.isDesktop() &&
+      nextStep.focusTarget &&
+      !nextStep.focusTarget.disabled
+    ) {
       ui.focusInput(nextStep.focusTarget);
     }
   } catch (err) {

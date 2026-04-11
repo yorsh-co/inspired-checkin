@@ -116,15 +116,15 @@ export const startPlaceholderTyping = (input, phrases) => {
 
 const inputs = {
   ticketCode: {
-    setup: () => {
-      (setupInput(dom.inputs.ticketCode, {
+    setup: () => 
+      setupInput(dom.inputs.ticketCode, {
         onInput: onTicketInput,
         formatValue: formatter.ticketCode.format,
         valueIsValid: formatter.ticketCode.isValid,
-      }),
-        attachScrollOnFocus(dom.inputs.ticketCode));
-      attachScrollOnBlur(dom.inputs.ticketCode);
-    },
+      },
+       // attachScrollOnFocus(dom.inputs.ticketCode));
+     // attachScrollOnBlur(dom.inputs.ticketCode);
+    
     start: () => {
       startPlaceholderTyping(dom.inputs.ticketCode, [
         { text: 'Digite seu código de ingresso...', pause: 1200 },

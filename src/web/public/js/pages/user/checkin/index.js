@@ -36,7 +36,6 @@ try {
   });
 } catch (err) {
   console.error(err);
-  alert(err); // FIXME:
 }
 
 import api from '../../../core/api/index.js';

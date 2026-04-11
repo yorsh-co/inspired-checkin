@@ -38,7 +38,7 @@
 
   <!-- ticket verification -->
   <div data-checkin="verification-step" class="verification-step">
-    <div>Confirma que o ingresso é seu</div>
+    <div>Confirme que o ingresso é seu</div>
     <table class="">
       <tr>
         <th>
@@ -66,13 +66,10 @@
           </div>
         </th>
         <td>
-          <div data-checkin="verification-input-wrapper" class="input-wrapper">
-            <span
-              data-checkin="verification-phoneStart"
-              data-checkin-value=""
-            ></span
-            >-••••
-          </div>
+          <span
+            data-checkin="verification-phoneStart"
+            data-checkin-value=""
+          ></span>
         </td>
       </tr>
     </table>
@@ -107,6 +104,45 @@
   <!-- TODO: turn this into a component -->
   <!-- qr step -->
   <div data-checkin="qr-step" class="qr-step">
+    <div>Confirme que você chegou</div>
+
+    <!--<div class="ticket-code-display">
+      <span class="material-symbols-outlined"> confirmation_number </span>
+      <span data-checkin="qr-ticketCode">t35t3</span>
+    </div>-->
+
+    <table class="">
+      <tr>
+        <th>
+          <div>
+            <span class="material-symbols-outlined"> confirmation_number </span>
+            Ingresso
+          </div>
+        </th>
+        <td><span data-checkin="qr-ticketCode"></span></td>
+      </tr>
+      <tr>
+        <th>
+          <div>
+            <span class="material-symbols-outlined"> id_card </span>
+            Nome
+          </div>
+        </th>
+        <td><span data-checkin="qr-name"></span></td>
+      </tr>
+      <tr>
+        <th>
+          <div>
+            <span class="material-symbols-outlined"> call </span>
+            Celular
+          </div>
+        </th>
+        <td>
+          <span data-checkin="qr-phoneStart" data-checkin-value=""></span>
+        </td>
+      </tr>
+    </table>
+
     <div class="qr-reader-wrapper">
       <div
         id="checkin-qr-reader"

@@ -3,7 +3,7 @@
 @import './base/reset.css';
 @import './base/variables.css';
 @import './base/typography.css';
-@import './base/elements.css';
+@import './base/global.css';
 @import './base/body.css';
 
 @import './components/container.css';

@@ -1,7 +1,8 @@
-import * as ui from '../../../../modules/ui.js';
-import * as utils from '../../../../modules/utils.js';
 import stepConfig from '../state/step-config.js';
 import store from '../state/store.js';
+
+import * as ui from '../../../../modules/ui.js';
+import utils from '../../../../modules/utils/index.js';
 
 export const goToStep = async (nextStepKey) => {
   const { currentStepKey } = store.getState();

@@ -1,10 +1,11 @@
 import { setupQr } from '../../../../modules/qr.js';
+import utils from '../../../../modules/utils/index.js';
 
 import dom from '../dom.js';
 import inputs from '../ui/inputs.js';
 import { runSuccessFlow } from '../steps/success.step.js';
-import { populateVerificationValues } from '../steps/verification.step.js';
 import { onQrScan } from '../steps/qr.step.js';
+import { populateStepValues } from '../ui/values.js';
 
 const stepConfig = {
   ticket: {
@@ -32,7 +33,11 @@ const stepConfig = {
         throw new Error('User data is missing');
       }
 
-      populateVerificationValues(userData);
+      populateStepValues('verification', userData, {
+        formatters: {
+          phoneStart: (value) => utils.formatPhone.locale(value, 'pt-BR'),
+        },
+      });
 
       // TODO: setup back button
 
@@ -46,13 +51,25 @@ const stepConfig = {
 
     el: dom.steps.qr,
 
-    async onEnter() {
+    async onEnter(state) {
       setupQr({
         // TODO: review
         qrReaderDiv: dom.qr.reader,
         startCameraBtn: dom.qr.startBtn,
         hintDiv: dom.qr.hint,
         onScan: onQrScan,
+      });
+
+      const { userData } = state;
+
+      if (!userData) {
+        throw new Error('User data is missing');
+      }
+
+      populateStepValues('qr', userData, {
+        formatters: {
+          phoneStart: (value) => utils.formatPhone.locale(value, 'pt-BR'),
+        },
       });
     },
   },

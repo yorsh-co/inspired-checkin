@@ -1,7 +1,7 @@
 import dom from '../dom.js';
 
 import * as ui from '../../../../modules/ui.js';
-import * as utils from '../../../../modules/utils.js';
+import utils from '../../../../modules/utils/index.js';
 
 /**
  *

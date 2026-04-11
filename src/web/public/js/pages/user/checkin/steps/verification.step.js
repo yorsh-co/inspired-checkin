@@ -1,4 +1,4 @@
-import dom, { qs } from '../dom.js';
+import dom from '../dom.js';
 import { goToStep } from '../ui/navigation.js';
 import {
   formatVerificationCode,
@@ -6,7 +6,7 @@ import {
 } from '../ui/formatters.js';
 
 import * as ui from '../../../../modules/ui.js';
-import * as utils from '../../../../modules/utils.js';
+import utils from '../../../../modules/utils/index.js';
 
 import api from '../../../../core/api/index.js';
 
@@ -102,47 +102,5 @@ export const onVerificationInput = async (fromPaste = false) => {
 
     input.disabled = false;
     input.focus();
-  }
-};
-
-/**
- * FIXME: use DOM?
- */
-export const populateVerificationValues = async (userData = {}) => {
-  const values = { ...userData };
-
-  const elements = {};
-
-  for (const key in values) {
-    elements[key] = qs(`[data-checkin="verification-${key}"]`, {
-      required: false,
-    });
-  }
-
-  // store values
-  for (const key in values) {
-    const el = elements[key];
-    if (!el) continue;
-
-    el.dataset.checkinValue = userData[key];
-  }
-
-  // format phone number
-  if (values.phoneStart) {
-    let value = values.phoneStart;
-    if (value.startsWith('55')) {
-      value = value.slice(2);
-
-      value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
-      values.phoneStart = value;
-    }
-  }
-
-  // display values
-  for (const key in values) {
-    const el = elements[key];
-    if (!el) continue;
-
-    if (el) el.textContent = values[key] || '';
   }
 };

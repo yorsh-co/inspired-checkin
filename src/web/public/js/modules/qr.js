@@ -1,24 +1,22 @@
-import { setupDebugButton } from '../debug/debug.js';
-import * as test from '../test.js';
 import * as ui from './ui.js';
+import { setupDebugButton } from '../debug/debug.js';
 
 /**
  *
  * @param {object} params
- * @param {string} params.qrReaderId
+ * @param {HTMLDivElement} params.qrReaderDiv
  * @param {HTMLButtonElement} params.startCameraBtn
  * @param {HTMLDivElement} params.hintDiv
  * @param {(qrText: string) => Promise<void>|void} params.onScan
  */
 export const setupQr = ({
-  qrReaderId,
+  qrReaderDiv,
   startCameraBtn,
   hintDiv,
   onScan,
 } = {}) => {
   startCameraBtn.addEventListener('click', async () => {
-    const qrReader = document.getElementById(qrReaderId);
-    const qrWrapper = qrReader.closest('.qr-reader-wrapper');
+    const qrWrapper = qrReaderDiv.closest('.qr-reader-wrapper');
 
     let helpTimeout;
     const defaultHint = hintDiv.textContent;
@@ -33,10 +31,10 @@ export const setupQr = ({
       ui.startLoading(startCameraBtn);
 
       // open qr reader div
-      const scanner = new Html5Qrcode(qrReaderId);
+      const scanner = new Html5Qrcode(qrReaderDiv.id);
 
       ui.startLoading(qrWrapper);
-      qrReader.classList.add('open');
+      qrReaderDiv.classList.add('open');
 
       ui.stopLoading(startCameraBtn);
       ui.hide(startCameraBtn);
@@ -78,7 +76,7 @@ export const setupQr = ({
           }, 2000);
 
           ui.startLoading(qrWrapper);
-          qrReader.style.opacity = 0;
+          qrReaderDiv.style.opacity = 0;
 
           // handle the scan
           await onScan(decodedText, hintDiv);
@@ -95,7 +93,7 @@ export const setupQr = ({
           startHelpTimeout(10000);
         } finally {
           // display the scanner again
-          qrReader.style.opacity = 1;
+          qrReaderDiv.style.opacity = 1;
           ui.stopLoading(qrWrapper);
           isProcessing = false;
         }
@@ -112,7 +110,7 @@ export const setupQr = ({
       clearTimeout(permissionTimeout);
       ui.showHint(hintDiv, defaultHint);
 
-      await waitForVideoReady(qrReader);
+      await waitForVideoReady(qrReaderDiv);
       ui.stopLoading(qrWrapper);
 
       console.log('qr scanner started');
@@ -131,7 +129,7 @@ export const setupQr = ({
       );
 
       // hide the scanner
-      qrReader.classList.remove('open');
+      qrReaderDiv.classList.remove('open');
       ui.stopLoading(qrWrapper);
 
       // show the camera start button

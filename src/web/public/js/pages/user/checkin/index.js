@@ -1,11 +1,8 @@
-import api from '../../../core/api/index.js';
-import { attachScrollOnResize } from '../../../components/container/resize-scroll.js';
-import { setupDebugButton } from '../../../debug/debug.js';
-
-import { dom } from './dom.js';
+import dom from './dom.js';
+import store from './state/store.js';
 import { goToStep } from './ui/navigation.js';
-import { store } from './state/store.js';
-import { setupStepHandlers } from './state/del.step-handlers.js';
+
+import { attachScrollOnResize } from '../../../components/container/resize-scroll.js';
 
 try {
   window.history.replaceState(null, '', '/checkin');
@@ -37,10 +34,13 @@ try {
     container.style.setProperty('--x', `${e.clientX - rect.left}px`);
     container.style.setProperty('--y', `${e.clientY - rect.top}px`);
   });
-
-  // debug
-  setupDebugButton(api.checkin.resetSession, 'reset session');
 } catch (err) {
   console.error(err);
   alert(err); // FIXME:
 }
+
+import api from '../../../core/api/index.js';
+import { setupDebugButton } from '../../../debug/debug.js';
+
+// debug
+setupDebugButton(api.checkin.resetSession, 'reset session');

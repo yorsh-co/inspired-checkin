@@ -4,6 +4,7 @@ import dom from '../dom.js';
 import inputs from '../ui/inputs.js';
 import { runSuccessFlow } from '../steps/success.step.js';
 import { populateVerificationValues } from '../steps/verification.step.js';
+import { onQrScan } from '../steps/qr.step.js';
 
 const stepConfig = {
   ticket: {

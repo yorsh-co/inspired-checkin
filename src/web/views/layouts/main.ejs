@@ -38,11 +38,6 @@
   <!-- main injection -->
   <%- body %>
 
-  <!-- test button to skip steps -->
-  <button id="debug-button" class="test">
-    <span>[test] pular etapa</span>
-  </button>
-
   <!-- global scripts -->
 
   <!-- page-specific scripts -->
@@ -50,7 +45,8 @@
   <%-  scripts %>
   <% } %>
 
-  <!-- dev tools on mobile -->
+  <!-- debug -->
+  <button id="debug-button" class="debug"></button>
   <script type="module" src="/js/debug/debug.js"></script>
 </body>
 </html>

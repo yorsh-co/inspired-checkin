@@ -1,15 +1,13 @@
+import { formatter } from './formatters.js';
+
+import dom from '../dom.js';
+import { onTicketInput } from '../steps/ticket.step.js';
+import { onVerificationInput } from '../steps/verification.step.js';
+
 import {
   attachScrollOnFocus,
   attachScrollOnBlur,
 } from '../../../../components/input/focus-scroll.js';
-
-import { formatter } from './formatters.js';
-import { onTicketInput } from '../steps/ticket.step.js';
-import { onVerificationInput } from '../steps/verification.step.js';
-import { inputMap } from './navigation.js';
-import { dom } from '../dom.js';
-
-const getInput = (query) => document.querySelector(query) || null;
 
 /**
  *
@@ -26,9 +24,6 @@ export const setupInput = (input, handlers) => {
 
   input.dataset.initialized = 'true';
   input.value = '';
-
-  attachScrollOnFocus(input);
-  attachScrollOnBlur(input);
 
   // handle enter keydown
   input.addEventListener('keydown', (e) => {
@@ -121,12 +116,15 @@ export const startPlaceholderTyping = (input, phrases) => {
 
 const inputs = {
   ticketCode: {
-    setup: () =>
-      setupInput(getInput(dom.inputs.ticketCode), {
+    setup: () => {
+      (setupInput(dom.inputs.ticketCode, {
         onInput: onTicketInput,
         formatValue: formatter.ticketCode.format,
         valueIsValid: formatter.ticketCode.isValid,
       }),
+        attachScrollOnFocus(dom.inputs.ticketCode));
+      attachScrollOnBlur(dom.inputs.ticketCode);
+    },
     start: () => {
       startPlaceholderTyping(dom.inputs.ticketCode, [
         { text: 'Digite seu código de ingresso...', pause: 1200 },

@@ -1,7 +1,7 @@
 import './config/env.js';
 import app from './app.js';
 import { env } from './config/env.js';
-import redis, { initRedis, checkRedis } from './shared/db/redis.js';
+import redis, { initRedis } from './shared/db/redis.js';
 
 const connectRedisWithRetry = async (retries = 5, delay = 1000) => {
   for (let i = 0; i < retries; i++) {

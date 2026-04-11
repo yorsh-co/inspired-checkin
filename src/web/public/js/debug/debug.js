@@ -29,7 +29,7 @@ const isDebug = (params = null) => {
  * @param {boolean} removeOnClick
  */
 export const setupDebugButton = async (handler, buttonTxt, removeOnClick) => {
-  const testButton = document.getElementById('skip-button');
+  const testButton = document.getElementById('debug-button');
 
   if (testButton) {
     testButton.classList.add('available');

@@ -12,6 +12,7 @@ import { store } from './store.js';
 import { initCheckinEffects } from './effects.js';
 import { setupButton } from '../../../test.js';
 import api from '../../../core/api/index.js';
+import { setupDebugButton } from '../../../debug/debug.js';
 
 try {
   window.history.replaceState(null, '', '/checkin');
@@ -76,9 +77,8 @@ try {
     container.style.setProperty('--y', `${e.clientY - rect.top}px`);
   });
 
-
   // debug
-  setupButton(api.checkin.resetSession);
+  setupDebugButton(api.checkin.resetSession, 'reset session');
 } catch (err) {
   console.error(err);
   alert(err); // FIXME:

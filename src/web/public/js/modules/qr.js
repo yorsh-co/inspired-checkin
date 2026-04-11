@@ -1,3 +1,4 @@
+import { setupDebugButton } from '../debug/debug.js';
 import * as test from '../test.js';
 import * as ui from './ui.js';
 
@@ -116,8 +117,8 @@ export const setupQr = ({
 
       console.log('qr scanner started');
 
-      // FIXME: test
-      test.setupButton(() => handleScan('test'));
+      // debug
+      setupDebugButton(() => handleScan('test'), 'pular qr code');
     } catch (err) {
       console.error(err);
 

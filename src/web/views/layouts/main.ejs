@@ -50,41 +50,7 @@
   <%-  scripts %>
   <% } %>
 
+  <!-- dev tools on mobile -->
+  <script type="module" src="/js/debug/debug.js"></script>
 </body>
-
-<!-- dev tools on mobile -->
-<script>
-  (function initErudaDebugMode() {
-    const params = new URLSearchParams(window.location.search);
-    const host = location.hostname;
-
-    const isAllowedHost =
-      host === 'localhost' ||
-      host === '127.0.0.1' ||
-      host.startsWith('192.168.') ||
-      host.startsWith('100.') ||
-      host.endsWith('.trycloudflare.com');
-
-    if (!isAllowedHost) return;
-
-    if (params.get('debug') === 'true') {
-      localStorage.setItem('debug', 'true');
-    }
-
-    if (params.get('debug') === 'false') {
-      localStorage.removeItem('debug');
-    }
-
-    const isDebug = localStorage.getItem('debug') === 'true';
-
-    if (!isDebug) return;
-
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/eruda';
-    script.onload = () => eruda.init();
-
-    document.body.appendChild(script);
-  })();
-</script>
-
 </html>

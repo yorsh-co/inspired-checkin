@@ -2,7 +2,7 @@ const formatLocalePhone = (phone, locale) => {
   const formatters = {
     'pt-BR': (phoneStr) => {
       if (!phoneStr) return '';
-      console.error(phoneStr);
+
       const original = phoneStr;
       let digits = phoneStr.replace(/\D/g, '');
 

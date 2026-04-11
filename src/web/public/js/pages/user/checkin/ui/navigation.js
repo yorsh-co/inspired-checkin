@@ -1,42 +1,49 @@
 import * as ui from '../../../../modules/ui.js';
 import * as utils from '../../../../modules/utils.js';
-import { store } from '../state/store.js';
+import stepConfig from '../state/step-config.js';
+import store from '../state/store.js';
 
-export const stepNames = {
-  qr: 'qr',
-  ticket: 'ticket',
-  verification: 'verification',
-  success: 'success',
-};
+export const goToStep = async (nextStepKey) => {
+  const { currentStepKey } = store.getState();
 
-const stepMap = {
-  qr: '[data-checkin="qr-step"]',
-  ticket: '[data-checkin="ticket-step"]',
-  verification: '[data-checkin="verification-step"]',
-  success: '[data-checkin="success-step"]',
-};
+  if (currentStepKey === nextStepKey) return;
 
-export const inputMap = {
-  ticket: '[data-checkin="ticket-code-input"]',
-  verification: '[data-checkin="verification-code-input"]',
-};
+  const nextStep = stepConfig[nextStepKey];
+  const currentStep = currentStepKey ? stepConfig[currentStepKey] : null;
 
-export const goToStep = async (nextStep) => {
-  const { currentStep } = store.getState();
+  if (!nextStep) {
+    console.error(`[Step] Invalid step: ${nextStepKey}`);
+    return;
+  }
 
-  if (currentStep === nextStep) return;
+  if (currentStep && !currentStep.next?.includes(nextStepKey)) {
+    console.warn(
+      `[Step] Invalid transition: ${currentStepKey} → ${nextStepKey}`,
+    );
+    return;
+  }
 
-  const nextEl = document.querySelector(stepMap[nextStep]);
-  const currentEl = currentStep
-    ? document.querySelector(stepMap[currentStep])
-    : null;
+  try {
+    if (currentStep?.onExit) {
+      await currentStep.onExit();
+    }
 
-  await ui.showStep(nextEl, currentEl);
+    await ui.showStep(nextStep.el, currentStep?.el);
 
-  store.setState({ currentStep: nextStep });
+    store.setState({ currentStepKey: nextStepKey });
 
-  if (utils.isDesktop()) {
-    const input = inputMap[nextStep];
-    if (input) ui.focusInput({ q: input });
+    if (nextStep.onEnter) {
+      await nextStep.onEnter(store.getState());
+    }
+
+    if (utils.isDesktop() && nextStep.focusTarget) {
+      ui.focusInput(nextStep.focusTarget);
+    }
+  } catch (err) {
+    console.error('[Step Error]', err);
+
+    store.setState({
+      error: err.message || 'Unexpected error',
+    });
   }
 };

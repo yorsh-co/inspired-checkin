@@ -6,6 +6,7 @@ import * as ui from '../../../../modules/ui.js';
 import * as utils from '../../../../modules/utils.js';
 
 import api from '../../../../core/api/index.js';
+import { dom } from '../dom.js';
 
 let isSubmitting = false;
 
@@ -19,14 +20,14 @@ export const onTicketInput = async (fromPaste = false) => {
   console.log('ticket submitted');
 
   // validate input
-  const input = document.querySelector('[data-checkin="ticket-input"]');
+  const input = dom.inputs.ticketCode;
   input.classList.remove('error');
 
   const value = formatTicket(input.value);
   input.value = value;
   console.log('ticket', input.value);
 
-  const hintDiv = document.querySelector('[data-checkin="ticket-hint-div"]');
+  const hintDiv = dom.ticket.hint;
   ui.clearError(hintDiv);
 
   if (!value) {
@@ -51,9 +52,7 @@ export const onTicketInput = async (fromPaste = false) => {
 
   console.log('input is valid');
 
-  const inputWrapper = document.querySelector(
-    '[data-checkin="ticket-input-wrapper"]',
-  );
+  const inputWrapper = dom.ticket.inputWrapper;
 
   // submit input
   try {
@@ -81,12 +80,16 @@ export const onTicketInput = async (fromPaste = false) => {
         userData: res.data.userPreview,
       });
 
-      await goToStep(res.meta.nextStep);
+      const nextStep = res.meta?.nextStep;
+      if (!nextStep) {
+        throw new Error('Missing next step from server');
+      }
+
+      await goToStep(nextStep);
     } else {
       ui.showError(hintDiv, 'Código inválido 😕 Tenta de novo');
       throw new Error('Invalid');
     }
-
   } catch (err) {
     console.error(err);
 

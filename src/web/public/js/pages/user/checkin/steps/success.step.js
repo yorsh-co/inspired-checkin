@@ -1,13 +1,12 @@
 import * as ui from '../../../../modules/ui.js';
 import * as utils from '../../../../modules/utils.js';
+import { dom } from '../dom.js';
 
 /**
  *
  */
 export const runSuccessFlow = async () => {
-  const successMessage = document.querySelector(
-    '[data-checkin="success-message"]',
-  );
+  const successMessage = dom.success.message;
 
   ui.change(successMessage, 'Check-in feito! ✨');
   navigator.vibrate?.(50);

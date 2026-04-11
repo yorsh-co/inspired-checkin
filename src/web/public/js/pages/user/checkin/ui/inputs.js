@@ -7,6 +7,7 @@ import { formatter } from './formatters.js';
 import { onTicketInput } from '../steps/ticket.step.js';
 import { onVerificationInput } from '../steps/verification.step.js';
 import { inputMap } from './navigation.js';
+import { dom } from '../dom.js';
 
 const getInput = (query) => document.querySelector(query) || null;
 
@@ -118,16 +119,16 @@ export const startPlaceholderTyping = (input, phrases) => {
   };
 };
 
-export const inputs = {
+const inputs = {
   ticketCode: {
     setup: () =>
-      setupInput(getInput(inputMap.ticket), {
+      setupInput(getInput(dom.inputs.ticketCode), {
         onInput: onTicketInput,
         formatValue: formatter.ticketCode.format,
         valueIsValid: formatter.ticketCode.isValid,
       }),
     start: () => {
-      startPlaceholderTyping(getInput(inputMap.ticket), [
+      startPlaceholderTyping(dom.inputs.ticketCode, [
         { text: 'Digite seu código de ingresso...', pause: 1200 },
         { text: 'Cola seu ID do ticket aqui...', pause: 1000 },
         { text: 'Pronto pra a Inspire?', pause: 1400 },
@@ -137,13 +138,13 @@ export const inputs = {
   },
   verificationCode: {
     setup: () =>
-      setupInput(getInput(inputMap.verification), {
+      setupInput(dom.inputs.verificationCode, {
         onInput: onVerificationInput,
         formatValue: formatter.verificationCode.format,
         valueIsValid: formatter.verificationCode.isValid,
       }),
     start: () => {
-      startPlaceholderTyping(getInput(inputMap.verification), [
+      startPlaceholderTyping(dom.inputs.verificationCode, [
         { text: 'Confirme seu celular...', pause: 1200 },
         { text: 'Digite os últimos 4 dígitos...', pause: 1000 },
         { text: 'Digite o final do seu telefone...', pause: 1400 },
@@ -152,3 +153,5 @@ export const inputs = {
     },
   },
 };
+
+export default inputs;

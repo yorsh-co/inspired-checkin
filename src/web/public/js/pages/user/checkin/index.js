@@ -1,17 +1,11 @@
-import { setupQr } from '../../../modules/qr.js';
-import { attachScrollOnResize } from '../../../components/container/resize-scroll.js';
 import api from '../../../core/api/index.js';
+import { attachScrollOnResize } from '../../../components/container/resize-scroll.js';
 import { setupDebugButton } from '../../../debug/debug.js';
 
-import { inputs } from './ui/inputs.js';
-import { onQrScan } from './steps/qr.step.js';
+import { dom } from './dom.js';
 import { goToStep } from './ui/navigation.js';
 import { store } from './state/store.js';
-import {
-  initCheckinEffects,
-  setupStepHandlers,
-} from './state/step-handlers.js';
-import { dom } from './dom.js';
+import { setupStepHandlers } from './state/del.step-handlers.js';
 
 try {
   window.history.replaceState(null, '', '/checkin');
@@ -31,8 +25,6 @@ try {
 
     await goToStep(initialStep);
   });
-
-  setupStepHandlers();
 
   // scroll on resize
   attachScrollOnResize(dom.main.container);

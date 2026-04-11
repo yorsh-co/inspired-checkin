@@ -108,8 +108,7 @@ export const showStep = async (nextStep, currentStep = null) => {
   success.classList.add('show');
 };*/
 
-export const focusInput = ({ input = null, q = '' } = {}) => {
+export const focusInput = (input) => {
   if (input) input.focus();
-  else if (q) document.querySelector(q).focus();
-  else console.error('`focusInput` failed: missing arguments');
+  else console.error('[focusInput] missing input argument');
 };

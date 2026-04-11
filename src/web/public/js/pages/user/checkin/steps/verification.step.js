@@ -1,10 +1,14 @@
-import { formatVerificationCode, isValidVerificationCode } from '../ui/formatters.js';
+import {
+  formatVerificationCode,
+  isValidVerificationCode,
+} from '../ui/formatters.js';
 import { goToStep } from '../ui/navigation.js';
 
 import * as ui from '../../../../modules/ui.js';
 import * as utils from '../../../../modules/utils.js';
 
 import api from '../../../../core/api/index.js';
+import { dom, qs } from '../dom.js';
 
 let isSubmitting = false;
 
@@ -18,16 +22,14 @@ export const onVerificationInput = async (fromPaste = false) => {
   console.log('verification code submitted');
 
   // validate input
-  const input = document.querySelector('[data-checkin="verification-input"]');
+  const input = dom.inputs.verificationCode;
   input.classList.remove('error');
 
   const value = formatVerificationCode(input.value);
   input.value = value;
   console.log('verification input', value);
 
-  const hintDiv = document.querySelector(
-    '[data-checkin="verification-hint-div"]',
-  );
+  const hintDiv = dom.verification.hint;
   const defaultHint =
     hintDiv.textContent || 'Digite os 4 últimos digitos do seu celular 👆';
 
@@ -47,12 +49,8 @@ export const onVerificationInput = async (fromPaste = false) => {
 
   console.log('input is valid');
 
-  const inputWrapper = document.querySelector(
-    '[data-checkin="verification-input-wrapper"]',
-  );
-  const backButton = document.querySelector(
-    '[data-checkin="verification-back-btn"]',
-  );
+  const inputWrapper = dom.verification.inputWrapper;
+  const backButton = dom.verification.backBtn;
 
   // submit input
   try {
@@ -80,7 +78,12 @@ export const onVerificationInput = async (fromPaste = false) => {
       );
       await utils.sleep(1200);
 
-      await goToStep(res.meta.nextStep);
+      const nextStep = res.meta?.nextStep;
+      if (!nextStep) {
+        throw new Error('Missing next step from server');
+      }
+
+      await goToStep(nextStep);
     } else {
       ui.showError(
         hintDiv,
@@ -108,9 +111,19 @@ export const onVerificationInput = async (fromPaste = false) => {
 export const populateVerificationValues = async (userData = {}) => {
   const values = { ...userData };
 
+  const elements = {};
+
+  for (const key in values) {
+    elements[key] = qs(`[data-checkin="verification-${key}"]`, {
+      required: false,
+    });
+  }
+
   // store values
   for (const key in values) {
-    const el = document.querySelector(`[data-checkin="verification-${key}"]`);
+    const el = elements[key];
+    if (!el) continue;
+
     el.dataset.checkinValue = userData[key];
   }
 
@@ -127,7 +140,9 @@ export const populateVerificationValues = async (userData = {}) => {
 
   // display values
   for (const key in values) {
-    const el = document.querySelector(`[data-checkin="verification-${key}"]`);
+    const el = elements[key];
+    if (!el) continue;
+
     if (el) el.textContent = values[key] || '';
   }
 };

@@ -25,7 +25,12 @@ export const onQrScan = async (qrCode, hintDiv) => {
     );
     await utils.sleep(1200);
 
-    await goToStep(res.meta.nextStep);
+    const nextStep = res.meta?.nextStep;
+    if (!nextStep) {
+      throw new Error('Missing next step from server');
+    }
+
+    await goToStep(nextStep);
   } else {
     ui.showError(hintDiv, 'QR inválido 😕 Tenta de novo');
     throw new Error('Invalid');

@@ -1,10 +1,10 @@
 let uiState = {
-  currentStep: null,
+  currentStepKey: null,
 };
 
 const listeners = new Set();
 
-export const store = {
+const store = {
   getState: () => uiState,
 
   setState: (partial) => {
@@ -18,3 +18,5 @@ export const store = {
     return () => listeners.delete(fn);
   },
 };
+
+export default store;

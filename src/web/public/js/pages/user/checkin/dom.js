@@ -1,4 +1,4 @@
-const qs = (selector, { required = true } = {}) => {
+export const qs = (selector, { required = true } = {}) => {
   const el = document.querySelector(selector);
 
   if (!el && required) {
@@ -8,7 +8,7 @@ const qs = (selector, { required = true } = {}) => {
   return el;
 };
 
-export const dom = {
+const dom = Object.freeze({
   main: {
     container: qs('[data-checkin="main-container"]'),
   },
@@ -21,8 +21,8 @@ export const dom = {
   },
 
   inputs: {
-    ticket: qs('[data-checkin="ticket-code-input"]'),
-    verification: qs('[data-checkin="verification-code-input"]'),
+    ticketCode: qs('[data-checkin="ticket-code-input"]'),
+    verificationCode: qs('[data-checkin="verification-code-input"]'),
   },
 
   ticket: {
@@ -37,7 +37,7 @@ export const dom = {
   },
 
   qr: {
-    reader: qs('#checkin-qr-reader'),
+    reader: qs('[data-checkin="qr-reader-div"]'),
     startBtn: qs('[data-checkin="start-camera-btn"]'),
     hint: qs('[data-checkin="qr-hint-div"]'),
   },
@@ -45,4 +45,6 @@ export const dom = {
   success: {
     message: qs('[data-checkin="success-message"]'),
   },
-};
+});
+
+export default dom;

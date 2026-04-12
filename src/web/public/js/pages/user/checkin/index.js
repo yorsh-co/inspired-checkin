@@ -4,6 +4,13 @@ import { goToStep } from './ui/navigation.js';
 
 import { attachScrollOnResize } from '../../../components/container/resize-scroll.js';
 
+import api from '../../../core/api/index.js';
+import { setupDebugButton } from '../../../debug/debug.js';
+
+// debug
+setupDebugButton(api.checkin.resetSession, 'reset session');
+
+
 try {
   window.history.replaceState(null, '', '/checkin');
 
@@ -37,9 +44,3 @@ try {
 } catch (err) {
   console.error(err);
 }
-
-import api from '../../../core/api/index.js';
-import { setupDebugButton } from '../../../debug/debug.js';
-
-// debug
-setupDebugButton(api.checkin.resetSession, 'reset session');

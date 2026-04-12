@@ -121,7 +121,7 @@ const inputs = {
         onInput: onTicketInput,
         formatValue: formatter.ticketCode.format,
         valueIsValid: formatter.ticketCode.isValid,
-      },
+      }),
        // attachScrollOnFocus(dom.inputs.ticketCode));
      // attachScrollOnBlur(dom.inputs.ticketCode);
     

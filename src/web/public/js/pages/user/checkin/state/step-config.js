@@ -1,20 +1,28 @@
 import { setupQr } from '../../../../modules/qr.js';
 import utils from '../../../../modules/utils/index.js';
 
-import dom from '../dom.js';
+import pageDom from '../dom.js';
 import inputs from '../ui/inputs.js';
 import { runSuccessFlow } from '../steps/success.step.js';
 import { onQrScan } from '../steps/qr.step.js';
 import { populateStepValues } from '../ui/values.js';
+import ui from '../../../../modules/ui/index.js';
 
 const stepConfig = {
   ticket: {
     next: ['verification'],
 
-    el: dom.steps.ticket,
-    focusTarget: dom.inputs.ticketCode,
+    el: pageDom.steps.ticket,
+    focusTarget: pageDom.inputs.ticketCode,
 
-    async onEnter() {
+    async onEnter(_state, { skeleton }) {
+      if (skeleton) {
+        ui.skeleton.render(pageDom.steps.ticket);
+        return;
+      }
+
+      ui.skeleton.clear(pageDom.steps.ticket);
+
       inputs.ticketCode.setup();
       inputs.ticketCode.start();
     },
@@ -23,15 +31,22 @@ const stepConfig = {
   verification: {
     next: ['qr', 'success'],
 
-    el: dom.steps.verification,
-    focusTarget: dom.inputs.verificationCode,
+    el: pageDom.steps.verification,
+    focusTarget: pageDom.inputs.verificationCode,
 
-    async onEnter(state) {
+    async onEnter(state, { skeleton }) {
       const { userData } = state;
+
+      if (skeleton) {
+        ui.skeleton.render(pageDom.steps.verification);
+        return;
+      }
 
       if (!userData) {
         throw new Error('User data is missing');
       }
+
+      ui.skeleton.clear(pageDom.steps.verification);
 
       populateStepValues('verification', userData, {
         formatters: {
@@ -49,14 +64,14 @@ const stepConfig = {
   qr: {
     next: ['ticket', 'verification', 'success'],
 
-    el: dom.steps.qr,
+    el: pageDom.steps.qr,
 
     async onEnter(state) {
       setupQr({
         // TODO: review
-        qrReaderDiv: dom.qr.reader,
-        startCameraBtn: dom.qr.startBtn,
-        hintDiv: dom.qr.hint,
+        qrReaderDiv: pageDom.qr.reader,
+        startCameraBtn: pageDom.qr.startBtn,
+        hintDiv: pageDom.qr.hint,
         onScan: onQrScan,
       });
 
@@ -75,7 +90,7 @@ const stepConfig = {
   },
 
   success: {
-    el: dom.steps.success,
+    el: pageDom.steps.success,
 
     async onEnter() {
       await runSuccessFlow();

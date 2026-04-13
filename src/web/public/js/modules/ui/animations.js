@@ -1,4 +1,4 @@
-export const shake = (el) => {
+const shake = (el) => {
   el.animate(
     [
       { transform: 'translateX(0)' },
@@ -13,3 +13,8 @@ export const shake = (el) => {
     },
   );
 };
+
+const animate = {
+  shake,
+};
+export default animate;

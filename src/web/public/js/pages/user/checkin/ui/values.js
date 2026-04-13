@@ -1,4 +1,4 @@
-import { qs } from '../dom.js';
+import { qs } from '../../../../layouts/main/dom.js';
 
 /**
  *

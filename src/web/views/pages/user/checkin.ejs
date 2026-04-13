@@ -12,163 +12,177 @@
   data-checkin="main-container"
   class="main-container checkin-container txt-center"
 >
-  <h1>inspire</h1>
+  <div class="content-wrapper">
+    <h1 class="app-title">inspire</h1>
 
-  <!-- ticket step -->
-  <div data-checkin="ticket-step" class="ticket-step">
-    <div data-checkin="ticket-input-wrapper" class="input-wrapper">
-      <input
-        id="checkin-ticket-code-input"
-        data-checkin="ticket-code-input"
-        type="text"
-        placeholder="Digite seu código de ingresso..."
-        inputmode="text"
-        pattern="[a-z0-9]{5}"
-        autocomplete="one-time-code"
-        autocorrect="on"
-        autocapitalize="sentences"
-        enterkeyhint="send"
-      />
-      <div class="input-spinner"></div>
-    </div>
-    <%- include('../../components/privacy-notice') %>
+    <!-- ticket step -->
+    <div data-checkin="ticket-step" class="ticket-step skeleton">
+      <div data-checkin="ticket-input-wrapper" class="input-wrapper">
+        <input
+          id="checkin-ticket-code-input"
+          data-checkin="ticket-code-input"
+          type="text"
+          placeholder=""
+          inputmode="text"
+          pattern="[a-z0-9]{5}"
+          autocomplete="one-time-code"
+          autocorrect="on"
+          autocapitalize="sentences"
+          enterkeyhint="send"
+        />
+      </div>
+      <%- include('../../components/privacy-notice') %>
 
-    <div data-checkin="ticket-hint-div" class="hint"></div>
-  </div>
-
-  <!-- ticket verification -->
-  <div data-checkin="verification-step" class="verification-step">
-    <div>Confirme que o ingresso é seu</div>
-    <table class="">
-      <tr>
-        <th>
-          <div>
-            <span class="material-symbols-outlined"> confirmation_number </span>
-            Ingresso
-          </div>
-        </th>
-        <td><span data-checkin="verification-ticketCode"></span></td>
-      </tr>
-      <tr>
-        <th>
-          <div>
-            <span class="material-symbols-outlined"> id_card </span>
-            Nome
-          </div>
-        </th>
-        <td><span data-checkin="verification-name"></span></td>
-      </tr>
-      <tr>
-        <th>
-          <div>
-            <span class="material-symbols-outlined"> call </span>
-            Celular
-          </div>
-        </th>
-        <td>
-          <span
-            data-checkin="verification-phoneStart"
-            data-checkin-value=""
-          ></span>
-        </td>
-      </tr>
-    </table>
-
-    <div data-checkin="verification-input-wrapper" class="input-wrapper">
-      <input
-        id="checkin-verification-code-input"
-        data-checkin="verification-code-input"
-        class="tel-input txt-center"
-        type="text"
-        placeholder="Confirme seu celular..."
-        inputmode="text"
-        pattern="[0-9]{4}"
-        autocomplete="one-time-code"
-        autocorrect="on"
-        autocapitalize="sentences"
-        enterkeyhint="send"
-      />
-      <div class="input-spinner"></div>
+      <div data-checkin="ticket-hint-div" class="hint"></div>
     </div>
 
-    <div data-checkin="verification-hint-div" class="hint">
-      Insira apenas os últimos 4 dígitos
+    <!-- ticket verification -->
+    <div data-checkin="verification-step" class="verification-step skeleton">
+      <div>Confirme que o ingresso é seu</div>
+      <table class="">
+        <tr>
+          <th>
+            <div>
+              <span class="material-symbols-outlined">
+                confirmation_number
+              </span>
+              Ingresso
+            </div>
+          </th>
+          <td>
+            <span data-checkin="verification-ticketCode" data-skeleton="value"
+              >•••••</span
+            >
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <div>
+              <span class="material-symbols-outlined"> id_card </span>
+              Nome
+            </div>
+          </th>
+          <td>
+            <span data-checkin="verification-name" data-skeleton="value"
+              >••••• ••••••••</span
+            >
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <div>
+              <span class="material-symbols-outlined"> call </span>
+              Celular
+            </div>
+          </th>
+          <td>
+            <span
+              data-checkin="verification-phoneStart"
+              data-checkin-value=""
+              data-skeleton="value"
+              >(••) •••••-••••</span
+            >
+          </td>
+        </tr>
+      </table>
+
+      <div data-checkin="verification-input-wrapper" class="input-wrapper">
+        <input
+          id="checkin-verification-code-input"
+          data-checkin="verification-code-input"
+          class="tel-input txt-center"
+          type="text"
+          placeholder=""
+          inputmode="text"
+          pattern="[0-9]{4}"
+          autocomplete="one-time-code"
+          autocorrect="on"
+          autocapitalize="sentences"
+          enterkeyhint="send"
+        />
+      </div>
+
+      <div data-checkin="verification-hint-div" class="hint">
+        Insira apenas os últimos 4 dígitos
+      </div>
+
+      <button data-checkin="verification-back-btn" class="ghost">
+        <span class="btn-label">Voltar</span>
+      </button>
     </div>
 
-    <button data-checkin="verification-back-btn" class="ghost">
-      <span class="btn-label">Voltar</span>
-      <span class="btn-spinner"></span>
-    </button>
-  </div>
+    <!-- TODO: turn this into a component -->
+    <!-- qr step -->
+    <div data-checkin="qr-step" class="qr-step skeleton">
+      <div>Confirme que você chegou</div>
 
-  <!-- TODO: turn this into a component -->
-  <!-- qr step -->
-  <div data-checkin="qr-step" class="qr-step">
-    <div>Confirme que você chegou</div>
-
-    <!--<div class="ticket-code-display">
+      <!--<div class="ticket-code-display">
       <span class="material-symbols-outlined"> confirmation_number </span>
       <span data-checkin="qr-ticketCode">t35t3</span>
     </div>-->
 
-    <table class="">
-      <tr>
-        <th>
-          <div>
-            <span class="material-symbols-outlined"> confirmation_number </span>
-            Ingresso
-          </div>
-        </th>
-        <td><span data-checkin="qr-ticketCode"></span></td>
-      </tr>
-      <tr>
-        <th>
-          <div>
-            <span class="material-symbols-outlined"> id_card </span>
-            Nome
-          </div>
-        </th>
-        <td><span data-checkin="qr-name"></span></td>
-      </tr>
-      <tr>
-        <th>
-          <div>
-            <span class="material-symbols-outlined"> call </span>
-            Celular
-          </div>
-        </th>
-        <td>
-          <span data-checkin="qr-phoneStart" data-checkin-value=""></span>
-        </td>
-      </tr>
-    </table>
+      <table class="">
+        <tr>
+          <th>
+            <div>
+              <span class="material-symbols-outlined">
+                confirmation_number
+              </span>
+              Ingresso
+            </div>
+          </th>
+          <td><span data-checkin="qr-ticketCode"></span></td>
+        </tr>
+        <tr>
+          <th>
+            <div>
+              <span class="material-symbols-outlined"> id_card </span>
+              Nome
+            </div>
+          </th>
+          <td><span data-checkin="qr-name"></span></td>
+        </tr>
+        <tr>
+          <th>
+            <div>
+              <span class="material-symbols-outlined"> call </span>
+              Celular
+            </div>
+          </th>
+          <td>
+            <span data-checkin="qr-phoneStart" data-checkin-value=""></span>
+          </td>
+        </tr>
+      </table>
 
-    <div class="qr-reader-wrapper">
-      <div
-        id="checkin-qr-reader"
-        data-checkin="qr-reader-div"
-        class="qr-reader"
-      ></div>
-      <div class="div-spinner"></div>
+      <div class="qr-reader-wrapper">
+        <div
+          id="checkin-qr-reader"
+          data-checkin="qr-reader-div"
+          class="qr-reader"
+        ></div>
+        <div class="div-spinner"></div>
+      </div>
+
+      <button data-checkin="start-camera-btn">
+        <span class="material-symbols-outlined btn-label">
+          qr_code_scanner
+        </span>
+        <span class="btn-label">Ativar câmera</span>
+        <span class="btn-spinner"></span>
+      </button>
+      <%- include('../../components/privacy-notice') %>
+
+      <div data-checkin="qr-hint-div" class="qr-hint hint">
+        Escaneia o QR code da Inspire para confirmar que você chegou 📍
+      </div>
     </div>
 
-    <button data-checkin="start-camera-btn">
-      <span class="material-symbols-outlined btn-label"> qr_code_scanner </span>
-      <span class="btn-label">Ativar câmera</span>
-      <span class="btn-spinner"></span>
-    </button>
-    <%- include('../../components/privacy-notice') %>
-
-    <div data-checkin="qr-hint-div" class="qr-hint hint">
-      Escaneia o QR code da Inspire para confirmar que você chegou 📍
+    <!-- success -->
+    <div data-checkin="success-step" class="success-step">
+      <div class="check material-symbols-outlined"></div>
+      <div data-checkin="success-message" class="success-message"></div>
     </div>
   </div>
-
-  <!-- success -->
-  <div data-checkin="success-step" class="success-step">
-    <div class="check material-symbols-outlined"></div>
-    <div data-checkin="success-message" class="success-message"></div>
-  </div>
-
   <%- include('../../partials/footer') %>
 </main>

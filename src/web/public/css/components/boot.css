@@ -1,0 +1,55 @@
+.app-boot {
+  opacity: 0;
+  visibility: hidden;
+
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  width: 100dvw;
+  height: 100dvh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  pointer-events: none;
+
+  background: var(--bg-gradient);
+
+  transition:
+    opacity 0.4s ease,
+    visibility 0.4s ease;
+}
+
+.app-boot.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.boot-content {
+  width: 100dvw;
+  height: 100dvh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.06) 25%,
+    rgba(255, 255, 255, 0.12) 37%,
+    rgba(255, 255, 255, 0.06) 63%
+  );
+
+  background-size: 400% 100%;
+  animation: skeleton-loading 1.2s ease-in-out infinite;
+}
+
+.boot-content .logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+}

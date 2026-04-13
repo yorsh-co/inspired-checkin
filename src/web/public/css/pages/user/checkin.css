@@ -1,3 +1,8 @@
+.checkin-container {
+  position: relative;
+  min-height: 300px;
+}
+
 .checkin-container input,
 .checkin-container button {
   margin-bottom: 0;
@@ -9,16 +14,15 @@
 .checkin-container .qr-step,
 .checkin-container .success-step {
   opacity: 0;
-  max-height: 0;
-  overflow: hidden;
+  transform: translateY(10px);
 
-  /*animation: fadeIn 0.6s ease forwards;*/
-  /*animation-delay: 0.4s;*/
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
 
   transition:
-    max-height 0.5s ease,
-    opacity 0.4s ease,
-    transform 0.3s ease;
+    opacity 0.25s ease,
+    transform 0.25s ease;
 }
 
 .checkin-container .ticket-step.show,
@@ -26,9 +30,10 @@
 .checkin-container .qr-step.show,
 .checkin-container .success-step.show {
   opacity: 1;
-  max-height: 700px;
-  overflow: visible;
-  animation: fadeIn 0.4s ease;
+  transform: translateY(0);
+
+  pointer-events: auto;
+  position: relative;
 }
 
 .checkin-container .ticket-step.fade-out,
@@ -36,11 +41,6 @@
 .checkin-container .qr-step.fade-out,
 .checkin-container .success-step.fadeout {
   animation: fadeOut 0.3s ease forwards;
-}
-
-/* ticket step */
-.ticket-step .hint {
-  min-height: 0;
 }
 
 /* verification step */

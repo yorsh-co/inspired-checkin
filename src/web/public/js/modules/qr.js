@@ -1,4 +1,4 @@
-import * as ui from './ui.js';
+import * as ui from './ui/transition.js';
 import { setupDebugButton } from '../debug/debug.js';
 
 /**

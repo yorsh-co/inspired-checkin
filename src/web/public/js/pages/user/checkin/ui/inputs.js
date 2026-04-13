@@ -1,6 +1,6 @@
 import { formatter } from './formatters.js';
 
-import dom from '../dom.js';
+import pageDom from '../dom.js';
 import { onTicketInput } from '../steps/ticket.step.js';
 import { onVerificationInput } from '../steps/verification.step.js';
 
@@ -22,7 +22,6 @@ export const setupInput = (input, handlers) => {
 
   if (input.dataset.initialized === 'true') return;
 
-  input.dataset.initialized = 'true';
   input.value = '';
 
   // handle enter keydown
@@ -57,6 +56,9 @@ export const setupInput = (input, handlers) => {
       handlers.onInput(true);
     }, 0);
   });
+
+  input.dataset.initialized = 'true';
+  input.disabled = false;
 };
 
 /**
@@ -116,17 +118,17 @@ export const startPlaceholderTyping = (input, phrases) => {
 
 const inputs = {
   ticketCode: {
-    setup: () => 
-      setupInput(dom.inputs.ticketCode, {
+    setup: () => {
+      setupInput(pageDom.inputs.ticketCode, {
         onInput: onTicketInput,
         formatValue: formatter.ticketCode.format,
         valueIsValid: formatter.ticketCode.isValid,
-      }),
-       // attachScrollOnFocus(dom.inputs.ticketCode));
-     // attachScrollOnBlur(dom.inputs.ticketCode);
-    
+      });
+      attachScrollOnFocus(pageDom.inputs.ticketCode);
+      attachScrollOnBlur(pageDom.inputs.ticketCode);
+    },
     start: () => {
-      startPlaceholderTyping(dom.inputs.ticketCode, [
+      startPlaceholderTyping(pageDom.inputs.ticketCode, [
         { text: 'Digite seu código de ingresso...', pause: 1200 },
         { text: 'Cola seu ID do ticket aqui...', pause: 1000 },
         { text: 'Pronto pra a Inspire?', pause: 1400 },
@@ -136,13 +138,13 @@ const inputs = {
   },
   verificationCode: {
     setup: () =>
-      setupInput(dom.inputs.verificationCode, {
+      setupInput(pageDom.inputs.verificationCode, {
         onInput: onVerificationInput,
         formatValue: formatter.verificationCode.format,
         valueIsValid: formatter.verificationCode.isValid,
       }),
     start: () => {
-      startPlaceholderTyping(dom.inputs.verificationCode, [
+      startPlaceholderTyping(pageDom.inputs.verificationCode, [
         { text: 'Confirme seu celular...', pause: 1200 },
         { text: 'Digite os últimos 4 dígitos...', pause: 1000 },
         { text: 'Digite o final do seu telefone...', pause: 1400 },

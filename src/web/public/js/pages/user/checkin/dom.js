@@ -1,14 +1,6 @@
-export const qs = (selector, { required = true } = {}) => {
-  const el = document.querySelector(selector);
+import { qs } from '../../../layouts/main/dom.js';
 
-  if (!el && required) {
-    console.error(`[DOM] Missing required element: ${selector}`);
-  }
-
-  return el;
-};
-
-const dom = Object.freeze({
+const pageDom = Object.freeze({
   main: {
     container: qs('[data-checkin="main-container"]'),
   },
@@ -47,4 +39,4 @@ const dom = Object.freeze({
   },
 });
 
-export default dom;
+export default pageDom;

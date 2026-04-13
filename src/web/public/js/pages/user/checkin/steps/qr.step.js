@@ -1,6 +1,6 @@
 import { goToStep } from '../ui/navigation.js';
 
-import * as ui from '../../../../modules/ui.js';
+import * as ui from '../../../../modules/ui/transition.js';
 import utils from '../../../../modules/utils/index.js';
 
 import api from '../../../../core/api/index.js';

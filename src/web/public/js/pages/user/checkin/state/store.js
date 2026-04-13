@@ -1,5 +1,6 @@
 let uiState = {
   currentStepKey: null,
+  isSkeleton: false
 };
 
 const listeners = new Set();

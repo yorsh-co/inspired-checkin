@@ -1,12 +1,11 @@
-import dom from '../dom.js';
+import pageDom from '../dom.js';
 import store from '../state/store.js';
 import { goToStep } from '../ui/navigation.js';
 import { formatTicket, isValidTicket } from '../ui/formatters.js';
 
-import * as ui from '../../../../modules/ui.js';
-import utils from '../../../../modules/utils/index.js';
-
 import api from '../../../../core/api/index.js';
+import hint from '../../../../modules/ui/hint.js';
+import { withSkeleton } from '../../../../modules/ui/skeleton.js';
 
 let isSubmitting = false;
 
@@ -20,20 +19,20 @@ export const onTicketInput = async (fromPaste = false) => {
   console.log('ticket submitted');
 
   // validate input
-  const input = dom.inputs.ticketCode;
+  const input = pageDom.inputs.ticketCode;
   input.classList.remove('error');
 
   const value = formatTicket(input.value);
   input.value = value;
   console.log('ticket', input.value);
 
-  const hintDiv = dom.ticket.hint;
-  ui.clearError(hintDiv);
+  const hintDiv = pageDom.ticket.hint;
+  hint.clearError(hintDiv);
 
   if (!value) {
     if (!fromPaste) {
       console.error('input is empty');
-      ui.showError(hintDiv, 'Coloca seu código de ingresso ✨');
+      hint.showError(hintDiv, 'Coloca seu código de ingresso ✨');
     }
     return;
   }
@@ -41,7 +40,7 @@ export const onTicketInput = async (fromPaste = false) => {
   if (!isValidTicket(value)) {
     console.error('input is invalid');
 
-    ui.showError(
+    hint.showError(
       hintDiv,
       fromPaste && value.length === 5
         ? 'Código inválido 😕'
@@ -52,53 +51,51 @@ export const onTicketInput = async (fromPaste = false) => {
 
   console.log('input is valid');
 
-  const inputWrapper = dom.ticket.inputWrapper;
-
   // submit input
   try {
     isSubmitting = true;
-    ui.clear(hintDiv);
-    ui.showHint(hintDiv, 'Buscando seu ingresso... ⏳');
-    input.blur();
+    hint.clearAll(hintDiv);
+    hint.showHint(hintDiv, 'Buscando seu ingresso... ⏳');
 
-    ui.startLoading(inputWrapper);
+    input.blur();
     input.disabled = true;
 
-    console.log('submitting to server');
+    await goToStep('verification', { skeleton: true });
 
     // validate ticket number with the server
-    const res = await api.checkin.submitTicket(value);
+    console.log('submitting to server');
+    const res = await withSkeleton(() => api.checkin.submitTicket(value));
 
-    ui.clear(hintDiv);
+    //ui.clear(hintDiv);
+    if (!res.success) throw new Error('Invalid');
 
     // handle server response
-    if (res.success) {
-      ui.showHint(hintDiv, 'Encontrado! Agora confirme seu ingresso 🎫');
-      await utils.sleep(1200);
 
-      store.setState({
-        userData: res.data.userPreview,
-      });
+    //ui.showHint(hintDiv, 'Encontrado! Agora confirme seu ingresso 🎫');
+    //await utils.sleep(1200);
 
-      const nextStep = res.meta?.nextStep;
-      if (!nextStep) {
-        throw new Error('Missing next step from server');
-      }
+    store.setState({
+      userData: res.data.userPreview,
+    });
 
-      await goToStep(nextStep);
-    } else {
-      ui.showError(hintDiv, 'Código inválido 😕 Tenta de novo');
-      throw new Error('Invalid');
+    const nextStep = res.meta?.nextStep;
+    if (!nextStep) {
+      throw new Error('Missing next step from server');
     }
+
+    //await goToStep(nextStep, { skeleton: false });
   } catch (err) {
     console.error(err);
 
-    ui.stopLoading(inputWrapper);
-    isSubmitting = false;
+    await goToStep('ticket');
 
-    ui.showError(hintDiv, 'Código inválido 😕 Tenta de novo'); // FIXME: error-specific messages
+    //ui.stopLoading(inputWrapper);
+
+    hint.showError(hintDiv, 'Código inválido 😕 Tenta de novo'); // FIXME: error-specific messages
 
     input.disabled = false;
     input.focus();
+  } finally {
+    isSubmitting = false;
   }
 };

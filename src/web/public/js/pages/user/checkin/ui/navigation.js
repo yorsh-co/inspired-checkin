@@ -1,13 +1,15 @@
 import stepConfig from '../state/step-config.js';
 import store from '../state/store.js';
 
-import * as ui from '../../../../modules/ui.js';
 import utils from '../../../../modules/utils/index.js';
+import ui from '../../../../modules/ui/index.js';
 
-export const goToStep = async (nextStepKey) => {
+export const goToStep = async (nextStepKey, options = {}) => {
+  const { skeleton = false } = options;
+
   const { currentStepKey } = store.getState();
 
-  if (currentStepKey === nextStepKey) return;
+  if (currentStepKey === nextStepKey && !skeleton) return;
 
   const nextStep = stepConfig[nextStepKey];
   const currentStep = currentStepKey ? stepConfig[currentStepKey] : null;
@@ -29,20 +31,23 @@ export const goToStep = async (nextStepKey) => {
       await currentStep.onExit();
     }
 
-    await ui.showStep(nextStep.el, currentStep?.el);
+    await ui.transition.step(nextStep.el, currentStep?.el, {
+      delay: skeleton ? 0 : 300,
+    });
 
-    store.setState({ currentStepKey: nextStepKey });
+    store.setState({ currentStepKey: nextStepKey, isSkeleton: skeleton });
 
     if (nextStep.onEnter) {
-      await nextStep.onEnter(store.getState());
+      await nextStep.onEnter(store.getState(), { skeleton });
     }
 
     if (
+      !skeleton &&
       utils.isDesktop() &&
       nextStep.focusTarget &&
       !nextStep.focusTarget.disabled
     ) {
-      ui.focusInput(nextStep.focusTarget);
+      nextStep.focusTarget.focus();
     }
   } catch (err) {
     console.error('[Step Error]', err);

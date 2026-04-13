@@ -46,6 +46,7 @@ input:not(.error):valid {
 /* input loader */
 .input-wrapper {
   position: relative;
+  border-radius: 12px;
 }
 
 .input-spinner {

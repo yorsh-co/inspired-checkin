@@ -8,11 +8,11 @@ export const goToStep = async (nextStepKey, options = {}) => {
   const { skeleton = false } = options;
   console.log('[Step] loading', nextStepKey, 'skeleton', skeleton);
 
-  const { currentStepKey } = store.getState();
+  const { currentStepKey, isSkeleton } = store.getState();
 
   if (
       currentStepKey === nextStepKey && 
-      (!skeleton && !state.isSkeleton)
+      !skeleton && !isSkeleton
     ) { 
     console.error('[Step]', nextStepKey, 'is already open'); 
     return;

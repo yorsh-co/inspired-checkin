@@ -5,6 +5,7 @@ import utils from '../../../../modules/utils/index.js';
 import ui from '../../../../modules/ui/index.js';
 
 export const goToStep = async (nextStepKey, options = {}) => {
+  console.log('[Step] loading', nextStepKey);
   const { skeleton = false } = options;
 
   const { currentStepKey } = store.getState();

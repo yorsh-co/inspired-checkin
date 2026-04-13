@@ -14,7 +14,7 @@ export const goToStep = async (nextStepKey, options = {}) => {
       currentStepKey === nextStepKey && 
       !skeleton && !isSkeleton
     ) { 
-    console.error('[Step]', nextStepKey, 'is already open'); 
+    console.error('[Step] is already open', isSkeleton); 
     return;
   }
 

@@ -10,7 +10,10 @@ export const goToStep = async (nextStepKey, options = {}) => {
 
   const { currentStepKey } = store.getState();
 
-  if (currentStepKey === nextStepKey && !skeleton) return;
+  if (currentStepKey === nextStepKey && !skeleton) { 
+    console.error('[Step] step is already open'); 
+    return;
+  }
 
   const nextStep = stepConfig[nextStepKey];
   const currentStep = currentStepKey ? stepConfig[currentStepKey] : null;

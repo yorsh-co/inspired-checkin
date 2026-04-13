@@ -1,3 +1,5 @@
+import utils from '../modules/utils/index.js';
+
 const debugIsAllowedHost = () => {
   const host = location.hostname;
   return (
@@ -45,7 +47,7 @@ export const setupDebugButton = async (handler, buttonTxt, removeOnClick) => {
 };
 
 export const initErudaDebugMode = () => {
-  if (!isDebug()) return;
+  if (!isDebug() || utils.isDesktop()) return;
 
   const script = document.createElement('script');
   script.src = 'https://cdn.jsdelivr.net/npm/eruda';

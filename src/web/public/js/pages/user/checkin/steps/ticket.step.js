@@ -83,7 +83,7 @@ export const onTicketInput = async (fromPaste = false) => {
       throw new Error('Missing next step from server');
     }
 
-    //await goToStep(nextStep, { skeleton: false });
+    await goToStep(nextStep, { skeleton: false });
   } catch (err) {
     console.error(err);
 

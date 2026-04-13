@@ -19,6 +19,7 @@ export const ensureMinTime = async () => {
 // rendering
 
 export const render = (stepEl) => {
+  if (stepEl.classList.contains('skeleton')) return;
   stepEl.classList.add('skeleton');
 };
 

@@ -10,7 +10,7 @@ export const goToStep = async (nextStepKey, options = {}) => {
   const { skeleton = false } = options;
 
   const { currentStepKey } = store.getState();
-  console.log(
+  console.debug(
     '[Step] loading',
     skeleton ? 'skeleton' : 'hydrated',
     nextStepKey,

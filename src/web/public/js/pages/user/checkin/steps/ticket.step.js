@@ -17,7 +17,6 @@ let isSubmitting = false;
  */
 export const onTicketInput = async (fromPaste = false) => {
   if (isSubmitting) return;
-  console.log('ticket submitted');
 
   // validate input
   const input = dom.inputs.ticketCode;
@@ -25,21 +24,20 @@ export const onTicketInput = async (fromPaste = false) => {
 
   const value = formatTicket(input.value);
   input.value = value;
-  console.log('ticket', input.value);
 
   const hintDiv = dom.ticket.hint;
   hint.clearError(hintDiv);
 
   if (!value) {
     if (!fromPaste) {
-      console.error('input is empty');
+      console.error('[Ticket input] empty');
       hint.showError(hintDiv, 'Coloca seu código de ingresso ✨');
     }
     return;
   }
 
   if (!isValidTicket(value)) {
-    console.error('input is invalid');
+    console.error('[Ticket input] invalid');
 
     hint.showError(
       hintDiv,
@@ -50,8 +48,6 @@ export const onTicketInput = async (fromPaste = false) => {
     return;
   }
 
-  console.log('input is valid');
-
   // submit input
   try {
     isSubmitting = true;
@@ -60,23 +56,19 @@ export const onTicketInput = async (fromPaste = false) => {
 
     input.blur();
     input.disabled = true;
-    
+
     await utils.sleep(800);
 
     await goToStep('verification', { skeleton: true });
 
     // validate ticket number with the server
-    console.log('submitting to server');
+    console.debug('Submitting to server');
     const res = await withSkeleton(() => api.checkin.submitTicket(value));
 
     //ui.clear(hintDiv);
     if (!res.success) throw new Error('Invalid');
 
     // handle server response
-
-    //ui.showHint(hintDiv, 'Encontrado! Agora confirme seu ingresso 🎫');
-    //await utils.sleep(1200);
-
     store.setState({
       userData: res.data.userPreview,
     });
@@ -87,6 +79,7 @@ export const onTicketInput = async (fromPaste = false) => {
     }
 
     await goToStep(nextStep, { skeleton: false });
+    
   } catch (err) {
     console.error(err);
 

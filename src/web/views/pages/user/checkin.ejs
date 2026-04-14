@@ -10,13 +10,13 @@
 
 <main
   data-checkin="main-container"
-  class="main-container checkin-container txt-center"
+  class="main-container checkin-container cursor-glow txt-center"
 >
   <%- include('../../partials/header') %>
 
   <div class="content-wrapper">
     <!-- ticket step -->
-    <div data-checkin="ticket-step" class="ticket-step skeleton">
+    <section data-checkin="ticket-step" class="ticket-step skeleton">
       <div data-checkin="ticket-input-wrapper" class="input-wrapper">
         <input
           id="checkin-ticket-code-input"
@@ -33,12 +33,12 @@
       </div>
       <%- include('../../components/privacy-notice') %>
 
-      <div data-checkin="ticket-hint-div" class="hint"></div>
-    </div>
+      <div data-checkin="ticket-hint-div" class="hint-div"></div>
+    </section>
 
     <!-- ticket verification -->
-    <div data-checkin="verification-step" class="verification-step skeleton">
-      <div>Confirme que o ingresso é seu</div>
+    <section data-checkin="verification-step" class="verification-step skeleton">
+      <h2>Confirme que o ingresso é seu</h2>
       <table class="">
         <tr>
           <th>
@@ -102,19 +102,19 @@
         />
       </div>
 
-      <div data-checkin="verification-hint-div" class="hint">
+      <div data-checkin="verification-hint-div" class="hint-div">
         Insira apenas os últimos 4 dígitos
       </div>
 
       <button data-checkin="verification-back-btn" class="ghost">
         <span class="btn-label">Voltar</span>
       </button>
-    </div>
+    </section>
 
     <!-- TODO: turn this into a component -->
     <!-- qr step -->
-    <div data-checkin="qr-step" class="qr-step skeleton">
-      <div>Confirme que você chegou</div>
+    <section data-checkin="qr-step" class="qr-step skeleton">
+      <h2>Confirme que você chegou</h2>
 
       <!--<div class="ticket-code-display">
       <span class="material-symbols-outlined"> confirmation_number </span>
@@ -173,7 +173,7 @@
       </button>
       <%- include('../../components/privacy-notice') %>
 
-      <div data-checkin="qr-hint-div" class="qr-hint hint">
+      <div data-checkin="qr-hint-div" class="hint-div qr-hint"><!--FIXME: .qr-hint needed?-->
         Escaneia o QR code da Inspire para confirmar que você chegou 📍
       </div>
     </div>
@@ -183,7 +183,7 @@
       <div class="check material-symbols-outlined"></div>
       <div data-checkin="success-message" class="success-message"></div>
     </div>
-  </div>
+  </section>
 
   <%- include('../../partials/footer') %>
 </main>

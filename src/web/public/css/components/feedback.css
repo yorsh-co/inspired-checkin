@@ -3,17 +3,8 @@
   animation: flash 0.2s ease;
 }*/
 
-/* div */
-div.error {
-  padding-top: 10px;
-  font-size: 0.9rem;
-  color: var(--error);
-  min-height: 18px;
-  transition: opacity 0.2s;
-  animation: shake 0.3s;
-}
-
-div.hint {
+/* hint */
+.hint-div.hint {
   margin-top: 10px;
   font-size: 0.9rem;
   color: var(--text);
@@ -24,7 +15,12 @@ div.hint {
     transform 0.2s ease;
 }
 
-div.changing {
+.hint-div.error {
+  color: var(--error);
+  animation: shake 0.3s;
+}
+
+.hint-div.changing {
   opacity: 0;
   transform: translateY(4px);
 }

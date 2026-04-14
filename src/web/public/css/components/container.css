@@ -1,6 +1,6 @@
 .main-container {
   position: relative;
-  
+
   min-height: 300px;
   width: 90%;
   max-width: 400px;
@@ -16,31 +16,13 @@
 
   transition: height 0.3s ease-in-out;
   overflow: hidden;
+
+  animation: fadeIn 0.4s ease-out forwards;
+  animation-delay: 0.4s;
+  animation-fill-mode: backwards;
 }
 
-/* glow */
-.main-container::before {
-  content: '';
-  position: absolute;
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.25),
-    transparent 60%
-  );
-  opacity: 0;
-  top: var(--y);
-  left: var(--x);
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  transition: opacity 0.2s;
-}
-
-.main-container:hover::before {
-  opacity: 1;
-}
-
+/* container content */
 .content-wrapper {
   flex: 1;
   position: relative;

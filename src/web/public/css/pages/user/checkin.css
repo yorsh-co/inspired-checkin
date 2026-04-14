@@ -15,13 +15,13 @@
 }
 
 /* verification step */
-.checkin-container table {
-  width: 100%;
+.checkin-container .table-wrapper {
+  padding: 8px;
+
   margin: auto;
   margin-top: 16px;
   margin-bottom: 24px;
 
-  padding: 8px;
   border-radius: 20px;
 
   background: linear-gradient(
@@ -33,6 +33,39 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    height 0.2s ease;
+}
+
+/* qr */
+.qr-step .ticket-code-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+
+  font-weight: 700;
+}
+
+/* table toggle */
+.checkin-container .table-wrapper.collapsed tr:not(:first-child) {
+  display: none;
+}
+
+.verification-step .table-wrapper button {
+  display: none;
+}
+
+.checkin-container .table-wrapper button {
+  margin: 0;
+  height: 20px;
+}
+
+.checkin-container table {
+  width: 100%;
 }
 
 .checkin-container th,
@@ -59,16 +92,6 @@
 
 .checkin-container button {
   margin-top: 16px;
-}
-
-/* qr */
-.qr-step .ticket-code-display {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-
-  font-weight: 700;
 }
 
 /* success */

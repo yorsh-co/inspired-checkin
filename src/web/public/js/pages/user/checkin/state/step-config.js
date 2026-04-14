@@ -103,6 +103,20 @@ const stepConfig = {
         },
       });
 
+      // setup table toggle
+      const tableToggle = dom.verification.tableToggle;
+      if (tableToggle.dataset.initialized !== 'true') {
+        tableToggle.addEventListener('click', () => {
+          const isCollapsed =
+            dom.verification.tableWrapper.classList.toggle('collapsed');
+
+          dom.verification.tableToggleLabel.textContent = isCollapsed
+            ? 'keyboard_arrow_down'
+            : 'keyboard_arrow_up';
+        });
+        tableToggle.dataset.initialized = 'true';
+      }
+
       // setup input
       const input = dom.inputs.verificationCode;
 
@@ -148,8 +162,43 @@ const stepConfig = {
     next: ['ticket', 'verification', 'success'],
 
     el: dom.steps.qr,
+    hint: dom.qr.hint,
 
-    async onEnter(state) {
+    async onEnter(state, { skeleton }) {
+      const { userData } = state;
+
+      if (skeleton) {
+        ui.skeleton.render(this.el);
+        return;
+      }
+
+      if (!userData) {
+        throw new Error('User data is missing');
+      }
+
+      ui.skeleton.clear(this.el);
+
+      // populate the table
+      populateStepValues('qr', userData, {
+        formatters: {
+          phoneStart: (value) => utils.formatPhone.locale(value, 'pt-BR'),
+        },
+      });
+
+      // setup table toggle
+      const tableToggle = dom.qr.tableToggle;
+      if (tableToggle.dataset.initialized !== 'true') {
+        tableToggle.addEventListener('click', () => {
+          const isCollapsed = dom.qr.tableWrapper.classList.toggle('collapsed');
+
+          dom.qr.tableToggleLabel.textContent = isCollapsed
+            ? 'keyboard_arrow_down'
+            : 'keyboard_arrow_up';
+        });
+        tableToggle.dataset.initialized = 'true';
+      }
+
+      // setup the qr reader
       setupQr({
         // TODO: review
         qrReaderDiv: dom.qr.reader,
@@ -157,18 +206,14 @@ const stepConfig = {
         hintDiv: dom.qr.hint,
         onScan: onQrScan,
       });
+    },
 
-      const { userData } = state;
+    async onExit() {
+      // clear the hint
+      ui.hint.clearAll(this.hint);
 
-      if (!userData) {
-        throw new Error('User data is missing');
-      }
-
-      populateStepValues('qr', userData, {
-        formatters: {
-          phoneStart: (value) => utils.formatPhone.locale(value, 'pt-BR'),
-        },
-      });
+      // reset to skeleton
+      ui.skeleton.render(this.el);
     },
   },
 

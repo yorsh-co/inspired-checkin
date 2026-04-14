@@ -24,14 +24,20 @@ const dom = Object.freeze({
 
   verification: {
     hint: qs('[data-checkin="verification-hint-div"]'),
+    tableWrapper: qs('[data-checkin="verification-table-wrapper"]'),
+    tableToggle: qs('[data-checkin="verification-table-toggle"]'),
+    tableToggleLabel: qs('[data-checkin="verification-table-toggle-label"]'),
     inputWrapper: qs('[data-checkin="verification-input-wrapper"]'),
     backBtn: qs('[data-checkin="verification-back-btn"]'),
   },
 
   qr: {
+    hint: qs('[data-checkin="qr-hint-div"]'),
+    tableWrapper: qs('[data-checkin="qr-table-wrapper"]'),
+    tableToggle: qs('[data-checkin="qr-table-toggle"]'),
+    tableToggleLabel: qs('[data-checkin="qr-table-toggle-label"]'),
     reader: qs('[data-checkin="qr-reader-div"]'),
     startBtn: qs('[data-checkin="start-camera-btn"]'),
-    hint: qs('[data-checkin="qr-hint-div"]'),
   },
 
   success: {

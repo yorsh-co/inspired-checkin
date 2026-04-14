@@ -1,9 +1,4 @@
 .app-boot {
-  opacity: 0;
-  visibility: hidden;
-  
-  transform: translateY(10px);
-
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -11,25 +6,29 @@
   width: 100dvw;
   height: 100dvh;
 
+  background: var(--bg-gradient);
+
   display: flex;
   align-items: center;
   justify-content: center;
 
   pointer-events: none;
 
-  background: var(--bg-gradient);
+  opacity: 0;
+  visibility: hidden;
 
   transition:
-    opacity 0.4s ease,
-    visibility 0.4s ease,
-    transform: 0.3s ease-in-out;
+    opacity 0.8s ease-in,
+    visibility 0.8s ease-in;
 }
 
 .app-boot.show {
   opacity: 1;
   visibility: visible;
-  
-  transform: translateY(0);
+}
+
+.app-boot:not(.show) .boot-content {
+  animation: boot-flash 0.8s ease forwards;
 }
 
 .boot-content {
@@ -59,48 +58,11 @@
   color: white;
 }
 
-
-.app-boot:not(.show) .boot-content {
-  animation:
-    shimmer 0.3s linear,
-    boot-flash 0.5s ease forwards;
+.app-boot.show .logo {
+  animation: pop 0.5s ease forwards;
 }
 
-/*@keyframes boot-flash {
-  0% {
-    opacity: 1;
-    filter: brightness(1);
-    background-position: 0% 50%;
-  }
-
-  40% {
-    opacity: 1;
-    filter: brightness(1.4);
-    background-position: 100% 50%;
-  }
-
-  70% {
-    opacity: 0.8;
-    filter: brightness(1.2);
-  }
-
-  100% {
-    opacity: 0;
-    filter: brightness(1);
-  }
-}*/
-
-@keyframes boot-flash {
-  0% {
-    transform: scale(1);
-  }
-
-  40% {
-    transform: scale(1.02);
-  }
-
-  100% {
-    transform: scale(0.98);
-    opacity: 0;
-  }
+.app-boot:not(.show) .logo {
+  animation: boot-logo-pop-out 0.3s ease forwards;
+  animation-delay: 0.4s;
 }

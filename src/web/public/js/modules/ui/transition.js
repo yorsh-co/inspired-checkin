@@ -4,17 +4,20 @@
  * @param {HTMLDivElement} currentStep
  * @param {{ delay: number }} options
  */
-const step = async (nextStep, currentStep = null, options = {}) => {
-  //const { delay = 300 } = options;
-
+export const step = (nextStep, currentStep = null) => {
   return new Promise((resolve) => {
+    const isSameStep = nextStep === currentStep;
+
+    if (isSameStep) {
+      resolve();
+      return;
+    }
+
     if (currentStep) currentStep.classList.remove('show');
 
-    /*setTimeout(() => {
-      nextStep.classList.add('show');
-      resolve();
-    }, delay);*/
-    const onEnd = () => {
+    const onEnd = (e) => {
+      if (e.target !== nextStep) return;
+
       nextStep.removeEventListener('transitionend', onEnd);
       resolve();
     };
@@ -24,6 +27,8 @@ const step = async (nextStep, currentStep = null, options = {}) => {
     requestAnimationFrame(() => {
       nextStep.classList.add('show');
     });
+
+    setTimeout(resolve, 400);
   });
 };
 

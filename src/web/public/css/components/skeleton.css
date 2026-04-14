@@ -1,3 +1,12 @@
+.skeleton {
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+:not(.skeleton) {
+  opacity: 1;
+}
+
 .skeleton button,
 .skeleton input,
 .skeleton .hint,

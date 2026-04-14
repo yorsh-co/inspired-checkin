@@ -1,13 +1,26 @@
 import { setupQr } from '../../../../modules/qr.js';
 import utils from '../../../../modules/utils/index.js';
+import ui from '../../../../modules/ui/index.js';
+import {
+  attachScrollOnFocus,
+  attachScrollOnBlur,
+} from '../../../../components/input/focus-scroll.js';
 
 import dom from '../dom.js';
-import inputs from '../ui/inputs.js';
+
 import { goToStep } from '../ui/navigation.js';
 import { runSuccessFlow } from '../steps/success.step.js';
 import { onQrScan } from '../steps/qr.step.js';
 import { populateStepValues } from '../ui/values.js';
-import ui from '../../../../modules/ui/index.js';
+import { onVerificationInput } from '../steps/verification.step.js';
+import { onTicketInput } from '../steps/ticket.step.js';
+import { formatter } from '../ui/formatters.js';
+import {
+  setupInput,
+  startPlaceholderTyping,
+  stopPlaceholderTyping,
+} from '../ui/inputs.js';
+import api from '../../../../core/api/index.js';
 
 const stepConfig = {
   ticket: {
@@ -18,26 +31,44 @@ const stepConfig = {
 
     async onEnter(_state, { skeleton }) {
       if (skeleton) {
-        ui.skeleton.render(dom.steps.ticket);
+        ui.skeleton.render(this.el);
         return;
       }
 
-      ui.skeleton.clear(dom.steps.ticket);
-
+      ui.skeleton.clear(this.el);
       ui.hint.clearAll(dom.ticket.hint);
 
-      inputs.ticketCode.setup();
-      inputs.ticketCode.start();
+      // set up input
+      const input = dom.inputs.ticketCode;
+
+      setupInput(input, {
+        onInput: onTicketInput,
+        formatValue: formatter.ticketCode.format,
+        valueIsValid: formatter.ticketCode.isValid,
+      });
+
+      attachScrollOnFocus(dom.inputs.ticketCode);
+      attachScrollOnBlur(dom.inputs.ticketCode);
+
+      startPlaceholderTyping(dom.inputs.ticketCode, [
+        { text: 'Digite seu código de ingresso...', pause: 1200 },
+        { text: 'Cola seu ID do ticket aqui...', pause: 1000 },
+        { text: 'Pronto pra a Inspire?', pause: 1400 },
+        { text: 'Vamos fazer seu check-in ✨', pause: 1500 },
+      ]);
     },
-    
+
     async onExit() {
-      // FIXME: reset inputs
-      // FIXME: ADD SKELETON CLASS BACK??
-      inputs.ticketCode.setup();
-      inputs.ticketCode.stop();
-      
-      ui.skeleton.render(dom.steps.ticket);
-    }
+      // reset input
+      const input = dom.inputs.ticketCode;
+
+      stopPlaceholderTyping(input);
+
+      input.value = '';
+
+      // reset to skeleton
+      ui.skeleton.render(this.el);
+    },
   },
 
   verification: {
@@ -50,7 +81,7 @@ const stepConfig = {
       const { userData } = state;
 
       if (skeleton) {
-        ui.skeleton.render(dom.steps.verification);
+        ui.skeleton.render(this.el);
         return;
       }
 
@@ -58,34 +89,51 @@ const stepConfig = {
         throw new Error('User data is missing');
       }
 
-      ui.skeleton.clear(dom.steps.verification);
+      ui.skeleton.clear(this.el);
 
+      // populate the table
       populateStepValues('verification', userData, {
         formatters: {
-          phoneStart: value => utils.formatPhone.locale(value, 'pt-BR')
-        }
+          phoneStart: (value) => utils.formatPhone.locale(value, 'pt-BR'),
+        },
       });
 
+      // setup input
+      const input = dom.inputs.verificationCode;
+
+      setupInput(input, {
+        onInput: onVerificationInput,
+        formatValue: formatter.verificationCode.format,
+        valueIsValid: formatter.verificationCode.isValid,
+      });
+
+      startPlaceholderTyping(dom.inputs.verificationCode, [
+        { text: 'Confirme seu celular...', pause: 1200 },
+        { text: 'Digite os últimos 4 dígitos...', pause: 1000 },
+        { text: 'Digite o final do seu telefone...', pause: 1400 },
+        //{ text: 'Vamos fazer seu check-in ✨', pause: 1500 },
+      ]);
+
+      // setup back button
       if (dom.verification.backBtn) {
-        dom.verification.backBtn.onclick = () => goToStep('ticket');
-      } else {
-        console.warn('[Verification] back button not found');
+        dom.verification.backBtn.onclick = () => {
+          api.checkin.reset();
+          goToStep('ticket');
+        };
       }
-
-      ui.hint.clearAll(dom.ticket.hint);
-
-      inputs.verificationCode.setup();
-      inputs.verificationCode.start();
     },
 
     async onExit() {
-      // FIXME: reset inputs
-      // FIXME: ADD SKELETON CLASS BACK??
-      inputs.verificationCode.setup();
-      inputs.verificationCode.stop();
-      
-      ui.skeleton.render(dom.steps.verification);
-    }
+      // reset input
+      const input = dom.inputs.verificationCode;
+
+      stopPlaceholderTyping(input);
+
+      input.value = '';
+
+      // reset to skeleton
+      ui.skeleton.render(this.el);
+    },
   },
 
   qr: {
@@ -99,7 +147,7 @@ const stepConfig = {
         qrReaderDiv: dom.qr.reader,
         startCameraBtn: dom.qr.startBtn,
         hintDiv: dom.qr.hint,
-        onScan: onQrScan
+        onScan: onQrScan,
       });
 
       const { userData } = state;
@@ -110,10 +158,10 @@ const stepConfig = {
 
       populateStepValues('qr', userData, {
         formatters: {
-          phoneStart: value => utils.formatPhone.locale(value, 'pt-BR')
-        }
+          phoneStart: (value) => utils.formatPhone.locale(value, 'pt-BR'),
+        },
       });
-    }
+    },
   },
 
   success: {
@@ -121,8 +169,8 @@ const stepConfig = {
 
     async onEnter() {
       await runSuccessFlow();
-    }
-  }
+    },
+  },
 };
 
 export default stepConfig;

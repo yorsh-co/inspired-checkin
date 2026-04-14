@@ -24,6 +24,8 @@ const stepConfig = {
 
       ui.skeleton.clear(pageDom.steps.ticket);
 
+      ui.hint.clearAll(pageDom.ticket.hint);
+
       inputs.ticketCode.setup();
       inputs.ticketCode.start();
     }
@@ -61,7 +63,9 @@ const stepConfig = {
       } else {
         console.warn('[Verification] back button not found');
       }
-
+      
+      ui.hint.clearAll(pageDom.ticket.hint);
+ 
       inputs.verificationCode.setup();
       inputs.verificationCode.start();
     }

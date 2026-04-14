@@ -19,10 +19,12 @@ export const setupInput = (input, handlers) => {
     console.error('input missing');
     return;
   }
+  
+  input.value = '';
+  input.disabled = false;
 
   if (input.dataset.initialized === 'true') return;
-
-  input.value = '';
+  
 
   // handle enter keydown
   input.addEventListener('keydown', (e) => {

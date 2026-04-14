@@ -58,7 +58,7 @@
 .app-boot:not(.show) .boot-content {
   animation:
     shimmer 0.3s linear,
-    boot-flash 0.4s ease forwards;
+    boot-flash 0.5s ease forwards;
 }
 
 /*@keyframes boot-flash {
@@ -96,6 +96,6 @@
 
   100% {
     transform: scale(0.98);
-    opacity: 0.2;
+    opacity: 0;
   }
 }

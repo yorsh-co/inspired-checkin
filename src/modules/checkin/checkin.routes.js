@@ -6,13 +6,13 @@ const router = express.Router();
 router.post('/ticket', controller.submitTicket);
 router.post('/verification', controller.submitVerification);
 router.post('/qr', controller.submitQrCode);
+router.post('/reset', controller.reset);
 
 // =========================
 // DEBUG
 // =========================
 
 import { env } from '../../config/env.js';
-import { destroySession } from '../session/session.service.js';
 
 router.get('/debug', async (req, res) => {
   try {
@@ -29,22 +29,6 @@ router.get('/debug', async (req, res) => {
     console.error(err);
     res.status(500).json({ error: 'Debug failed' });
   }
-});
-
-router.post('/debug/reset', async (req, res) => {
-  if (env.nodeEnv === 'production') {
-    return res.status(404).end();
-  }
-
-  const sessionId = req.cookies['checkin_session_id'];
-
-  if (sessionId) {
-    await destroySession(sessionId);
-  }
-
-  res.clearCookie('checkin_session_id');
-
-  res.json({ ok: true });
 });
 
 export default router;

@@ -50,3 +50,20 @@ export const submitQrCode = async (req, res, next) => {
     next(err);
   }
 };
+
+export const reset = async (req, res, next) => {
+  try {
+    const service = new CheckinService({ req, res });
+
+    const result = await service.resetCheckin();
+
+    return res.json({
+      success: true,
+      code: 'CHECKIN_RESET',
+      meta: result.meta,
+      data: result.data || {},
+    });
+  } catch (err) {
+    next(err);
+  }
+};

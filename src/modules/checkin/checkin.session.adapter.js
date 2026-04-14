@@ -40,8 +40,33 @@ export const rotateCheckinSession = async (req, res, sessionId) => {
   return rotated;
 };
 
+const destroyCheckinSession = async (req, res) => {
+  const sessionId = req.cookies[COOKIE_NAME];
+
+  if (sessionId) {
+    await sessionService.destroy(sessionId);
+  }
+
+  res.clearCookie(COOKIE_NAME);
+};
+
+const resetCheckinSession = async (req, res) => {
+  const sessionId = req.cookies[COOKIE_NAME];
+
+  if (sessionId) {
+    await destroyCheckinSession(req, res);
+  }
+
+  res.clearCookie(COOKIE_NAME);
+
+  // create a brand new session
+  return await getOrCreateCheckinSession(req, res);
+};
+
 export const checkinSession = {
   getOrCreate: getOrCreateCheckinSession,
   persist: persistCheckinSession,
   rotate: rotateCheckinSession,
+  destroy: destroyCheckinSession,
+  reset: resetCheckinSession,
 };

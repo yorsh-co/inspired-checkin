@@ -43,6 +43,11 @@ export class CheckinService {
     return this._persistAndRespond(this.session, data);
   }
 
+  /**
+   *
+   * @param {string} ticketCode
+   * @returns
+   */
   async submitTicket(ticketCode) {
     await this._initSession();
 
@@ -51,6 +56,11 @@ export class CheckinService {
     return await this._persistAndRespond(session, data);
   }
 
+  /**
+   *
+   * @param {string} verificationCode
+   * @returns
+   */
   async submitVerification(verificationCode) {
     await this._initSession();
 
@@ -68,12 +78,33 @@ export class CheckinService {
     return await this._persistAndRespond(session);
   }
 
+  /**
+   *
+   * @param {string} qrCode
+   * @returns
+   */
   async submitQr(qrCode) {
     await this._initSession();
 
     const { session } = await this._processQr(qrCode);
 
     return await this._persistAndRespond(session);
+  }
+
+  /**
+   *
+   * @param {object} values
+   */
+  async resetCheckin() {
+    const { sessionId, session } = await checkinSession.reset(
+      this.req,
+      this.res,
+    );
+
+    this.sessionId = sessionId;
+    this.session = session;
+
+    return this._persistAndRespond(session);
   }
 
   // =========================

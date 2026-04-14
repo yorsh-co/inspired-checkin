@@ -4,6 +4,8 @@ import store from '../state/store.js';
 import utils from '../../../../modules/utils/index.js';
 import ui from '../../../../modules/ui/index.js';
 
+import pageDom from '../dom.js';
+
 export const goToStep = async (nextStepKey, options = {}) => {
   const { skeleton = false } = options;
 
@@ -43,7 +45,7 @@ export const goToStep = async (nextStepKey, options = {}) => {
       await currentStep.onExit();
     }
 
-    const container = dom.main.container;
+    const container = pageDom.main.container;
     container.addEventListener(
       'transitionend',
       () => {

@@ -12,9 +12,9 @@
   data-checkin="main-container"
   class="main-container checkin-container txt-center"
 >
-  <div class="content-wrapper">
-    <h1 class="app-title">inspire</h1>
+  <%- include('../../partials/header') %>
 
+  <div class="content-wrapper">
     <!-- ticket step -->
     <div data-checkin="ticket-step" class="ticket-step skeleton">
       <div data-checkin="ticket-input-wrapper" class="input-wrapper">
@@ -184,5 +184,6 @@
       <div data-checkin="success-message" class="success-message"></div>
     </div>
   </div>
+
   <%- include('../../partials/footer') %>
 </main>

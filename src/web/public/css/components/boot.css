@@ -1,6 +1,8 @@
 .app-boot {
   opacity: 0;
   visibility: hidden;
+  
+  transform: translateY(10px);
 
   position: fixed;
   inset: 0;
@@ -19,12 +21,15 @@
 
   transition:
     opacity 0.4s ease,
-    visibility 0.4s ease;
+    visibility 0.4s ease,
+    transform: 0.3s ease-in-out;
 }
 
 .app-boot.show {
   opacity: 1;
   visibility: visible;
+  
+  transform: translateY(0);
 }
 
 .boot-content {

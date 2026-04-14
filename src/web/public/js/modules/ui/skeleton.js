@@ -23,7 +23,11 @@ export const render = (stepEl) => {
 };
 
 export const clear = (stepEl) => {
-  stepEl.classList.remove('skeleton');
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      stepEl.classList.remove('skeleton');
+    });
+  });
 };
 
 const skeleton = {

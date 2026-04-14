@@ -9,7 +9,7 @@
 
 .skeleton button,
 .skeleton input,
-.skeleton .hint,
+.skeleton .hint-div,
 .skeleton [data-skeleton='value'] {
   position: relative;
   color: transparent !important;
@@ -18,9 +18,13 @@
   box-shadow: none !important;
 }
 
+.skeleton button {
+  background: transparent;
+}
+
 .skeleton button::before,
 .skeleton .input-wrapper::before,
-.skeleton .hint::before,
+.skeleton .hint-div::before,
 .skeleton [data-skeleton='value']::before {
   content: '';
   position: absolute;
@@ -46,7 +50,7 @@
   height: 100%;
 }
 
-.skeleton .hint {
+.skeleton .hint-div {
   color: transparent;
   border-radius: 8px;
 }

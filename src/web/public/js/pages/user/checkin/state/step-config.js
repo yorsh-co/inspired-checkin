@@ -30,7 +30,7 @@ const stepConfig = {
   },
 
   verification: {
-    next: ['qr', 'success'],
+    next: ['ticket', 'qr', 'success'],
 
     el: pageDom.steps.verification,
     focusTarget: pageDom.inputs.verificationCode,

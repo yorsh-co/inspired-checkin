@@ -111,6 +111,7 @@ export const startPlaceholderTyping = (input, phrases) => {
   loop();
 
   input._placeholderCleanup = () => {
+    input.placeholder= "";
     destroyed = true;
     clearInterval(interval);
     clearTimeout(timeoutId);

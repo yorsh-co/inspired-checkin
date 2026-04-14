@@ -1,10 +1,5 @@
-/* container */
-/*.container:has(.success.show) {
-  animation: flash 0.2s ease;
-}*/
-
 /* hint */
-.hint-div.hint {
+.hint-div {
   margin-top: 10px;
   font-size: 0.9rem;
   color: var(--text);

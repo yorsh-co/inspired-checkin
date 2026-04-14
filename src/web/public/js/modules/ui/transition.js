@@ -5,7 +5,7 @@
  * @param {{ delay: number }} options
  */
 export const step = (nextStep, currentStep = null) => {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const isSameStep = nextStep === currentStep;
 
     if (isSameStep) {
@@ -15,7 +15,7 @@ export const step = (nextStep, currentStep = null) => {
 
     if (currentStep) currentStep.classList.remove('show');
 
-    const onEnd = (e) => {
+    const onEnd = e => {
       if (e.target !== nextStep) return;
 
       nextStep.removeEventListener('transitionend', onEnd);
@@ -36,9 +36,15 @@ export const step = (nextStep, currentStep = null) => {
  *
  * @param {HTMLDivElement} el
  */
-const bootScreen = async (el) => {
+const bootScreen = async el => {
   if (el.classList.contains('show')) {
     requestAnimationFrame(() => {
+      /*bootEl.classList.add('hiding');
+      bootEl.classList.remove('show');
+
+      setTimeout(() => {
+        bootEl.classList.remove('hiding');
+      }, 400);*/
       el.classList.remove('show');
     });
   } else {

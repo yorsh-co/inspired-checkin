@@ -53,3 +53,49 @@
   font-weight: 700;
   color: white;
 }
+
+
+.app-boot:not(.show) .boot-content {
+  animation:
+    skeleton-loading 0.4s linear,
+    boot-flash 0.4s ease forwards;
+}
+
+@keyframes boot-flash {
+  0% {
+    opacity: 1;
+    filter: brightness(1);
+    background-position: 0% 50%;
+  }
+
+  40% {
+    opacity: 1;
+    filter: brightness(1.4);
+    background-position: 100% 50%;
+  }
+
+  70% {
+    opacity: 0.8;
+    filter: brightness(1.2);
+  }
+
+  100% {
+    opacity: 0;
+    filter: brightness(1);
+  }
+}
+
+@keyframes boot-flash {
+  0% {
+    transform: scale(1);
+  }
+
+  40% {
+    transform: scale(1.02);
+  }
+
+  100% {
+    transform: scale(0.98);
+    opacity: 0;
+  }
+}

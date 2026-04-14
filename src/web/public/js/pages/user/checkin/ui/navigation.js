@@ -43,11 +43,11 @@ const isSameStep = currentStepKey === nextStepKey;
     if (currentStep?.onExit) {
       await currentStep.onExit();
     }
-
+console.warn('start')
     await ui.transition.step(nextStep.el, isSameStep ? null : currentStep?.el, {
       delay: skeleton ? 0 : 300,
     });
-
+console.warn('end')
     store.setState({ currentStepKey: nextStepKey, isSkeleton: skeleton });
 
     if (nextStep.onEnter) {

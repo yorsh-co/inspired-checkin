@@ -1,27 +1,75 @@
 import utils from '../utils/index.js';
 
+const waitForHeightTransition = (el) => {
+  return new Promise((resolve) => {
+    const onEnd = (e) => {
+      if (e.propertyName !== 'height') return;
+
+      el.removeEventListener('transitionend', onEnd);
+      resolve();
+    };
+
+    el.addEventListener('transitionend', onEnd);
+
+    // fallback
+    setTimeout(resolve, 300);
+  });
+};
+
 /**
  *
  * @param {HTMLDivElement} nextStep
  * @param {HTMLDivElement} currentStep
- * @param {{ delay: number }} options
+ * @param {{ delay: number, container: HTMLDivElement }} options
  */
-export const step = (nextStep, currentStep = null, options = {}) => {
-  const { delay = 300 } = options;
-  return new Promise(async resolve => {
-    const isSameStep = nextStep === currentStep;
+export const step = async (
+  nextStep,
+  currentStep = null,
+  options = {}
+) => {
+  const { delay = 300, container } = options;
 
-    if (isSameStep) {
-      resolve();
-      return;
+  const isSameStep = nextStep === currentStep;
+
+  // -----------------------------
+  // HEIGHT LOCK
+  // -----------------------------
+  let startHeight;
+
+  if (container) {
+    startHeight = container.offsetHeight;
+    container.style.height = startHeight + 'px';
+    container.style.overflow = 'hidden';
+  }
+
+  // -----------------------------
+  // SAME STEP (skeleton → real)
+  // -----------------------------
+  if (isSameStep) {
+    if (container) {
+      const endHeight = container.scrollHeight;
+
+      container.style.height = endHeight + 'px';
+
+      await waitForHeightTransition(container);
     }
 
-    if (currentStep) {
-      currentStep.classList.remove('show');
-      await utils.sleep(delay);
-    }
+    return;
+  }
 
-    const onEnd = e => {
+  // -----------------------------
+  // EXIT CURRENT STEP
+  // -----------------------------
+  if (currentStep) {
+    currentStep.classList.remove('show');
+    await utils.sleep(delay);
+  }
+
+  // -----------------------------
+  // ENTER NEXT STEP
+  // -----------------------------
+  await new Promise((resolve) => {
+    const onEnd = (e) => {
       if (e.target !== nextStep) return;
 
       nextStep.removeEventListener('transitionend', onEnd);
@@ -36,6 +84,20 @@ export const step = (nextStep, currentStep = null, options = {}) => {
 
     setTimeout(resolve, 400);
   });
+
+  // -----------------------------
+  // HEIGHT ADJUST
+  // -----------------------------
+  if (container) {
+    const endHeight = container.scrollHeight;
+
+    container.style.height = endHeight + 'px';
+
+    await waitForHeightTransition(container);
+
+    container.style.height = 'auto';
+    container.style.overflow = '';
+  }
 };
 
 /**

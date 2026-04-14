@@ -6,6 +6,7 @@ import { formatTicket, isValidTicket } from '../ui/formatters.js';
 import api from '../../../../core/api/index.js';
 import hint from '../../../../modules/ui/hint.js';
 import { withSkeleton } from '../../../../modules/ui/skeleton.js';
+import utils from '../../../../modules/utils/index.js';'
 
 let isSubmitting = false;
 
@@ -60,7 +61,7 @@ export const onTicketInput = async (fromPaste = false) => {
     input.blur();
     input.disabled = true;
     
-    ui.sleep(300);
+    utils.sleep(300);
 
     await goToStep('verification', { skeleton: true });
 

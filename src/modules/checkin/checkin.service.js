@@ -83,10 +83,10 @@ export class CheckinService {
    * @param {string} qrCode
    * @returns
    */
-  async submitQr(qrCode) {
+  async submitQrToken(qrCode) {
     await this._initSession();
 
-    const { session } = await this._processQr(qrCode);
+    const { session } = await this._processQrToken(qrCode);
 
     return await this._persistAndRespond(session);
   }
@@ -173,8 +173,8 @@ export class CheckinService {
     };
   }
 
-  async _processQr(qrToken) {
-    const result = await validateQrCode(qrToken);
+  async _processQrToken(qrToken) {
+    const result = await validateQrToken(qrToken);
 
     const updated = applyStep(this.session, CheckinSteps.QR, {
       eventId: result.eventId,
@@ -273,7 +273,7 @@ const verifyUser = async (session, code) => {
  * @param {*} qrToken
  * @returns
  */
-const validateQrCode = async (qrToken) => {
+const validateQrToken = async (qrToken) => {
   if (!qrToken) throw new Error('Invalid QR');
 
   const payload = qrService.verify(qrToken, {

@@ -55,7 +55,8 @@ const stepConfig = {
         },
       });
 
-      // TODO: setup back button
+      if (pageDom.verification.backBtn)
+        pageDom.verification.backBtn.onclick = () => goToStep('ticket');
 
       inputs.verificationCode.setup();
       inputs.verificationCode.start();

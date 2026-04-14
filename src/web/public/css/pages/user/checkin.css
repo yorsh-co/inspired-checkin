@@ -8,39 +8,9 @@
   margin-bottom: 0;
 }
 
-/* step */
-.checkin-container .ticket-step,
-.checkin-container .verification-step,
-.checkin-container .qr-step,
-.checkin-container .success-step {
-  opacity: 0;
-  /*transform: translateY(-10px);*/
-
-  pointer-events: none;
-  position: absolute;
-  inset: 0;
-
-  transition:
-    opacity 0.25s ease,
-    transform 0.25s ease;
-}
-
-.checkin-container .ticket-step.show,
-.checkin-container .verification-step.show,
-.checkin-container .qr-step.show,
-.checkin-container .success-step.show {
-  opacity: 1;
-  /*transform: translateY(0);*/
-
-  pointer-events: auto;
-  position: relative;
-}
-
-.checkin-container .ticket-step.fade-out,
-.checkin-container .verification-step.fade-out,
-.checkin-container .qr-step.fade-out,
-.checkin-container .success-step.fadeout {
-  animation: fadeOut 0.3s ease forwards;
+.checkin-container h2 {
+  font-size: 1em;
+  margin: 0;
 }
 
 /* verification step */

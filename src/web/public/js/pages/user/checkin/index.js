@@ -23,7 +23,8 @@ try {
       document.getElementById('checkin-data').textContent,
     );
 
-    const initialStep = checkinData?.meta?.nextStep || 'ticket';
+    //const initialStep = checkinData?.meta?.nextStep || 'ticket';
+    const initialStep = 'qr';
 
     store.setState({
       currentStep: null,

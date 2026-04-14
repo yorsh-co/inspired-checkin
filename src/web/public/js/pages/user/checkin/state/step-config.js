@@ -173,7 +173,8 @@ const stepConfig = {
       }
 
       if (!userData) {
-        throw new Error('User data is missing');
+        //throw new Error('User data is missing');
+        console.warn('User data is missing');
       }
 
       ui.skeleton.clear(this.el);

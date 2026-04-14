@@ -10,7 +10,8 @@
 .skeleton button,
 .skeleton input,
 .skeleton .hint-div,
-.skeleton [data-skeleton='value'] {
+.skeleton [data-skeleton='value'],
+[data-skeleton='div'].skeleton {
   position: relative;
   color: transparent !important;
   pointer-events: none;
@@ -25,7 +26,8 @@
 .skeleton button::before,
 .skeleton .input-wrapper::before,
 .skeleton .hint-div::before,
-.skeleton [data-skeleton='value']::before {
+.skeleton [data-skeleton='value']::before,
+[data-skeleton='div'].skeleton::before {
   content: '';
   position: absolute;
   inset: 0;

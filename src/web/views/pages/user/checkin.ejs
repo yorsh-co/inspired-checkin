@@ -189,16 +189,18 @@
         </button>
       </div>
 
-      <div class="qr-reader-wrapper">
+      <div data-skeleton="div" class="qr-reader-wrapper skeleton">
         <div
           id="checkin-qr-reader"
           data-checkin="qr-reader-div"
-          class="qr-reader"
+          class="qr-reader skeleton"
         ></div>
-        <div class="div-spinner"></div>
+        <div class="qr-reader-icon">
+          <span class="material-symbols-outlined btn-label"> search </span>
+        </div>
       </div>
 
-      <button data-checkin="start-camera-btn">
+      <button data-checkin="start-camera-btn" class="qr-start-btn show">
         <span class="material-symbols-outlined btn-label">
           qr_code_scanner
         </span>

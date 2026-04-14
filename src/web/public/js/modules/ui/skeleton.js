@@ -18,14 +18,14 @@ export const ensureMinTime = async () => {
 
 // rendering
 
-export const render = (stepEl) => {
-  stepEl.classList.add('skeleton');
+export const render = (el) => {
+  el.classList.add('skeleton');
 };
 
-export const clear = (stepEl) => {
+export const clear = (el) => {
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
-      stepEl.classList.remove('skeleton');
+      el.classList.remove('skeleton');
     });
   });
 };

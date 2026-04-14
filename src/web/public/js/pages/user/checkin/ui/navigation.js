@@ -14,7 +14,7 @@ export const goToStep = async (nextStepKey, options = {}) => {
       currentStepKey === nextStepKey && 
       !skeleton && !isSkeleton
     ) { 
-    console.error('[Step] is already open', isSkeleton); 
+    console.error('[Step] is already open'); 
     return;
   }
 
@@ -26,7 +26,11 @@ export const goToStep = async (nextStepKey, options = {}) => {
     return;
   }
 
-  if (currentStep && !currentStep.next?.includes(nextStepKey)) {
+  if (
+    currentStep && 
+    !currentStep.next?.includes(nextStepKey) && 
+    currentStepKey !== nextStepKey
+    ) {
     console.warn(
       `[Step] Invalid transition: ${currentStepKey} → ${nextStepKey}`,
     );

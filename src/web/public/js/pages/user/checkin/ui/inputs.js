@@ -22,6 +22,7 @@ export const setupInput = (input, handlers) => {
 
   input.value = '';
   input.disabled = false;
+  input.placeholder = '';
 
   if (input.dataset.initialized === 'true') return;
 
@@ -111,7 +112,6 @@ export const startPlaceholderTyping = (input, phrases) => {
   loop();
 
   input._placeholderCleanup = () => {
-    input.placeholder= "";
     destroyed = true;
     clearInterval(interval);
     clearTimeout(timeoutId);
@@ -123,6 +123,7 @@ export const stopPlaceholderTyping = input => {
     input._placeholderCleanup();
     input._placeholderCleanup = null;
   }
+  input.placeholder = '';
 };
 
 const inputs = {
@@ -149,7 +150,8 @@ const inputs = {
     }
   },
   verificationCode: {
-    setup: () => // FIXME: mkve to step config
+    setup: () =>
+      // FIXME: mkve to step config
       setupInput(pageDom.inputs.verificationCode, {
         onInput: onVerificationInput,
         formatValue: formatter.verificationCode.format,

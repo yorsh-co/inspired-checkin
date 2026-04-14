@@ -12,7 +12,7 @@ export const goToStep = async (nextStepKey, options = {}) => {
 
   if (
       currentStepKey === nextStepKey && 
-      !skeleton && !isSkeleton
+      skeleton
     ) { 
     console.error('[Step] is already open'); 
     return;

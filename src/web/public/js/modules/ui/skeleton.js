@@ -1,6 +1,6 @@
 let skeletonStartTime = 0;
 
-const MIN_SKELETON_TIME = 300;
+const MIN_SKELETON_TIME = 500;
 
 // timing
 

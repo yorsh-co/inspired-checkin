@@ -52,7 +52,6 @@ const stepConfig = {
       if (!userData) {
         throw new Error('User data is missing');
       }
-      console.error('OK!!!');
 
       ui.skeleton.clear(pageDom.steps.verification);
 

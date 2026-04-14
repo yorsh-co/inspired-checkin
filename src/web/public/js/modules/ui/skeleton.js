@@ -25,6 +25,7 @@ export const render = (stepEl) => {
 
 export const clear = (stepEl) => {
   stepEl.classList.remove('skeleton');
+  console.log('[Skeleton] cleared')
 };
 
 const skeleton = {

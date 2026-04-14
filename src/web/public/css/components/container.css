@@ -1,6 +1,6 @@
 .main-container {
   position: relative;
-
+  
   min-height: 300px;
   width: 90%;
   max-width: 400px;
@@ -14,9 +14,8 @@
   backdrop-filter: blur(20px);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
 
-  transition: 
-    opacity 0.3s ease;
-    
+  transition: height 0.3s ease-in-out;
+  overflow: hidden;
 }
 
 /* glow */

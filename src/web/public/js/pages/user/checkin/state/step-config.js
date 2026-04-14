@@ -31,6 +31,9 @@ const stepConfig = {
     },
     
     async onExit() {
+      // FIXME: reset inputs
+      // FIXME: ADD SKELETON CLASS BACK??
+      inputs.ticketCode.setup();
       inputs.ticketCode.stop();
     }
   },
@@ -74,6 +77,9 @@ const stepConfig = {
     },
 
     async onExit() {
+      // FIXME: reset inputs
+      // FIXME: ADD SKELETON CLASS BACK??
+      inputs.verificationCode.setup();
       inputs.verificationCode.stop();
     }
   },

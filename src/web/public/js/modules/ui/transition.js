@@ -4,7 +4,8 @@
  * @param {HTMLDivElement} currentStep
  * @param {{ delay: number }} options
  */
-export const step = (nextStep, currentStep = null) => {
+export const step = (nextStep, currentStep = null, options = {}) => {
+ const {delay = 300} =options;
   return new Promise(resolve => {
     const isSameStep = nextStep === currentStep;
 
@@ -13,7 +14,10 @@ export const step = (nextStep, currentStep = null) => {
       return;
     }
 
-    if (currentStep) currentStep.classList.remove('show');
+    if (currentStep) {
+      currentStep.classList.remove('show');
+      await utils.sleep(delay);
+    }
 
     const onEnd = e => {
       if (e.target !== nextStep) return;

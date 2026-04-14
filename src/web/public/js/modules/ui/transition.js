@@ -1,3 +1,5 @@
+import utils from '../utils/index.js';
+
 /**
  *
  * @param {HTMLDivElement} nextStep

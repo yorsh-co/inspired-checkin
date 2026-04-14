@@ -10,7 +10,7 @@ export const goToStep = async (nextStepKey, options = {}) => {
 
   const { currentStepKey, isSkeleton } = store.getState();
 
-const isSameStep = currentStepKey === nextStepKey;
+  const isSameStep = currentStepKey === nextStepKey;
 
   if (
       isSameStep && 

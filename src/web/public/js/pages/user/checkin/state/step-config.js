@@ -3,6 +3,7 @@ import utils from '../../../../modules/utils/index.js';
 
 import pageDom from '../dom.js';
 import inputs from '../ui/inputs.js';
+import { goToStep } from '../ui/navigation.js';
 import { runSuccessFlow } from '../steps/success.step.js';
 import { onQrScan } from '../steps/qr.step.js';
 import { populateStepValues } from '../ui/values.js';
@@ -55,8 +56,10 @@ const stepConfig = {
         },
       });
 
-      if (pageDom.verification.backBtn)
+      if (pageDom.verification.backBtn) {
         pageDom.verification.backBtn.onclick = () => goToStep('ticket');
+        
+      } else {console.warn('[Verification] back button not found')}
 
       inputs.verificationCode.setup();
       inputs.verificationCode.start();

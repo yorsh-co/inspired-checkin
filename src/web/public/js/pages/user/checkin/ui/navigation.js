@@ -10,8 +10,10 @@ export const goToStep = async (nextStepKey, options = {}) => {
 
   const { currentStepKey, isSkeleton } = store.getState();
 
+const isSameStep = currentStepKey === nextStepKey;
+
   if (
-      currentStepKey === nextStepKey && 
+      isSameStep && 
       skeleton
     ) { 
     console.warn('[Step] is already open'); 
@@ -28,7 +30,7 @@ export const goToStep = async (nextStepKey, options = {}) => {
 
   if (
     currentStep && 
-    currentStepKey !== nextStepKey &&
+    !isSameStep &&
     !currentStep.next?.includes(nextStepKey)
     ) {
     console.warn(
@@ -42,11 +44,9 @@ export const goToStep = async (nextStepKey, options = {}) => {
       await currentStep.onExit();
     }
 
-console.log('starting ui transition')
-    await ui.transition.step(nextStep.el, currentStep?.el, {
+    await ui.transition.step(nextStep.el, isSameStep ? null : currentStep?.el, {
       delay: skeleton ? 0 : 300,
     });
-console.log('ui transition complete')
 
     store.setState({ currentStepKey: nextStepKey, isSkeleton: skeleton });
 

@@ -11,7 +11,6 @@ const waitForHeightTransition = (el) => {
 
     el.addEventListener('transitionend', onEnd);
 
-    // fallback
     setTimeout(resolve, 300);
   });
 };
@@ -22,11 +21,7 @@ const waitForHeightTransition = (el) => {
  * @param {HTMLDivElement} currentStep
  * @param {{ delay: number, container: HTMLDivElement }} options
  */
-export const step = async (
-  nextStep,
-  currentStep = null,
-  options = {}
-) => {
+export const step = async (nextStep, currentStep = null, options = {}) => {
   const { delay = 300, container } = options;
 
   const isSameStep = nextStep === currentStep;
@@ -43,13 +38,13 @@ export const step = async (
   // return for same step
   if (isSameStep) {
     if (container) {
-      const endHeight = container.scrollHeight;
+      await new Promise((r) => requestAnimationFrame(r));
+      const endHeight = nextStep.getBoundingClientRect().height;
 
       container.style.height = endHeight + 'px';
 
       await waitForHeightTransition(container);
     }
-
     return;
   }
 
@@ -64,7 +59,7 @@ export const step = async (
     const onEnd = (e) => {
       if (e.target !== nextStep) return;
 
-      nextStep.removeEventListener('transitionend', onEnd);
+      container.removeEventListener('transitionend', onEnd);
       resolve();
     };
 
@@ -79,7 +74,8 @@ export const step = async (
 
   // adjust container height
   if (container) {
-    const endHeight = container.scrollHeight;
+    await new Promise((r) => requestAnimationFrame(r));
+    const endHeight = container.getBoundingClientRect().height;
 
     container.style.height = endHeight + 'px';
 
@@ -94,22 +90,34 @@ export const step = async (
  *
  * @param {HTMLDivElement} el
  */
-const bootScreen = async el => {
-  if (el.classList.contains('show')) {
-    requestAnimationFrame(() => {
-      /*bootEl.classList.add('hiding');
-      bootEl.classList.remove('show');
-
-      setTimeout(() => {
-        bootEl.classList.remove('hiding');
-      }, 400);*/
-      el.classList.remove('show');
-    });
-  } else {
+const bootScreen = (el) => {
+  const show = () => {
     requestAnimationFrame(() => {
       el.classList.add('show');
     });
-  }
+  };
+  const hide = () => {
+    requestAnimationFrame(() => {
+      el.classList.remove('show');
+    });
+  };
+  const transition = () => {
+    if (el.classList.contains('show')) {
+      requestAnimationFrame(() => {
+        el.classList.remove('show');
+      });
+    } else {
+      requestAnimationFrame(() => {
+        el.classList.add('show');
+      });
+    }
+  };
+
+  return {
+    show,
+    hide,
+    transition,
+  };
 };
 
 const transition = { step, bootScreen };

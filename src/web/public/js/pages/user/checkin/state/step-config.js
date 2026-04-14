@@ -26,7 +26,7 @@ const stepConfig = {
 
       inputs.ticketCode.setup();
       inputs.ticketCode.start();
-    },
+    }
   },
 
   verification: {
@@ -46,24 +46,25 @@ const stepConfig = {
       if (!userData) {
         throw new Error('User data is missing');
       }
-      console.error('OK!!!')
+      console.error('OK!!!');
 
       ui.skeleton.clear(pageDom.steps.verification);
 
       populateStepValues('verification', userData, {
         formatters: {
-          phoneStart: (value) => utils.formatPhone.locale(value, 'pt-BR'),
-        },
+          phoneStart: value => utils.formatPhone.locale(value, 'pt-BR')
+        }
       });
 
       if (pageDom.verification.backBtn) {
         pageDom.verification.backBtn.onclick = () => goToStep('ticket');
-        
-      } else {console.warn('[Verification] back button not found')}
+      } else {
+        console.warn('[Verification] back button not found');
+      }
 
       inputs.verificationCode.setup();
       inputs.verificationCode.start();
-    },
+    }
   },
 
   qr: {
@@ -77,7 +78,7 @@ const stepConfig = {
         qrReaderDiv: pageDom.qr.reader,
         startCameraBtn: pageDom.qr.startBtn,
         hintDiv: pageDom.qr.hint,
-        onScan: onQrScan,
+        onScan: onQrScan
       });
 
       const { userData } = state;
@@ -88,10 +89,10 @@ const stepConfig = {
 
       populateStepValues('qr', userData, {
         formatters: {
-          phoneStart: (value) => utils.formatPhone.locale(value, 'pt-BR'),
-        },
+          phoneStart: value => utils.formatPhone.locale(value, 'pt-BR')
+        }
       });
-    },
+    }
   },
 
   success: {
@@ -99,8 +100,8 @@ const stepConfig = {
 
     async onEnter() {
       await runSuccessFlow();
-    },
-  },
+    }
+  }
 };
 
 export default stepConfig;

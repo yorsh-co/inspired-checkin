@@ -59,6 +59,7 @@ export const goToStep = async (nextStepKey, options = {}) => {
       delay: skeleton ? 0 : 300
     });
 
+await utils.sleep(100);
     const nextHeight = container.scrollHeight;
     container.style.height = nextHeight + 'px';
 

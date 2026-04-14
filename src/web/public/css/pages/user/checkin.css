@@ -18,7 +18,7 @@
 .checkin-container .qr-step,
 .checkin-container .success-step {
   opacity: 0;
-  transform: translatex(10px);
+  transform: translateX(10px);
 
   pointer-events: none;
   position: absolute;
@@ -34,7 +34,7 @@
 .checkin-container .qr-step.show,
 .checkin-container .success-step.show {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateX(0);
 
   pointer-events: auto;
   position: relative;

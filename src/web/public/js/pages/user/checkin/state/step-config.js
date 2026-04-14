@@ -28,6 +28,7 @@ const stepConfig = {
 
     el: dom.steps.ticket,
     focusTarget: dom.inputs.ticketCode,
+    hint: dom.ticket.hint,
 
     async onEnter(_state, { skeleton }) {
       if (skeleton) {
@@ -66,6 +67,9 @@ const stepConfig = {
 
       input.value = '';
 
+      // clear the hint
+      ui.hint.clearAll(this.hint);
+
       // reset to skeleton
       ui.skeleton.render(this.el);
     },
@@ -76,6 +80,7 @@ const stepConfig = {
 
     el: dom.steps.verification,
     focusTarget: dom.inputs.verificationCode,
+    hint: dom.verification.hint,
 
     async onEnter(state, { skeleton }) {
       const { userData } = state;
@@ -130,6 +135,9 @@ const stepConfig = {
       stopPlaceholderTyping(input);
 
       input.value = '';
+
+      // clear the hint
+      ui.hint.clearAll(this.hint);
 
       // reset to skeleton
       ui.skeleton.render(this.el);

@@ -13,9 +13,11 @@ router.post('/reset', controller.reset);
 // =========================
 
 import { env } from '../../config/env.js';
+import { CheckinService } from './checkin.service.js';
 
 router.get('/debug', async (req, res) => {
   try {
+    console.log('SESSION DEBUG REQUEST');
     if (env.nodeEnv === 'production') {
       return res.status(404).end();
     }

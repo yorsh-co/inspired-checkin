@@ -31,9 +31,7 @@ export const step = async (
 
   const isSameStep = nextStep === currentStep;
 
-  // -----------------------------
-  // HEIGHT LOCK
-  // -----------------------------
+  // lock container height
   let startHeight;
 
   if (container) {
@@ -42,9 +40,7 @@ export const step = async (
     container.style.overflow = 'hidden';
   }
 
-  // -----------------------------
-  // SAME STEP (skeleton → real)
-  // -----------------------------
+  // return for same step
   if (isSameStep) {
     if (container) {
       const endHeight = container.scrollHeight;
@@ -57,17 +53,13 @@ export const step = async (
     return;
   }
 
-  // -----------------------------
-  // EXIT CURRENT STEP
-  // -----------------------------
+  // hide current step
   if (currentStep) {
     currentStep.classList.remove('show');
     await utils.sleep(delay);
   }
 
-  // -----------------------------
-  // ENTER NEXT STEP
-  // -----------------------------
+  // show new step
   await new Promise((resolve) => {
     const onEnd = (e) => {
       if (e.target !== nextStep) return;
@@ -85,9 +77,7 @@ export const step = async (
     setTimeout(resolve, 400);
   });
 
-  // -----------------------------
-  // HEIGHT ADJUST
-  // -----------------------------
+  // adjust container height
   if (container) {
     const endHeight = container.scrollHeight;
 

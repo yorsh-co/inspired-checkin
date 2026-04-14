@@ -28,6 +28,10 @@ const stepConfig = {
 
       inputs.ticketCode.setup();
       inputs.ticketCode.start();
+    },
+    
+    async onExit() {
+      inputs.ticketCode.stop();
     }
   },
 
@@ -63,11 +67,15 @@ const stepConfig = {
       } else {
         console.warn('[Verification] back button not found');
       }
-      
+
       ui.hint.clearAll(pageDom.ticket.hint);
- 
+
       inputs.verificationCode.setup();
       inputs.verificationCode.start();
+    },
+
+    async onExit() {
+      inputs.verificationCode.stop();
     }
   },
 

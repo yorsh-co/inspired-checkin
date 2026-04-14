@@ -1,4 +1,4 @@
-import pageDom from './dom.js';
+import dom from './dom.js';
 import store from './state/store.js';
 import { goToStep } from './ui/navigation.js';
 
@@ -8,10 +8,11 @@ import api from '../../../core/api/index.js';
 import { setupDebugButton } from '../../../debug/debug.js';
 import transition from '../../../modules/ui/transition.js';
 import layoutDom from '../../../layouts/main/dom.js';
-import utils from '../../../modules/utils/index.js';
 
 // debug
 setupDebugButton(api.checkin.resetSession, 'reset session');
+
+const bootScreen = layoutDom.bootScreen;
 
 try {
   window.history.replaceState(null, '', '/checkin');
@@ -31,15 +32,14 @@ try {
 
     await goToStep(initialStep, { skeleton: false });
 
-    //utils.sleep(300);
-    transition.bootScreen(layoutDom.bootScreen);
+    transition.bootScreen(bootScreen).hide();
   });
 
   // scroll on resize
-  attachScrollOnResize(pageDom.main.container);
+  attachScrollOnResize(dom.main.container);
 
   // cursor glow
-  const container = pageDom.main.container;
+  const container = dom.main.container;
   container.addEventListener('mousemove', (e) => {
     const rect = container.getBoundingClientRect();
 

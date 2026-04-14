@@ -18,8 +18,8 @@
   background: var(--bg-gradient);
 
   transition:
-    opacity 0.6s ease,
-    visibility 0.6s ease;
+    opacity 0.4s ease,
+    visibility 0.4s ease;
 }
 
 .app-boot.show {

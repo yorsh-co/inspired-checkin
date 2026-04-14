@@ -59,6 +59,8 @@ export const onTicketInput = async (fromPaste = false) => {
 
     input.blur();
     input.disabled = true;
+    
+    ui.sleep(300);
 
     await goToStep('verification', { skeleton: true });
 

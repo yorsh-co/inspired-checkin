@@ -35,6 +35,8 @@ const stepConfig = {
       // FIXME: ADD SKELETON CLASS BACK??
       inputs.ticketCode.setup();
       inputs.ticketCode.stop();
+      
+      ui.skeleton.render(pageDom.steps.ticket);
     }
   },
 
@@ -81,6 +83,8 @@ const stepConfig = {
       // FIXME: ADD SKELETON CLASS BACK??
       inputs.verificationCode.setup();
       inputs.verificationCode.stop();
+      
+      ui.skeleton.render(pageDom.steps.verification);
     }
   },
 

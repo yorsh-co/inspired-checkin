@@ -4,18 +4,18 @@ import store from '../state/store.js';
 import utils from '../../../../modules/utils/index.js';
 import ui from '../../../../modules/ui/index.js';
 
-import pageDom from '../dom.js';
+import dom from '../dom.js';
 
 export const goToStep = async (nextStepKey, options = {}) => {
   const { skeleton = false } = options;
 
-  const { currentStepKey, isSkeleton } = store.getState();
+  const { currentStepKey } = store.getState();
   console.log(
     '[Step] loading',
+    skeleton ? 'skeleton' : 'hydrated',
     nextStepKey,
-    skeleton ? 'skeleton' : '',
     'from',
-    currentStepKey
+    currentStepKey,
   );
 
   const isSameStep = currentStepKey === nextStepKey;
@@ -35,7 +35,7 @@ export const goToStep = async (nextStepKey, options = {}) => {
 
   if (currentStep && !isSameStep && !currentStep.next?.includes(nextStepKey)) {
     console.warn(
-      `[Step] Invalid transition: ${currentStepKey} → ${nextStepKey}`
+      `[Step] Invalid transition: ${currentStepKey} --> ${nextStepKey}`,
     );
     return;
   }
@@ -44,9 +44,10 @@ export const goToStep = async (nextStepKey, options = {}) => {
     if (currentStep?.onExit) {
       await currentStep.onExit();
     }
-    
+
     await ui.transition.step(nextStep.el, isSameStep ? null : currentStep?.el, {
-      delay: skeleton ? 0 : 300, container: pageDom.main.container
+      delay: skeleton ? 0 : 300,
+      container: dom.main.container,
     });
 
     store.setState({ currentStepKey: nextStepKey, isSkeleton: skeleton });
@@ -67,7 +68,7 @@ export const goToStep = async (nextStepKey, options = {}) => {
     console.error('[Step Error]', err);
 
     store.setState({
-      error: err.message || 'Unexpected error'
+      error: err.message || 'Unexpected error',
     });
   }
 };

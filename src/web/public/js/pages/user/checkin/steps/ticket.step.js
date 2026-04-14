@@ -1,4 +1,4 @@
-import pageDom from '../dom.js';
+import dom from '../dom.js';
 import store from '../state/store.js';
 import { goToStep } from '../ui/navigation.js';
 import { formatTicket, isValidTicket } from '../ui/formatters.js';
@@ -20,14 +20,14 @@ export const onTicketInput = async (fromPaste = false) => {
   console.log('ticket submitted');
 
   // validate input
-  const input = pageDom.inputs.ticketCode;
+  const input = dom.inputs.ticketCode;
   input.classList.remove('error');
 
   const value = formatTicket(input.value);
   input.value = value;
   console.log('ticket', input.value);
 
-  const hintDiv = pageDom.ticket.hint;
+  const hintDiv = dom.ticket.hint;
   hint.clearError(hintDiv);
 
   if (!value) {

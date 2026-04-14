@@ -1,4 +1,4 @@
-import pageDom from '../dom.js';
+import dom from '../dom.js';
 import { goToStep } from '../ui/navigation.js';
 import {
   formatVerificationCode,
@@ -22,14 +22,14 @@ export const onVerificationInput = async (fromPaste = false) => {
   console.log('verification code submitted');
 
   // validate input
-  const input = pageDom.inputs.verificationCode;
+  const input = dom.inputs.verificationCode;
   input.classList.remove('error');
 
   const value = formatVerificationCode(input.value);
   input.value = value;
   console.log('verification input', value);
 
-  const hintDiv = pageDom.verification.hint;
+  const hintDiv = dom.verification.hint;
   const defaultHint =
     hintDiv.textContent || 'Digite os 4 últimos digitos do seu celular 👆';
 
@@ -49,8 +49,8 @@ export const onVerificationInput = async (fromPaste = false) => {
 
   console.log('input is valid');
 
-  const inputWrapper = pageDom.verification.inputWrapper;
-  const backButton = pageDom.verification.backBtn;
+  const inputWrapper = dom.verification.inputWrapper;
+  const backButton = dom.verification.backBtn;
 
   // submit input
   try {

@@ -1,4 +1,4 @@
-import pageDom from '../dom.js';
+import dom from '../dom.js';
 
 import * as ui from '../../../../modules/ui/transition.js';
 import utils from '../../../../modules/utils/index.js';
@@ -7,7 +7,7 @@ import utils from '../../../../modules/utils/index.js';
  *
  */
 export const runSuccessFlow = async () => {
-  const successMessage = pageDom.success.message;
+  const successMessage = dom.success.message;
 
   ui.change(successMessage, 'Check-in feito! ✨');
   navigator.vibrate?.(50);

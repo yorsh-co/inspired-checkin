@@ -1,6 +1,6 @@
 import { qs } from '../../../layouts/main/dom.js';
 
-const pageDom = Object.freeze({
+const dom = Object.freeze({
   main: {
     container: qs('[data-checkin="main-container"]'),
   },
@@ -39,4 +39,4 @@ const pageDom = Object.freeze({
   },
 });
 
-export default pageDom;
+export default dom;

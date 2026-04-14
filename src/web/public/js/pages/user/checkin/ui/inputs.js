@@ -1,12 +1,12 @@
 import { formatter } from './formatters.js';
 
-import pageDom from '../dom.js';
+import dom from '../dom.js';
 import { onTicketInput } from '../steps/ticket.step.js';
 import { onVerificationInput } from '../steps/verification.step.js';
 
 import {
   attachScrollOnFocus,
-  attachScrollOnBlur
+  attachScrollOnBlur,
 } from '../../../../components/input/focus-scroll.js';
 
 /**
@@ -27,7 +27,7 @@ export const setupInput = (input, handlers) => {
   if (input.dataset.initialized === 'true') return;
 
   // handle enter keydown
-  input.addEventListener('keydown', e => {
+  input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
 
@@ -118,7 +118,7 @@ export const startPlaceholderTyping = (input, phrases) => {
   };
 };
 
-export const stopPlaceholderTyping = input => {
+export const stopPlaceholderTyping = (input) => {
   if (input?._placeholderCleanup) {
     input._placeholderCleanup();
     input._placeholderCleanup = null;
@@ -129,46 +129,47 @@ export const stopPlaceholderTyping = input => {
 const inputs = {
   ticketCode: {
     setup: () => {
-      setupInput(pageDom.inputs.ticketCode, {
+      setupInput(dom.inputs.ticketCode, {
         onInput: onTicketInput,
         formatValue: formatter.ticketCode.format,
-        valueIsValid: formatter.ticketCode.isValid
+        valueIsValid: formatter.ticketCode.isValid,
       });
-      attachScrollOnFocus(pageDom.inputs.ticketCode);
-      attachScrollOnBlur(pageDom.inputs.ticketCode);
+      attachScrollOnFocus(dom.inputs.ticketCode);
+      attachScrollOnBlur(dom.inputs.ticketCode);
     },
     start: () => {
-      startPlaceholderTyping(pageDom.inputs.ticketCode, [
+      startPlaceholderTyping(dom.inputs.ticketCode, [
         { text: 'Digite seu código de ingresso...', pause: 1200 },
         { text: 'Cola seu ID do ticket aqui...', pause: 1000 },
         { text: 'Pronto pra a Inspire?', pause: 1400 },
-        { text: 'Vamos fazer seu check-in ✨', pause: 1500 }
+        { text: 'Vamos fazer seu check-in ✨', pause: 1500 },
       ]);
     },
     stop: () => {
-      stopPlaceholderTyping(pageDom.inputs.ticketCode);
-    }
+      // FIXME:
+      stopPlaceholderTyping(dom.inputs.ticketCode);
+    },
   },
   verificationCode: {
     setup: () =>
       // FIXME: mkve to step config
-      setupInput(pageDom.inputs.verificationCode, {
+      setupInput(dom.inputs.verificationCode, {
         onInput: onVerificationInput,
         formatValue: formatter.verificationCode.format,
-        valueIsValid: formatter.verificationCode.isValid
+        valueIsValid: formatter.verificationCode.isValid,
       }),
     start: () => {
-      startPlaceholderTyping(pageDom.inputs.verificationCode, [
+      startPlaceholderTyping(dom.inputs.verificationCode, [
         { text: 'Confirme seu celular...', pause: 1200 },
         { text: 'Digite os últimos 4 dígitos...', pause: 1000 },
-        { text: 'Digite o final do seu telefone...', pause: 1400 }
+        { text: 'Digite o final do seu telefone...', pause: 1400 },
         //{ text: 'Vamos fazer seu check-in ✨', pause: 1500 },
       ]);
     },
     stop: () => {
-      stopPlaceholderTyping(pageDom.inputs.ticketCode);
-    }
-  }
+      stopPlaceholderTyping(dom.inputs.ticketCode);
+    },
+  },
 };
 
 export default inputs;

@@ -1,7 +1,7 @@
 import { setupQr } from '../../../../modules/qr.js';
 import utils from '../../../../modules/utils/index.js';
 
-import pageDom from '../dom.js';
+import dom from '../dom.js';
 import inputs from '../ui/inputs.js';
 import { goToStep } from '../ui/navigation.js';
 import { runSuccessFlow } from '../steps/success.step.js';
@@ -13,18 +13,18 @@ const stepConfig = {
   ticket: {
     next: ['verification'],
 
-    el: pageDom.steps.ticket,
-    focusTarget: pageDom.inputs.ticketCode,
+    el: dom.steps.ticket,
+    focusTarget: dom.inputs.ticketCode,
 
     async onEnter(_state, { skeleton }) {
       if (skeleton) {
-        ui.skeleton.render(pageDom.steps.ticket);
+        ui.skeleton.render(dom.steps.ticket);
         return;
       }
 
-      ui.skeleton.clear(pageDom.steps.ticket);
+      ui.skeleton.clear(dom.steps.ticket);
 
-      ui.hint.clearAll(pageDom.ticket.hint);
+      ui.hint.clearAll(dom.ticket.hint);
 
       inputs.ticketCode.setup();
       inputs.ticketCode.start();
@@ -36,21 +36,21 @@ const stepConfig = {
       inputs.ticketCode.setup();
       inputs.ticketCode.stop();
       
-      ui.skeleton.render(pageDom.steps.ticket);
+      ui.skeleton.render(dom.steps.ticket);
     }
   },
 
   verification: {
     next: ['ticket', 'qr', 'success'],
 
-    el: pageDom.steps.verification,
-    focusTarget: pageDom.inputs.verificationCode,
+    el: dom.steps.verification,
+    focusTarget: dom.inputs.verificationCode,
 
     async onEnter(state, { skeleton }) {
       const { userData } = state;
 
       if (skeleton) {
-        ui.skeleton.render(pageDom.steps.verification);
+        ui.skeleton.render(dom.steps.verification);
         return;
       }
 
@@ -58,7 +58,7 @@ const stepConfig = {
         throw new Error('User data is missing');
       }
 
-      ui.skeleton.clear(pageDom.steps.verification);
+      ui.skeleton.clear(dom.steps.verification);
 
       populateStepValues('verification', userData, {
         formatters: {
@@ -66,13 +66,13 @@ const stepConfig = {
         }
       });
 
-      if (pageDom.verification.backBtn) {
-        pageDom.verification.backBtn.onclick = () => goToStep('ticket');
+      if (dom.verification.backBtn) {
+        dom.verification.backBtn.onclick = () => goToStep('ticket');
       } else {
         console.warn('[Verification] back button not found');
       }
 
-      ui.hint.clearAll(pageDom.ticket.hint);
+      ui.hint.clearAll(dom.ticket.hint);
 
       inputs.verificationCode.setup();
       inputs.verificationCode.start();
@@ -84,21 +84,21 @@ const stepConfig = {
       inputs.verificationCode.setup();
       inputs.verificationCode.stop();
       
-      ui.skeleton.render(pageDom.steps.verification);
+      ui.skeleton.render(dom.steps.verification);
     }
   },
 
   qr: {
     next: ['ticket', 'verification', 'success'],
 
-    el: pageDom.steps.qr,
+    el: dom.steps.qr,
 
     async onEnter(state) {
       setupQr({
         // TODO: review
-        qrReaderDiv: pageDom.qr.reader,
-        startCameraBtn: pageDom.qr.startBtn,
-        hintDiv: pageDom.qr.hint,
+        qrReaderDiv: dom.qr.reader,
+        startCameraBtn: dom.qr.startBtn,
+        hintDiv: dom.qr.hint,
         onScan: onQrScan
       });
 
@@ -117,7 +117,7 @@ const stepConfig = {
   },
 
   success: {
-    el: pageDom.steps.success,
+    el: dom.steps.success,
 
     async onEnter() {
       await runSuccessFlow();

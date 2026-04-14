@@ -44,7 +44,7 @@
 .checkin-container .verification-step.fade-out,
 .checkin-container .qr-step.fade-out,
 .checkin-container .success-step.fadeout {
-  animation: fadeOut 0.3s ease forwards;
+  animation: fadeOut 0.3s ease backwards;
 }
 
 /* verification step */

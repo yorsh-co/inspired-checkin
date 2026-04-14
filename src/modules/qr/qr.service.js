@@ -23,7 +23,7 @@ const generateToken = (payload, options = {}) => {
  * @returns
  */
 const generateUrl = (path, token, options = {}) =>
-  `${options.baseUrl || env.appUrl}${path}?qr=${token}`;
+  `${options.baseUrl || env.appUrl}${path}?token=${token}`;
 
 /**
  *

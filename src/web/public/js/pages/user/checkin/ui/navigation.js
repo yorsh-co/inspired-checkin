@@ -8,15 +8,18 @@ export const goToStep = async (nextStepKey, options = {}) => {
   const { skeleton = false } = options;
 
   const { currentStepKey, isSkeleton } = store.getState();
-  console.log('[Step] loading', nextStepKey, skeleton ? 'skeleton' : '', 'from', currentStepKey);
+  console.log(
+    '[Step] loading',
+    nextStepKey,
+    skeleton ? 'skeleton' : '',
+    'from',
+    currentStepKey
+  );
 
   const isSameStep = currentStepKey === nextStepKey;
 
-  if (
-      isSameStep && 
-      skeleton
-    ) { 
-    console.warn('[Step] is already open'); 
+  if (isSameStep && skeleton) {
+    console.warn('[Step] is already open');
     return;
   }
 
@@ -28,13 +31,9 @@ export const goToStep = async (nextStepKey, options = {}) => {
     return;
   }
 
-  if (
-    currentStep && 
-    !isSameStep &&
-    !currentStep.next?.includes(nextStepKey)
-    ) {
+  if (currentStep && !isSameStep && !currentStep.next?.includes(nextStepKey)) {
     console.warn(
-      `[Step] Invalid transition: ${currentStepKey} → ${nextStepKey}`,
+      `[Step] Invalid transition: ${currentStepKey} → ${nextStepKey}`
     );
     return;
   }
@@ -44,9 +43,22 @@ export const goToStep = async (nextStepKey, options = {}) => {
       await currentStep.onExit();
     }
 
+    const container = dom.main.container;
+    container.addEventListener(
+      'transitionend',
+      () => {
+        container.style.height = 'auto';
+      },
+      { once: true }
+    );
+    container.style.height = container.offsetHeight + 'px';
+
     await ui.transition.step(nextStep.el, isSameStep ? null : currentStep?.el, {
-      delay: skeleton ? 0 : 300,
+      delay: skeleton ? 0 : 300
     });
+
+    const nextHeight = container.scrollHeight;
+    container.style.height = nextHeight + 'px';
 
     store.setState({ currentStepKey: nextStepKey, isSkeleton: skeleton });
 
@@ -66,7 +78,7 @@ export const goToStep = async (nextStepKey, options = {}) => {
     console.error('[Step Error]', err);
 
     store.setState({
-      error: err.message || 'Unexpected error',
+      error: err.message || 'Unexpected error'
     });
   }
 };

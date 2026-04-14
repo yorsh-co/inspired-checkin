@@ -1,6 +1,10 @@
 .checkin-container {
   position: relative;
   min-height: 300px;
+  
+  transition: height 0.25s ease-in-out;
+  overflow: hidden;
+}
 }
 
 .checkin-container input,

@@ -46,22 +46,23 @@ export const goToStep = async (nextStepKey, options = {}) => {
     }
 
     const container = pageDom.main.container;
-    container.addEventListener(
-      'transitionend',
-      () => {
-        container.style.height = 'auto';
-      },
-      { once: true }
-    );
-    container.style.height = container.offsetHeight + 'px';
+    
+    container.style.min-height = container.offsetHeight + 'px';
 
     await ui.transition.step(nextStep.el, isSameStep ? null : currentStep?.el, {
       delay: skeleton ? 0 : 300
     });
 
 await utils.sleep(100);
+container.addEventListener(
+      'transitionend',
+      () => {
+        container.style.min-height = 'auto';
+      },
+      { once: true }
+    );
     const nextHeight = container.scrollHeight;
-    container.style.height = nextHeight + 'px';
+    container.style.min-height = nextHeight + 'px';
 
     store.setState({ currentStepKey: nextStepKey, isSkeleton: skeleton });
 

@@ -6,7 +6,7 @@ import ui from '../../../../modules/ui/index.js';
 
 export const goToStep = async (nextStepKey, options = {}) => {
   const { skeleton = false } = options;
-  console.log('[Step] loading', nextStepKey, 'skeleton', skeleton);
+  console.loading('[Step] loading', nextStepKey, 'skeleton', skeleton);
 
   const { currentStepKey, isSkeleton } = store.getState();
 
@@ -14,7 +14,7 @@ export const goToStep = async (nextStepKey, options = {}) => {
       currentStepKey === nextStepKey && 
       skeleton
     ) { 
-    console.error('[Step] is already open'); 
+    console.warn('[Step] is already open'); 
     return;
   }
 
@@ -22,14 +22,14 @@ export const goToStep = async (nextStepKey, options = {}) => {
   const currentStep = currentStepKey ? stepConfig[currentStepKey] : null;
 
   if (!nextStep) {
-    console.error(`[Step] Invalid step: ${nextStepKey}`);
+    console.warn(`[Step] Invalid step: ${nextStepKey}`);
     return;
   }
 
   if (
     currentStep && 
-    !currentStep.next?.includes(nextStepKey) && 
-    currentStepKey !== nextStepKey
+    currentStepKey !== nextStepKey &&
+    !currentStep.next?.includes(nextStepKey)
     ) {
     console.warn(
       `[Step] Invalid transition: ${currentStepKey} → ${nextStepKey}`,
@@ -42,9 +42,11 @@ export const goToStep = async (nextStepKey, options = {}) => {
       await currentStep.onExit();
     }
 
+console.log('starting ui transition')
     await ui.transition.step(nextStep.el, currentStep?.el, {
       delay: skeleton ? 0 : 300,
     });
+console.log('ui transition complete')
 
     store.setState({ currentStepKey: nextStepKey, isSkeleton: skeleton });
 

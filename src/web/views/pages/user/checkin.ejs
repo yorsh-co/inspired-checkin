@@ -37,7 +37,10 @@
     </section>
 
     <!-- ticket verification -->
-    <section data-checkin="verification-step" class="verification-step skeleton">
+    <section
+      data-checkin="verification-step"
+      class="verification-step skeleton"
+    >
       <h2>Confirme que o ingresso é seu</h2>
       <table class="">
         <tr>
@@ -173,17 +176,18 @@
       </button>
       <%- include('../../components/privacy-notice') %>
 
-      <div data-checkin="qr-hint-div" class="hint-div qr-hint"><!--FIXME: .qr-hint needed?-->
+      <div data-checkin="qr-hint-div" class="hint-div qr-hint">
+        <!--FIXME: .qr-hint needed?-->
         Escaneia o QR code da Inspire para confirmar que você chegou 📍
       </div>
-    </div>
+    </section>
 
     <!-- success -->
-    <div data-checkin="success-step" class="success-step">
+    <section data-checkin="success-step" class="success-step skeleton">
       <div class="check material-symbols-outlined"></div>
       <div data-checkin="success-message" class="success-message"></div>
-    </div>
-  </section>
+    </section>
+  </div>
 
   <%- include('../../partials/footer') %>
 </main>

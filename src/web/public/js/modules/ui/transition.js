@@ -7,8 +7,8 @@ import utils from '../utils/index.js';
  * @param {{ delay: number }} options
  */
 export const step = (nextStep, currentStep = null, options = {}) => {
- const {delay = 300} =options;
-  return new Promise(resolve => {
+  const { delay = 300 } = options;
+  return new Promise(async resolve => {
     const isSameStep = nextStep === currentStep;
 
     if (isSameStep) {

@@ -1,0 +1,11 @@
+header {
+  margin-bottom: 24px;
+
+  text-align: center;
+
+  transform: translateY(-10px);
+
+  opacity: 0;
+  animation: fadeIn 0.4s ease forwards;
+  animation-delay: 0.3s;
+}

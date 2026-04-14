@@ -1,5 +1,4 @@
-.footer {
-  /*margin-top: auto;*/
+footer {
   margin-top: 32px;
 
   text-align: center;
@@ -32,10 +31,10 @@
   gap: 6px;
 }
 
-.footer .dot {
+footer .dot {
   opacity: 0.5;
 }
 
-.footer .credit a {
+footer .credit a {
   font-weight: 700;
 }

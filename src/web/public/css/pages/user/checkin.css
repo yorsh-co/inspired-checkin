@@ -18,7 +18,7 @@
 .checkin-container .qr-step,
 .checkin-container .success-step {
   opacity: 0;
-  transform: translateY(-10px);
+  /*transform: translateY(-10px);*/
 
   pointer-events: none;
   position: absolute;
@@ -34,7 +34,7 @@
 .checkin-container .qr-step.show,
 .checkin-container .success-step.show {
   opacity: 1;
-  transform: translateY(0);
+  /*transform: translateY(0);*/
 
   pointer-events: auto;
   position: relative;
@@ -44,7 +44,7 @@
 .checkin-container .verification-step.fade-out,
 .checkin-container .qr-step.fade-out,
 .checkin-container .success-step.fadeout {
-  animation: fadeOut 0.3s ease backwards;
+  animation: fadeOut 0.3s ease forwards;
 }
 
 /* verification step */

@@ -26,56 +26,73 @@ export const step = async (nextStep, currentStep = null, options = {}) => {
 
   const isSameStep = nextStep === currentStep;
 
-  // lock container height
-  let startHeight;
-
-  if (container) {
-    startHeight = container.offsetHeight;
-    container.style.height = startHeight + 'px';
-    container.style.overflow = 'hidden';
-  }
-
   // return for same step
+  let resizeRAF;
+
   if (isSameStep) {
+    cancelAnimationFrame(resizeRAF);
+
     if (container) {
-      await new Promise((r) => requestAnimationFrame(r));
-      const endHeight = nextStep.getBoundingClientRect().height;
+      resizeRAF = requestAnimationFrame(async () => {
+        await new Promise((r) =>
+          requestAnimationFrame(() => requestAnimationFrame(r)),
+        );
 
-      container.style.height = endHeight + 'px';
+        const currentHeight = container.getBoundingClientRect().height;
+        const wrapperHeight = currentStep
+          ? currentHeight - currentStep.getBoundingClientRect().height
+          : 0;
+        const endHeight =
+          nextStep.getBoundingClientRect().height + wrapperHeight;
 
-      await waitForHeightTransition(container);
+        //const endHeight = Math.max(currentHeight, nextHeight);
+
+        if (endHeight === currentHeight) return;
+
+        container.style.height = currentHeight + 'px';
+        container.offsetHeight;
+
+        container.style.height = endHeight + 'px';
+
+        await waitForHeightTransition(container);
+
+        container.style.height = 'auto';
+      });
     }
+
     return;
   }
 
-  // hide current step
-  if (currentStep) {
-    currentStep.classList.remove('show');
-    await utils.sleep(delay);
+  // lock container height
+  let startHeight;
+  let wrapperHeight;
+
+  if (container) {
+    startHeight = container.getBoundingClientRect().height;
+    if (currentStep)
+      wrapperHeight = startHeight - currentStep.getBoundingClientRect().height;
+
+    container.style.height = startHeight + 'px';
+    container.style.overflow = 'hidden';
+
+    console.log({ startHeight });
   }
 
-  // show new step
-  await new Promise((resolve) => {
-    const onEnd = (e) => {
-      if (e.target !== nextStep) return;
+  if (currentStep) currentStep.classList.remove('show');
 
-      container.removeEventListener('transitionend', onEnd);
-      resolve();
-    };
+  nextStep.classList.add('show');
 
-    nextStep.addEventListener('transitionend', onEnd);
-
-    requestAnimationFrame(() => {
-      nextStep.classList.add('show');
-    });
-
-    setTimeout(resolve, 400);
-  });
-
-  // adjust container height
   if (container) {
-    await new Promise((r) => requestAnimationFrame(r));
-    const endHeight = container.getBoundingClientRect().height;
+    container.offsetHeight;
+
+    // wait a full frame
+    await new Promise((r) =>
+      requestAnimationFrame(() => requestAnimationFrame(r)),
+    );
+
+    const endHeight =
+      nextStep.getBoundingClientRect().height + (wrapperHeight || 0);
+    console.log({ endHeight });
 
     container.style.height = endHeight + 'px';
 

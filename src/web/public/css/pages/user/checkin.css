@@ -39,6 +39,10 @@
     height 0.2s ease;
 }
 
+.checkin-container .verification-step.show {
+  
+}
+
 /* qr step */
 .qr-step {
   display: flex;

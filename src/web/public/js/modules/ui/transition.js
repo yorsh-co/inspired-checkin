@@ -1,4 +1,5 @@
 import utils from '../utils/index.js';
+import ui from './index.js';
 
 const waitForHeightTransition = (el) => {
   return new Promise((resolve) => {
@@ -30,6 +31,7 @@ export const step = async (nextStep, currentStep = null, options = {}) => {
   let resizeRAF;
 
   if (isSameStep) {
+    // FIXME: this isn't actually doing anything
     cancelAnimationFrame(resizeRAF);
 
     if (container) {
@@ -44,8 +46,6 @@ export const step = async (nextStep, currentStep = null, options = {}) => {
           : 0;
         const endHeight =
           nextStep.getBoundingClientRect().height + wrapperHeight;
-
-        //const endHeight = Math.max(currentHeight, nextHeight);
 
         if (endHeight === currentHeight) return;
 
@@ -74,13 +74,11 @@ export const step = async (nextStep, currentStep = null, options = {}) => {
 
     container.style.height = startHeight + 'px';
     container.style.overflow = 'hidden';
-
-    console.log({ startHeight });
   }
 
-  if (currentStep) currentStep.classList.remove('show');
+  if (currentStep) ui.element.setShow(currentStep, false);
 
-  nextStep.classList.add('show');
+  ui.element.setShow(nextStep, true);
 
   if (container) {
     container.offsetHeight;
@@ -92,7 +90,6 @@ export const step = async (nextStep, currentStep = null, options = {}) => {
 
     const endHeight =
       nextStep.getBoundingClientRect().height + (wrapperHeight || 0);
-    console.log({ endHeight });
 
     container.style.height = endHeight + 'px';
 

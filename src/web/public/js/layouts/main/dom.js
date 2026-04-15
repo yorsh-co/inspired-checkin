@@ -10,6 +10,9 @@ export const qs = (selector, { required = true } = {}) => {
 
 const layoutDom = Object.freeze({
   bootScreen: qs('[data-main="boot-screen"]'),
+  topBar: {
+    logoutIcon: qs('[data-top-bar="logout-icon"]'),
+  },
 });
 
 export default layoutDom;

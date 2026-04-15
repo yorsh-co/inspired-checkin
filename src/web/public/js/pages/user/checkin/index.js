@@ -8,9 +8,10 @@ import api from '../../../core/api/index.js';
 import { setupDebugButton } from '../../../debug/debug.js';
 import transition from '../../../modules/ui/transition.js';
 import layoutDom from '../../../layouts/main/dom.js';
+import { setupTopBarBtn } from '../../../components/topBar/buttons.js';
 
 // debug
-//setupDebugButton(api.checkin.debugSession, 'debug session');
+setupDebugButton(api.checkin.debugSession, 'debug session');
 
 const bootScreen = layoutDom.bootScreen;
 
@@ -47,6 +48,16 @@ try {
     container.style.setProperty('--x', `${e.clientX - rect.left}px`);
     container.style.setProperty('--y', `${e.clientY - rect.top}px`);
   });
+
+  // top-bar buttons
+  if (layoutDom.topBar.logoutIcon) {
+    setupTopBarBtn(layoutDom.topBar.logoutIcon, () => {
+      api.checkin.reset();
+      goToStep('ticket');
+    });
+  }
 } catch (err) {
   console.error(err);
+
+  // FIXME:
 }

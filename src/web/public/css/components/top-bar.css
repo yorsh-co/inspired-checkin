@@ -4,7 +4,7 @@
   margin: 0;
 
   width: 100vw;
-  max-height: 0;
+  height: var(--top-bar-height);
   overflow: hidden;
 
   display: flex;
@@ -16,13 +16,13 @@
   opacity: 0;
 }
 
-.top-bar [data-flex-position='start'] {
-}
+/*.top-bar [data-flex-position='start'] {
+}*/
 .top-bar [data-flex-position='center'] {
   flex: 1;
 }
-.top-bar [data-flex-position='end'] {
-}
+/*.top-bar [data-flex-position='end'] {
+}*/
 
 .top-bar button {
   opacity: 0;

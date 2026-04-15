@@ -8,6 +8,8 @@
   --button-bg: #ffffff;
   --button-text: #333;
   --error: #ff6b6b;
+
+  --top-bar-height: 56px;
 }
 
 @media (prefers-color-scheme: light) {

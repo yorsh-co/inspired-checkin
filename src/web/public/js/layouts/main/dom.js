@@ -12,6 +12,7 @@ const layoutDom = Object.freeze({
   bootScreen: qs('[data-main="boot-screen"]'),
   topBar: {
     logoutIcon: qs('[data-top-bar="logout-icon"]'),
+    debugBtn: qs('[data-top-bar="debug-btn"]'),
   },
 });
 

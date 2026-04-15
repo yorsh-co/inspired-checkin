@@ -51,6 +51,9 @@ export const goToStep = async (nextStepKey, options = {}) => {
     });
 
     store.setState({ currentStepKey: nextStepKey, isSkeleton: skeleton });
+    
+    // filter top-bar buttons
+    document.body.dataset.step = nextStepKey;
 
     if (nextStep.onEnter) {
       await nextStep.onEnter(store.getState(), { skeleton });

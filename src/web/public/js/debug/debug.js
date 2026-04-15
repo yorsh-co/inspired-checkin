@@ -21,29 +21,9 @@ const isDebug = (params = null) => {
 
   if (searchParams.get('debug') === 'false') localStorage.removeItem('debug');
 
+  document.body.dataset.debug = localStorage.getItem('debug'); // used to display debug topbar button
+
   return localStorage.getItem('debug') === 'true';
-};
-
-/**
- *
- * @param {*} handler
- * @param {string} buttonTxt
- * @param {boolean} removeOnClick
- */
-export const setupDebugButton = async (handler, buttonTxt, removeOnClick) => {
-  const testButton = document.getElementById('debug-button');
-
-  if (testButton) {
-    testButton.classList.add('available');
-    testButton.textContent = `debug [${buttonTxt}]`;
-
-    testButton.addEventListener('click', () => {
-      handler();
-      if (removeOnClick) {
-        setTimeout(() => testButton.classList.remove('available'), 500);
-      }
-    });
-  }
 };
 
 export const initErudaDebugMode = () => {

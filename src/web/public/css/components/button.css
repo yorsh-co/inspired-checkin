@@ -53,11 +53,3 @@ button.loading .btn-spinner {
 button.loading .btn-label {
   opacity: 0;
 }
-
-/* logout icon */
-button.logout-icon {
-  width: auto;
-  height: auto;
-
-  color: var(--muted);
-}

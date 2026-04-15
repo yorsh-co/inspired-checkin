@@ -1,6 +1,4 @@
 import ui from './ui/index.js';
-
-import { setupDebugButton } from '../debug/debug.js';
 import utils from './utils/index.js';
 
 /**
@@ -112,8 +110,6 @@ export const setupQr = ({
 
       console.log('qr scanner started');
 
-      // debug
-      //setupDebugButton(() => handleScan('test'), 'pular qr code');
     } catch (err) {
       console.error(err);
 

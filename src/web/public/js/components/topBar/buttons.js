@@ -4,5 +4,5 @@
  * @param {*} handler
  */
 export const setupTopBarBtn = async (button, handler) => {
-  button.onclick = () => handler;
+  button.onclick = () => handler();
 };

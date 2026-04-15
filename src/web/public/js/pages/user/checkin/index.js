@@ -2,16 +2,11 @@ import dom from './dom.js';
 import store from './state/store.js';
 import { goToStep } from './ui/navigation.js';
 
-import { attachScrollOnResize } from '../../../components/container/resize-scroll.js';
-
 import api from '../../../core/api/index.js';
-import { setupDebugButton } from '../../../debug/debug.js';
 import transition from '../../../modules/ui/transition.js';
 import layoutDom from '../../../layouts/main/dom.js';
 import { setupTopBarBtn } from '../../../components/topBar/buttons.js';
-
-// debug
-setupDebugButton(api.checkin.debugSession, 'debug session');
+import { attachScrollOnResize } from '../../../components/container/resize-scroll.js';
 
 const bootScreen = layoutDom.bootScreen;
 
@@ -24,8 +19,7 @@ try {
       document.getElementById('checkin-data').textContent,
     );
 
-    //const initialStep = checkinData?.meta?.nextStep || 'ticket';
-    const initialStep = 'qr';
+    const initialStep = checkinData?.meta?.nextStep || 'ticket';
 
     store.setState({
       currentStep: null,
@@ -50,12 +44,26 @@ try {
   });
 
   // top-bar buttons
-  if (layoutDom.topBar.logoutIcon) {
-    setupTopBarBtn(layoutDom.topBar.logoutIcon, () => {
-      api.checkin.reset();
-      goToStep('ticket');
-    });
-  }
+  const topBarBtnConfig = [
+    {
+      key: 'debugBtn',
+      handler: api.checkin.debugSession,
+    },
+    {
+      key: 'logoutIcon',
+      handler: () => {
+        api.checkin.reset();
+        goToStep('ticket');
+      },
+    },
+  ];
+  topBarBtnConfig.forEach((btnConfig) => {
+    const btnEl = layoutDom.topBar[btnConfig.key];
+    if (btnEl) setupTopBarBtn(btnEl, btnConfig.handler);
+  });
+
+  // allow top-bar display
+  document.body.dataset.topbar = 'true';
 } catch (err) {
   console.error(err);
 

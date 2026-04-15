@@ -39,10 +39,6 @@
     height 0.2s ease;
 }
 
-.checkin-container .verification-step.show {
-  
-}
-
 /* qr step */
 .qr-step {
   display: flex;
@@ -185,4 +181,21 @@
 .success-message.changing {
   opacity: 0;
   transform: translateY(4px);
+}
+
+/* top bar buttons */
+body[data-debug='true'] .top-bar button[data-top-bar='debug-btn'] {
+  opacity: 1;
+
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+body[data-step='verification'] .top-bar button[data-top-bar='logout-icon'],
+body[data-step='qr'] .top-bar button[data-top-bar='logout-icon'],
+body[data-step='success'] .top-bar button[data-top-bar='logout-icon'] {
+  opacity: 1;
+
+  pointer-events: auto;
+  cursor: pointer;
 }

@@ -1,6 +1,7 @@
 import ui from './ui/index.js';
+
 import { setupDebugButton } from '../debug/debug.js';
-import skeleton from './ui/skeleton.js';
+import utils from './utils/index.js';
 
 /**
  *
@@ -18,22 +19,21 @@ export const setupQr = ({
 } = {}) => {
   startCameraBtn.addEventListener('click', async () => {
     const qrWrapper = qrReaderDiv.closest('.qr-reader-wrapper');
-
-    let helpTimeout;
     const defaultHint = hintDiv.textContent;
 
+    let helpTimeout;
+
     try {
-      // update ui
       const permissionTimeout = setTimeout(() => {
         ui.hint.showHint(hintDiv, '👆 Libera acesso à câmera pra continuar');
       }, 3000);
 
+      // update ui
       startCameraBtn.disabled = true;
-      ui.element.hide(startCameraBtn);
+      ui.element.setShow(startCameraBtn, false);
 
       ui.skeleton.render(qrWrapper);
-      ui.element.show(qrWrapper);
-      ui.element.show(qrReaderDiv);
+      ui.element.setShow(qrWrapper, true);
 
       // open qr reader div
       const scanner = new Html5Qrcode(qrReaderDiv.id);
@@ -67,29 +67,27 @@ export const setupQr = ({
         console.debug('qr code scanned', decodedText);
 
         try {
+          scanner.pause(true);
+
           clearTimeout(helpTimeout);
 
-          // TODO:
-          // show loading
-          ui.skeleton.render(qrWrapper);
-          qrReaderDiv.style.opacity = 0;
-
+          ui.element.setProcessing(qrWrapper, true);
           ui.hint.showHint(hintDiv, 'Lendo o QR code... 🔎');
-          return;
-          // handle the scan
-          await onScan(decodedText, hintDiv);
+
+          await onScan(decodedText);
+
           scanner.stop();
-          return;
-          // FIXME: roll back if onScan error
         } catch (err) {
           console.error(err);
           ui.hint.showError(
             hintDiv,
             'Ops! Não deu pra ler esse QR 😕 Tenta de novo ou usa outro',
           );
+          utils.sleep(1200);
 
-          qrReaderDiv.style.opacity = 1;
-          ui.skeleton.clear(qrWrapper);
+          ui.element.setProcessing(qrWrapper, false);
+
+          scanner.resume();
 
           startHelpTimeout(10000);
         } finally {
@@ -115,7 +113,7 @@ export const setupQr = ({
       console.log('qr scanner started');
 
       // debug
-      setupDebugButton(() => handleScan('test'), 'pular qr code');
+      //setupDebugButton(() => handleScan('test'), 'pular qr code');
     } catch (err) {
       console.error(err);
 
@@ -127,13 +125,9 @@ export const setupQr = ({
         'Não foi possível acessar a câmera 📷 Verifique as permissões e tente novamente',
       );
 
-      // hide the scanner
-      ui.element.hide(qrReaderDiv);
-      ui.element.hide(qrWrapper);
-      ui.skeleton.render(qrReaderDiv);
+      ui.element.setShow(qrWrapper, false);
 
-      // show the camera start button
-      ui.element.show(startCameraBtn);
+      ui.element.setShow(startCameraBtn, true);
       startCameraBtn.disabled = false;
     }
   });

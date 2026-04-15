@@ -39,7 +39,22 @@
     height 0.2s ease;
 }
 
-/* qr */
+/* qr step */
+.qr-step {
+  display: flex;
+  flex-direction: column;
+  /*gap: 15px;*/
+
+  /*max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+
+  transition:
+    max-height 0.5s ease,
+    opacity 0.4s ease,
+    transform 0.3s ease;*/
+}
+
 .qr-step .ticket-code-display {
   display: flex;
   justify-content: center;
@@ -47,6 +62,23 @@
   gap: 8px;
 
   font-weight: 700;
+}
+
+.qr-start-btn {
+  display: none;
+}
+.qr-start-btn.show {
+  display: flex;
+}
+
+.qr-step .hint-div {
+  min-height: 35px;
+}
+.qr-step .table-wrapper {
+  margin-bottom: 16px !important;
+}
+.qr-step button {
+  margin-top: 0 !important;
 }
 
 /* table toggle */
@@ -63,6 +95,7 @@
   height: 20px;
 }
 
+/* table */
 .checkin-container table {
   width: 100%;
 }

@@ -14,13 +14,15 @@ router.get('/privacy', (_req, res) => {
 });
 
 // checkin
+// FIXME: on error, set initial step to ticket with a new session
+// FIXME:
 router.get('/checkin', async (req, res, next) => {
   try {
     const service = new CheckinService({ req, res });
 
     const result = await service.init({
-      qrCode: req.query.qr,
-      ticketCode: req.query.ticket,
+      qrToken: req.query.k,
+      ticketToken: req.query.t,
     });
 
     res.render('pages/user/checkin', {

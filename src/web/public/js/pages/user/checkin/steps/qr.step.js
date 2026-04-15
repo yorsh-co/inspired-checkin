@@ -1,9 +1,10 @@
 import { goToStep } from '../ui/navigation.js';
 
-import * as ui from '../../../../modules/ui/transition.js';
+import ui from '../../../../modules/ui/index.js';
 import utils from '../../../../modules/utils/index.js';
 
 import api from '../../../../core/api/index.js';
+import dom from '../dom.js';
 
 /**
  * TODO:
@@ -11,28 +12,21 @@ import api from '../../../../core/api/index.js';
  * @param {HTMLDivElement} hintDiv
  * @returns
  */
-export const onQrScan = async (qrCode, hintDiv) => {
+export const onQrScan = async (qrCode) => {
+
   // server request
   const res = await api.checkin.submitQrCode(qrCode);
 
-  ui.clear(hintDiv);
+  const hintDiv = dom.qr.hint;
+  ui.hint.clearAll(hintDiv);
 
   // handle server response
-  if (res.success) {
-    ui.showHint(
-      hintDiv,
-      `QR code ok!${res.meta.nextStep === 'ticket' ? ' Agora valide seu ingresso 🎟️' : ' 🎉'}`,
-    );
-    await utils.sleep(1200);
+  if (!res.success) throw new Error('Invalid');
 
-    const nextStep = res.meta?.nextStep;
-    if (!nextStep) {
-      throw new Error('Missing next step from server');
-    }
-
-    await goToStep(nextStep);
-  } else {
-    ui.showError(hintDiv, 'QR inválido 😕 Tenta de novo');
-    throw new Error('Invalid');
+  const nextStep = res.meta?.nextStep;
+  if (!nextStep) {
+    throw new Error('Missing next step from server');
   }
+
+  await goToStep(nextStep);
 };

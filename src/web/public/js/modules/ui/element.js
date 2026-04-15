@@ -1,10 +1,18 @@
-const show = (el) => {
-  el.classList.add('show');
+const setShow = (el, show) => {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      el.classList.toggle('show', show);
+    });
+  });
 };
 
-const hide = (el) => {
-  el.classList.remove('show');
+const setProcessing = (el, isProcessing) => {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      el.classList.toggle('processing', isProcessing);
+    });
+  });
 };
 
-const element = { show, hide };
+const element = { setShow, setProcessing };
 export default element;

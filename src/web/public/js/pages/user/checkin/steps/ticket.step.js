@@ -65,7 +65,6 @@ export const onTicketInput = async (fromPaste = false) => {
     console.debug('Submitting to server');
     const res = await withSkeleton(() => api.checkin.submitTicket(value));
 
-    //ui.clear(hintDiv);
     if (!res.success) throw new Error('Invalid');
 
     // handle server response

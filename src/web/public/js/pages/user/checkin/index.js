@@ -10,7 +10,7 @@ import transition from '../../../modules/ui/transition.js';
 import layoutDom from '../../../layouts/main/dom.js';
 
 // debug
-setupDebugButton(api.checkin.debugSession, 'debug session');
+//setupDebugButton(api.checkin.debugSession, 'debug session');
 
 const bootScreen = layoutDom.bootScreen;
 

@@ -6,7 +6,8 @@
 @import './base/global.css';
 @import './base/body.css';
 
-@import './components/boot.css';
+@import './components/boot-screen.css';
+@import './components/top-bar.css';
 @import './components/skeleton.css';
 @import './components/container.css';
 @import './components/form.css';

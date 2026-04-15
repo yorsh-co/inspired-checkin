@@ -1,6 +1,7 @@
 body {
   height: 100dvh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   background: var(--bg-gradient);
@@ -14,4 +15,11 @@ body {
   padding: 16px;
   text-align: center;
   font-weight: 600;
+}
+
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

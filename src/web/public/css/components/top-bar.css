@@ -1,0 +1,29 @@
+.top-bar {
+  opacity: 0;
+
+  margin: 0;
+
+  width: 100vw;
+  max-height: 0;
+  overflow: hidden;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-bar:not(.skeleton) {
+  opacity: 0;
+}
+
+.top-bar [data-flex-position='start'] {
+}
+.top-bar [data-flex-position='center'] {
+  flex: 1;
+}
+.top-bar [data-flex-position='end'] {
+}
+
+.top-bar button {
+  opacity: 0;
+}

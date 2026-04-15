@@ -18,7 +18,7 @@ export class CheckinService {
   // PUBLIC API
   // =========================
 
-  async init({ qrCode, ticketCode }) {
+  async init({ qrToken, ticketToken }) {
     await this._initSession();
 
     let data = {};
@@ -27,15 +27,22 @@ export class CheckinService {
       data.userPreview = this.session.userPreview;
     }
 
-    if (ticketCode && !this.session.progress.ticket) {
+    if (ticketToken && !this.session.progress.ticket) {
+      this.session.source = 'ticket';
+
+      // FIXME: verify the ticket token to get the code
+
       const result = await this._processTicket(ticketCode);
+
       this.session = result.session;
 
       data = { ...data, ...result.data };
     }
 
-    if (qrCode && !this.session.progress.qr) {
-      const result = await this._processQr(qrCode);
+    if (qrToken && !this.session.progress.qr) {
+      this.session.source = 'qr';
+
+      const result = await this._processQrToken(qrToken);
 
       this.session = result.session;
     }

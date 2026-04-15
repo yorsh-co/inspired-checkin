@@ -8,6 +8,7 @@ const getKey = (id) => `session:checkin:${id}`;
 const createSession = async (req) => {
   const sessionId = uuidv4();
 
+  // FIXME: move this model out of here??
   const session = {
     version: 1,
     progress: { qr: false, ticket: false, verified: false },

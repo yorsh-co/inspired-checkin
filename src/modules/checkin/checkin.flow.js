@@ -1,31 +1,36 @@
 import { CheckinSteps } from './checkin.steps.js';
 
-export const validateStep = (progress, step) => {
+export const validateStep = (session, step) => {
   switch (step) {
-    case CheckinSteps.TICKET:
+    case CheckinSteps.TICKET: {
       return true;
+    }
 
-    case CheckinSteps.VERIFICATION:
-      if (!progress.ticket) {
+    case CheckinSteps.VERIFICATION: {
+      if (!session.progress.ticket) {
         throw new Error('Cannot verify without ticket');
       }
       return true;
+    }
 
-    case CheckinSteps.QR:
-      if (!progress.verified) {
+    case CheckinSteps.QR: {
+      console.log(session.source);
+      if (!session.progress.verified && session.source !== 'qr') {
         throw new Error('QR requires verified ticket');
       }
       return true;
+    }
 
-    default:
+    default: {
       return true;
+    }
   }
 };
 
 export const applyStep = (session, step, payload = {}) => {
   const progress = session.progress;
 
-  validateStep(progress, step);
+  validateStep(session, step);
 
   const updated = {
     ...session,
@@ -45,7 +50,7 @@ export const applyStep = (session, step, payload = {}) => {
 
     case CheckinSteps.QR:
       updated.progress.qr = true;
-      updated.eventId = payload.eventId; // TODO:
+      updated.eventId = payload.eventId;
       break;
   }
 

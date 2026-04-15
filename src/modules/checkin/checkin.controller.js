@@ -38,10 +38,7 @@ export const submitQrCode = async (req, res, next) => {
   try {
     const service = new CheckinService({ req, res });
 
-    let token = req.body.qrCode;
-    // TODO: FIXME:
-
-    const result = await service.submitQrToken(token);
+    const result = await service.submitQrCode(req.body.qrCode);
 
     return res.json({
       success: true,

@@ -83,10 +83,12 @@ export class CheckinService {
    * @param {string} qrCode
    * @returns
    */
-  async submitQrToken(qrCode) {
+  async submitQrCode(qrCode) {
     await this._initSession();
 
-    const { session } = await this._processQrToken(qrCode);
+    const token = qrService.extractToken(qrCode);
+
+    const { session } = await this._processQrToken(token);
 
     return await this._persistAndRespond(session);
   }
@@ -174,10 +176,10 @@ export class CheckinService {
   }
 
   async _processQrToken(qrToken) {
-    const result = await validateQrToken(qrToken);
+    await validateQrToken(qrToken);
 
     const updated = applyStep(this.session, CheckinSteps.QR, {
-      eventId: result.eventId,
+      eventId: env.eventId,
     });
 
     return {
@@ -274,46 +276,12 @@ const verifyUser = async (session, code) => {
  * @returns
  */
 const validateQrToken = async (qrToken) => {
-  if (!qrToken) throw new Error('Invalid QR');
+  const isToken = (t) => /^[a-zA-Z0-9]{10,32}$/.test(t);
+  if (!isToken(qrToken)) throw new Error('Invalid QR token');
 
-  const payload = qrService.verify(qrToken, {
-    audience: 'qr',
-    issuer: env.JWT_ISSUER,
-    clockTolerance: 60,
-  });
+  if (!qrToken) throw new Error('Invalid QR token');
 
-  // ===== Required structure =====
-  if (!payload || payload.type !== 'event_checkin') {
-    throw new Error('Invalid QR payload');
-  }
+  if (qrToken !== env.checkinQrToken) throw new Error('Invalid QR token');
 
-  if (!payload.eventId) {
-    throw new Error('QR missing eventId');
-  }
-
-  // ===== Event validation =====
-  if (payload.eventId !== env.eventId) {
-    throw new Error('Invalid eventId');
-  }
-
-  // ===== Scope validation =====
-  if (payload.scope !== 'public_qr') {
-    throw new Error('Invalid QR scope');
-  }
-
-  // ===== Versioning (future-proofing) =====
-  if (payload.version !== 1) {
-    throw new Error('Unsupported QR version');
-  }
-
-  // ===== Optional: time sanity check =====
-  // (nbf & exp are already enforced by jwt.verify, but this protects bad configs)
-  if (payload.nbf && payload.nbf > Math.floor(Date.now() / 1000)) {
-    throw new Error('QR not active yet');
-  }
-
-  return {
-    eventId: payload.eventId,
-    payload,
-  };
+  return true;
 };

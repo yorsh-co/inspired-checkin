@@ -23,7 +23,7 @@ const generateToken = (payload, options = {}) => {
  * @returns
  */
 const generateUrl = (path, token, options = {}) =>
-  `${options.baseUrl || env.appUrl}${path}?token=${token}`;
+  `${options.baseUrl || env.appUrl}${path}?k=${token}`;
 
 /**
  *
@@ -43,8 +43,26 @@ const verify = (token, options = {}) => {
   }
 };
 
+const extractToken = (qrCode) => {
+  if (!qrCode) return null;
+
+  try {
+    const url = new URL(qrCode);
+
+    return (
+      url.searchParams.get('k') ||
+      url.searchParams.get('t') ||
+      url.pathname.split('/').filter(Boolean).pop() ||
+      null
+    );
+  } catch {
+    return qrCode;
+  }
+};
+
 export const qrService = {
   generateToken,
   generateUrl,
   verify,
+  extractToken,
 };

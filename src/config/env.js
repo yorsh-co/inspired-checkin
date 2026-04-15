@@ -1,6 +1,6 @@
 import 'dotenv/config';
 
-const required = ['AUTH_SECRET', 'QR_SECRET'];
+const required = ['CHECKIN_QR_TOKEN', 'AUTH_SECRET'];
 
 for (const key of required) {
   if (!process.env[key]) {
@@ -14,11 +14,12 @@ export const env = {
 
   appUrl: process.env.APP_URL,
   appTitle: process.env.APP_TITLE,
+
   eventId: process.env.EVENT_ID,
+  checkinQrToken: process.env.CHECKIN_QR_TOKEN,
 
   jwtIssuer: process.env.JWT_ISSUER,
   authSecret: process.env.AUTH_SECRET,
-  qrSecret: process.env.QR_SECRET,
 
   sessionTtl: process.env.SESSION_TTL || 600,
 

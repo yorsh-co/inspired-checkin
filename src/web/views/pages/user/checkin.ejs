@@ -30,6 +30,7 @@
           autocorrect="on"
           autocapitalize="sentences"
           enterkeyhint="send"
+          disabled
         />
       </div>
       <%- include('../../components/privacy-notice') %>
@@ -90,7 +91,7 @@
             </td>
           </tr>
         </table>
-        <button data-checkin="verification-table-toggle" class="ghost">
+        <button data-checkin="verification-table-toggle" class="ghost" disabled>
           <span
             data-checkin="verification-table-toggle-label"
             class="material-symbols-outlined"
@@ -112,6 +113,7 @@
           autocorrect="on"
           autocapitalize="sentences"
           enterkeyhint="send"
+          disabled
         />
       </div>
 
@@ -119,7 +121,7 @@
         Insira apenas os últimos 4 dígitos
       </div>
 
-      <button data-checkin="verification-back-btn" class="ghost">
+      <button data-checkin="verification-back-btn" class="ghost" disabled>
         <span class="btn-label">Voltar</span>
       </button>
     </section>
@@ -181,7 +183,7 @@
             </td>
           </tr>
         </table>
-        <button data-checkin="qr-table-toggle" class="ghost">
+        <button data-checkin="qr-table-toggle" class="ghost" disabled>
           <span
             data-checkin="qr-table-toggle-label"
             class="material-symbols-outlined"
@@ -206,7 +208,7 @@
         </div>
       </div>
 
-      <button data-checkin="start-camera-btn" class="qr-start-btn show">
+      <button data-checkin="start-camera-btn" class="qr-start-btn show" disabled>
         <span class="material-symbols-outlined btn-label">
           qr_code_scanner
         </span>
@@ -220,7 +222,7 @@
       </div>
     </section>
 
-    <!-- success -->
+    <!-- success step -->
     <section data-checkin="success-step" class="success-step skeleton">
       <div class="check material-symbols-outlined"></div>
       <div data-checkin="success-message" class="success-message"></div>

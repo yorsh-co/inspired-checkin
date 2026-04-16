@@ -50,6 +50,8 @@ const stepConfig = {
 
       attachScrollOnFocus(dom.inputs.ticketCode);
       attachScrollOnBlur(dom.inputs.ticketCode);
+      
+      input.disabled = false;
 
       startPlaceholderTyping(dom.inputs.ticketCode, [
         { text: 'Digite seu código de ingresso...', pause: 1200 },
@@ -66,6 +68,7 @@ const stepConfig = {
       stopPlaceholderTyping(input);
 
       input.value = '';
+      input.disabled = true;
 
       // clear the hint
       ui.hint.clearAll(this.hint);
@@ -116,6 +119,7 @@ const stepConfig = {
         });
         tableToggle.dataset.initialized = 'true';
       }
+      tableToggle.disabled = false;
 
       // setup input
       const input = dom.inputs.verificationCode;
@@ -128,6 +132,8 @@ const stepConfig = {
       
       attachScrollOnFocus(dom.inputs.verificationCode);
       attachScrollOnBlur(dom.inputs.verificationCode);
+      
+      input.disabled = false;
 
       startPlaceholderTyping(dom.inputs.verificationCode, [
         { text: 'Confirme seu celular...', pause: 1200 },
@@ -142,6 +148,7 @@ const stepConfig = {
           api.checkin.reset();
           goToStep('ticket');
         };
+        dom.verification.backBtn.disabled = false;
       }
     },
 
@@ -152,6 +159,11 @@ const stepConfig = {
       stopPlaceholderTyping(input);
 
       input.value = '';
+      input.disabled = true;
+      
+      // reset buttons
+      dom.verification.backBtn.disabled = true;
+      dom.verification.tableToggle.disabled = true;
 
       // clear the hint
       ui.hint.clearAll(this.hint);
@@ -201,6 +213,7 @@ const stepConfig = {
         });
         tableToggle.dataset.initialized = 'true';
       }
+      tableToggle.disabled = false;
 
       // setup the qr reader
       setupQr({
@@ -210,9 +223,16 @@ const stepConfig = {
         hintDiv: dom.qr.hint,
         onScan: onQrScan,
       });
+      
+      dom.qr.startBtn.disabled = false;
     },
 
     async onExit() {
+      
+      // rest buttons
+      dom.qr.tableToggle.disabled = true;
+      dom.qr.startBtn.disabled = true;
+      
       // clear the hint
       ui.hint.clearAll(this.hint);
 

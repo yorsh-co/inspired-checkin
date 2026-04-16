@@ -20,45 +20,52 @@ const waitForHeightTransition = (el) => {
  *
  * @param {HTMLDivElement} nextStep
  * @param {HTMLDivElement} currentStep
- * @param {{ delay: number, container: HTMLDivElement }} options
+ * @param {{ container: HTMLDivElement }} options
  */
 export const step = async (nextStep, currentStep = null, options = {}) => {
-  const { delay = 300, container } = options;
+  const { container } = options;
 
   const isSameStep = nextStep === currentStep;
 
   // return for same step
-  let resizeRAF;
-
   if (isSameStep) {
-    // FIXME: this isn't actually doing anything
-    cancelAnimationFrame(resizeRAF);
+    if (!container) return;
 
-    if (container) {
-      resizeRAF = requestAnimationFrame(async () => {
+    await new Promise((resolve) => {
+      requestAnimationFrame(async () => {
         await new Promise((r) =>
           requestAnimationFrame(() => requestAnimationFrame(r)),
         );
 
         const currentHeight = container.getBoundingClientRect().height;
+
         const wrapperHeight = currentStep
           ? currentHeight - currentStep.getBoundingClientRect().height
           : 0;
+
         const endHeight =
           nextStep.getBoundingClientRect().height + wrapperHeight;
 
-        if (endHeight === currentHeight) return;
+        if (Math.abs(endHeight - currentHeight) < 1) {
+          resolve();
+          return;
+        }
 
         container.style.height = currentHeight + 'px';
-        container.offsetHeight;
+        container.style.overflow = 'hidden';
+
+        void container.offsetHeight;
 
         container.style.height = endHeight + 'px';
 
         await waitForHeightTransition(container);
 
         container.style.height = 'auto';
+        container.style.overflow = '';
+
+        resolve();
       });
-    }
+    });
 
     return;
   }
@@ -81,7 +88,7 @@ export const step = async (nextStep, currentStep = null, options = {}) => {
   ui.element.setShow(nextStep, true);
 
   if (container) {
-    container.offsetHeight;
+    void container.offsetHeight;
 
     // wait a full frame
     await new Promise((r) =>

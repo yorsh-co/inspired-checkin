@@ -58,15 +58,6 @@ export const goToStep = async (nextStepKey, options = {}) => {
     if (nextStep.onEnter) {
       await nextStep.onEnter(store.getState(), { skeleton });
     }
-
-    if (
-      !skeleton &&
-      utils.isDesktop() &&
-      nextStep.focusTarget &&
-      !nextStep.focusTarget.disabled
-    ) {
-      nextStep.focusTarget.focus();
-    }
   } catch (err) {
     console.error('[Step Error]', err);
 

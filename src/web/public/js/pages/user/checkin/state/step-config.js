@@ -50,7 +50,7 @@ const stepConfig = {
 
       attachScrollOnFocus(dom.inputs.ticketCode);
       attachScrollOnBlur(dom.inputs.ticketCode);
-      
+
       input.disabled = false;
 
       startPlaceholderTyping(dom.inputs.ticketCode, [
@@ -59,6 +59,15 @@ const stepConfig = {
         { text: 'Pronto pra a Inspire?', pause: 1400 },
         { text: 'Vamos fazer seu check-in ✨', pause: 1500 },
       ]);
+
+      if (
+        !skeleton &&
+        utils.isDesktop() &&
+        this.focusTarget &&
+        !this.focusTarget.disabled
+      ) {
+        nextStep.focusTarget.focus();
+      }
     },
 
     async onExit() {
@@ -129,10 +138,10 @@ const stepConfig = {
         formatValue: formatter.verificationCode.format,
         valueIsValid: formatter.verificationCode.isValid,
       });
-      
+
       attachScrollOnFocus(dom.inputs.verificationCode);
       attachScrollOnBlur(dom.inputs.verificationCode);
-      
+
       input.disabled = false;
 
       startPlaceholderTyping(dom.inputs.verificationCode, [
@@ -160,7 +169,7 @@ const stepConfig = {
 
       input.value = '';
       input.disabled = true;
-      
+
       // reset buttons
       dom.verification.backBtn.disabled = true;
       dom.verification.tableToggle.disabled = true;
@@ -223,16 +232,15 @@ const stepConfig = {
         hintDiv: dom.qr.hint,
         onScan: onQrScan,
       });
-      
+
       dom.qr.startBtn.disabled = false;
     },
 
     async onExit() {
-      
       // rest buttons
       dom.qr.tableToggle.disabled = true;
       dom.qr.startBtn.disabled = true;
-      
+
       // clear the hint
       ui.hint.clearAll(this.hint);
 

@@ -70,17 +70,19 @@ export const setupQr = ({
           clearTimeout(helpTimeout);
 
           ui.element.setProcessing(qrWrapper, true);
-          ui.hint.showHint(hintDiv, 'Lendo o QR code... 🔎');
+          await ui.hint.showHint(hintDiv, 'Lendo o QR code... 🔎');
 
           await onScan(decodedText);
 
           scanner.stop();
         } catch (err) {
           console.error(err);
+
           ui.hint.showError(
             hintDiv,
             'Ops! Não deu pra ler esse QR 😕 Tenta de novo ou usa outro',
           );
+          
           await utils.sleep(800);
 
           ui.element.setProcessing(qrWrapper, false);

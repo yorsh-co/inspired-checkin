@@ -2,6 +2,7 @@ import express from 'express';
 
 import { requireWebAuth } from '../../middleware/auth.middleware.js';
 import { CheckinService } from '../../modules/checkin/checkin.service.js';
+import { env } from '../../config/env.js';
 
 const router = express.Router();
 
@@ -15,7 +16,6 @@ router.get('/privacy', (_req, res) => {
 
 // checkin
 // FIXME: on error, set initial step to ticket with a new session
-// FIXME:
 router.get('/checkin', async (req, res, next) => {
   try {
     const service = new CheckinService({ req, res });
@@ -26,7 +26,7 @@ router.get('/checkin', async (req, res, next) => {
     });
 
     res.render('pages/user/checkin', {
-      title: 'Check-in',
+      title: `Check-in | ${env.appTitle}`,
 
       initialData: {
         ...result,
@@ -39,9 +39,13 @@ router.get('/checkin', async (req, res, next) => {
 
 // app
 router.get('/', requireWebAuth, (req, res) => {
-  res.render('pages/app', {
-    title: 'Inspire',
-  });
+  try {
+    res.render('pages/app', {
+      title: env.appTitle,
+    });
+  } catch (err) {
+    next(err);
+  }
 });
 
 export default router;

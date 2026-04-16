@@ -1,10 +1,10 @@
-.top-bar {
+.top-bar, .bottom-bar {
   opacity: 0;
 
   margin: 0;
 
   width: 100vw;
-  height: var(--top-bar-height);
+  min-height: var(--top-bar-height);
   overflow: hidden;
 
   display: flex;
@@ -12,6 +12,8 @@
   align-items: center;
 
   z-index: 3;
+
+  flex-shrink: 0;
 }
 
 body[data-topbar='true'] .top-bar {

@@ -5,6 +5,7 @@ import {
   attachScrollOnFocus,
   attachScrollOnBlur,
 } from '../../../../components/input/focus-scroll.js';
+import api from '../../../../core/api/index.js';
 
 import dom from '../dom.js';
 
@@ -20,7 +21,6 @@ import {
   startPlaceholderTyping,
   stopPlaceholderTyping,
 } from '../ui/inputs.js';
-import api from '../../../../core/api/index.js';
 
 const stepConfig = {
   ticket: {
@@ -125,6 +125,9 @@ const stepConfig = {
         formatValue: formatter.verificationCode.format,
         valueIsValid: formatter.verificationCode.isValid,
       });
+      
+      attachScrollOnFocus(dom.inputs.verificationCode);
+      attachScrollOnBlur(dom.inputs.verificationCode);
 
       startPlaceholderTyping(dom.inputs.verificationCode, [
         { text: 'Confirme seu celular...', pause: 1200 },

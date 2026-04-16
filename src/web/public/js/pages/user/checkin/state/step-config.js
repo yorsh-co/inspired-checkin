@@ -49,7 +49,7 @@ const stepConfig = {
       });
 
       attachScrollOnFocus(dom.inputs.ticketCode);
-      attachScrollOnBlur(dom.inputs.ticketCode);
+      //attachScrollOnBlur(dom.inputs.ticketCode);
 
       input.disabled = false;
 
@@ -78,6 +78,7 @@ const stepConfig = {
 
       input.value = '';
       input.disabled = true;
+      input.blur();
 
       // clear the hint
       ui.hint.clearAll(this.hint);
@@ -140,7 +141,6 @@ const stepConfig = {
       });
 
       attachScrollOnFocus(dom.inputs.verificationCode);
-      attachScrollOnBlur(dom.inputs.verificationCode);
 
       input.disabled = false;
 
@@ -155,6 +155,7 @@ const stepConfig = {
       if (dom.verification.backBtn) {
         dom.verification.backBtn.onclick = () => {
           api.checkin.reset();
+
           goToStep('ticket');
         };
         dom.verification.backBtn.disabled = false;
@@ -169,6 +170,7 @@ const stepConfig = {
 
       input.value = '';
       input.disabled = true;
+      input.blur();
 
       // reset buttons
       dom.verification.backBtn.disabled = true;

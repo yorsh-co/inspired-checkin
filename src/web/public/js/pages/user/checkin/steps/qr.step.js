@@ -2,15 +2,15 @@ import store from '../state/store.js';
 import { goToStep } from '../ui/navigation.js';
 
 import api from '../../../../core/api/index.js';
+import utils from '../../../../modules/utils/index.js';
 
 /**
- * TODO:
+ * 
  * @param {string} qrCode
  * @param {HTMLDivElement} hintDiv
  * @returns
  */
 export const onQrScan = async (qrCode) => {
-  throw new Error('Test'); // FIXME: not handling errors properly. Might by a promise issue
   // server request
   const res = await api.checkin.submitQrCode(qrCode);
 
@@ -25,6 +25,8 @@ export const onQrScan = async (qrCode) => {
   if (!nextStep) {
     throw new Error('Missing next step from server');
   }
+
+  await utils.sleep(500);
 
   await goToStep(nextStep);
 };

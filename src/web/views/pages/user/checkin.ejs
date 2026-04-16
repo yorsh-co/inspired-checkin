@@ -15,7 +15,6 @@
   <%- include('../../partials/header') %>
 
   <div class="content-wrapper">
-    
     <!-- ticket step -->
     <section data-checkin="ticket-step" class="ticket-step skeleton">
       <div data-checkin="ticket-input-wrapper" class="input-wrapper">
@@ -208,7 +207,11 @@
         </div>
       </div>
 
-      <button data-checkin="start-camera-btn" class="qr-start-btn show" disabled>
+      <button
+        data-checkin="start-camera-btn"
+        class="qr-start-btn show"
+        disabled
+      >
         <span class="material-symbols-outlined btn-label">
           qr_code_scanner
         </span>
@@ -223,11 +226,13 @@
     </section>
 
     <!-- success step -->
-    <section data-checkin="success-step" class="success-step skeleton">
+    <section data-checkin="success-step" class="success-step">
       <div class="check material-symbols-outlined"></div>
       <div data-checkin="success-message" class="success-message"></div>
       <div data-checkin="success-hint-div" class="hint-div">
-      <a href="/">Clique aqui se nada acontecer ↗️</a><!--FIXME:-->
+        <a href="/"
+          >Clique <span class="underline">aqui</span> se nada acontecer... ↗️</a
+        >
       </div>
     </section>
   </div>

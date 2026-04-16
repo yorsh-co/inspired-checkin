@@ -8,6 +8,10 @@ import layoutDom from '../../../layouts/main/dom.js';
 import { setupTopBarBtn } from '../../../components/top-bar/buttons.js';
 import { attachScrollOnResize } from '../../../components/container/resize-scroll.js';
 import { setupCursorGlow } from '../../../modules/ui/cursorGlow.js';
+import utils from '../../../modules/utils/index.js';
+
+const BOOT_INTERVAL = 1000;
+const bootStartTime = Date.now();
 
 // load step
 const init = async () => {
@@ -36,6 +40,8 @@ const init = async () => {
     await new Promise((r) =>
       requestAnimationFrame(() => requestAnimationFrame(r)),
     );
+
+    await utils.duration.waitForNextInterval(bootStartTime, BOOT_INTERVAL);
 
     const bootScreen = layoutDom.bootScreen;
     const boot = transition.bootScreen(bootScreen);

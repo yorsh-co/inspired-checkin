@@ -81,7 +81,7 @@ export const setupQr = ({
             hintDiv,
             'Ops! Não deu pra ler esse QR 😕 Tenta de novo ou usa outro',
           );
-          utils.sleep(1200);
+          await utils.sleep(800);
 
           ui.element.setProcessing(qrWrapper, false);
 
@@ -109,7 +109,6 @@ export const setupQr = ({
       ui.skeleton.clear(qrWrapper);
 
       console.log('qr scanner started');
-
     } catch (err) {
       console.error(err);
 

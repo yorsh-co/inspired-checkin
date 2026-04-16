@@ -62,9 +62,12 @@ const setupTopBar = () => {
     },
     {
       key: 'logoutIcon',
-      handler: async () => {
+      handler: async (e) => {
+        const btn = e.currentTarget;
+        btn.disabled = true;
+
         await api.checkin.reset();
-        await goToStep('ticket');
+        window.location.href = '/checkin';
       },
     },
   ];

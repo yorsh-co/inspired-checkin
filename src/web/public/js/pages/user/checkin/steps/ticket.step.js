@@ -4,9 +4,9 @@ import { goToStep } from '../ui/navigation.js';
 import { formatTicket, isValidTicket } from '../ui/formatters.js';
 
 import api from '../../../../core/api/index.js';
-import hint from '../../../../modules/ui/hint.js';
 import { withSkeleton } from '../../../../modules/ui/skeleton.js';
 import utils from '../../../../modules/utils/index.js';
+import ui from '../../../../modules/ui/index.js';
 
 let isSubmitting = false;
 
@@ -26,12 +26,12 @@ export const onTicketInput = async (fromPaste = false) => {
   input.value = value;
 
   const hintDiv = dom.ticket.hint;
-  hint.clearError(hintDiv);
+  ui.hint.clearError(hintDiv);
 
   if (!value) {
     if (!fromPaste) {
       console.error('[Ticket input] empty');
-      hint.showError(hintDiv, 'Coloca seu código de ingresso ✨');
+      ui.hint.showError(hintDiv, 'Coloca seu código de ingresso ✨');
     }
     return;
   }
@@ -39,7 +39,7 @@ export const onTicketInput = async (fromPaste = false) => {
   if (!isValidTicket(value)) {
     console.error('[Ticket input] invalid');
 
-    hint.showError(
+    ui.hint.showError(
       hintDiv,
       fromPaste && value.length === 5
         ? 'Código inválido 😕'
@@ -51,8 +51,9 @@ export const onTicketInput = async (fromPaste = false) => {
   // submit input
   try {
     isSubmitting = true;
-    hint.clearAll(hintDiv);
-    hint.showHint(hintDiv, 'Buscando seu ingresso... ⏳');
+
+    ui.hint.clearAll(hintDiv);
+    ui.hint.showHint(hintDiv, 'Buscando seu ingresso... ⏳');
 
     input.blur();
     input.disabled = true;
@@ -61,7 +62,7 @@ export const onTicketInput = async (fromPaste = false) => {
 
     await goToStep('verification', { skeleton: true });
 
-    // validate ticket number with the server
+    // validate ticket code with the server
     console.debug('Submitting to server');
     const res = await withSkeleton(() => api.checkin.submitTicket(value));
 
@@ -69,7 +70,7 @@ export const onTicketInput = async (fromPaste = false) => {
 
     // handle server response
     store.setState({
-      userData: res.data.userPreview,
+      session: res.data.session,
     });
 
     const nextStep = res.meta?.nextStep;
@@ -78,15 +79,13 @@ export const onTicketInput = async (fromPaste = false) => {
     }
 
     await goToStep(nextStep, { skeleton: false });
-    
   } catch (err) {
     console.error(err);
 
+    // remove skeleton
     await goToStep('ticket');
 
-    //ui.stopLoading(inputWrapper);
-
-    hint.showError(hintDiv, 'Código inválido 😕 Tenta de novo'); // FIXME: error-specific messages
+    ui.hint.showError(hintDiv, 'Código inválido 😕 Tenta de novo'); // FIXME: error-specific messages
 
     input.disabled = false;
     input.focus();

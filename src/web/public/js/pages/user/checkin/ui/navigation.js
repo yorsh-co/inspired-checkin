@@ -9,16 +9,16 @@ import dom from '../dom.js';
 export const goToStep = async (nextStepKey, options = {}) => {
   const { skeleton = false } = options;
 
-  const { currentStepKey } = store.getState();
+  const { currentUiStepKey } = store.getState();
   console.debug(
     '[Step] loading',
     skeleton ? 'skeleton' : 'hydrated',
     nextStepKey,
     'from',
-    currentStepKey,
+    currentUiStepKey,
   );
 
-  const isSameStep = currentStepKey === nextStepKey;
+  const isSameStep = currentUiStepKey === nextStepKey;
 
   if (isSameStep && skeleton) {
     console.warn('[Step] is already open');
@@ -26,7 +26,7 @@ export const goToStep = async (nextStepKey, options = {}) => {
   }
 
   const nextStep = stepConfig[nextStepKey];
-  const currentStep = currentStepKey ? stepConfig[currentStepKey] : null;
+  const currentStep = currentUiStepKey ? stepConfig[currentUiStepKey] : null;
 
   if (!nextStep) {
     console.warn(`[Step] Invalid step: ${nextStepKey}`);
@@ -35,7 +35,7 @@ export const goToStep = async (nextStepKey, options = {}) => {
 
   if (currentStep && !isSameStep && !currentStep.next?.includes(nextStepKey)) {
     console.warn(
-      `[Step] Invalid transition: ${currentStepKey} --> ${nextStepKey}`,
+      `[Step] Invalid transition: ${currentUiStepKey} --> ${nextStepKey}`,
     );
     return;
   }
@@ -50,7 +50,7 @@ export const goToStep = async (nextStepKey, options = {}) => {
       container: dom.main.container,
     });
 
-    store.setState({ currentStepKey: nextStepKey, isSkeleton: skeleton });
+    store.setState({ currentUiStepKey: nextStepKey, isSkeleton: skeleton });
     
     // filter top-bar buttons
     document.body.dataset.step = nextStepKey;

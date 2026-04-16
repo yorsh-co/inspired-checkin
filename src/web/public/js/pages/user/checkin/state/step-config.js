@@ -83,21 +83,21 @@ const stepConfig = {
     hint: dom.verification.hint,
 
     async onEnter(state, { skeleton }) {
-      const { userData } = state;
+      const { session } = state;
 
       if (skeleton) {
         ui.skeleton.render(this.el);
         return;
       }
 
-      if (!userData) {
-        throw new Error('User data is missing');
+      if (!session.userPreview) {
+        throw new Error('User preview data is missing');
       }
 
       ui.skeleton.clear(this.el);
 
       // populate the table
-      populateStepValues('verification', userData, {
+      populateStepValues('verification', session.userPreview, {
         formatters: {
           phoneStart: (value) => utils.formatPhone.locale(value, 'pt-BR'),
         },
@@ -165,14 +165,14 @@ const stepConfig = {
     hint: dom.qr.hint,
 
     async onEnter(state, { skeleton }) {
-      const { userData } = state;
+      const { session } = state;
 
       if (skeleton) {
         ui.skeleton.render(this.el);
         return;
       }
 
-      if (!userData) {
+      if (!session.userPreview) {
         //throw new Error('User data is missing');
         console.warn('User data is missing');
       }
@@ -180,7 +180,7 @@ const stepConfig = {
       ui.skeleton.clear(this.el);
 
       // populate the table
-      populateStepValues('qr', userData, {
+      populateStepValues('qr', session.userPreview, {
         formatters: {
           phoneStart: (value) => utils.formatPhone.locale(value, 'pt-BR'),
         },

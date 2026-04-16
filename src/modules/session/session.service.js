@@ -13,14 +13,16 @@ const createSession = async (req) => {
     version: 1,
     progress: { qr: false, ticket: false, verified: false },
 
-    currentStep: 'init', // 'qr', 'ticket', 'verification'
-    source: 'direct', // 'qr' | 'ticket' | 'direct',
+    currentStep: 'init', // 'qr', 'ticket', 'verification', 'success'
+    source: 'direct', // 'qr', 'ticket', 'direct',
 
     ticketId: null,
     eventId: null,
 
     phoneHash: null,
     phoneLast4Hash: null,
+
+    userPreview: null, // { ticketCode, name, phoneStart }
 
     ua: hashUA(req.headers['user-agent']),
 

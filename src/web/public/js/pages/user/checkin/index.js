@@ -15,20 +15,27 @@ try {
 
   // load step
   window.addEventListener('load', async () => {
-    const checkinData = JSON.parse(
-      document.getElementById('checkin-data').textContent,
-    );
+    try {
+      const initialData = JSON.parse(
+        document.getElementById('checkin-data').textContent,
+      );
 
-    const initialStep = checkinData?.meta?.nextStep || 'ticket';
+      const initialStep = initialData?.meta?.nextStep || 'ticket';
+      const data = { ...(initalData?.data || {}) };
 
-    store.setState({
-      currentStep: null,
-      userData: checkinData?.data?.userPreview || null,
-    });
+      store.setState({
+        currentUiStepKey: null,
+        session: data.session || {},
+      });
 
-    await goToStep(initialStep, { skeleton: false });
+      await goToStep(initialStep, { skeleton: false });
 
-    transition.bootScreen(bootScreen).hide();
+      requestAnimationFrame(() => {
+        transition.bootScreen(bootScreen).hide();
+      });
+    } catch (err) {
+      console.error('[Init Error]', err);
+    }
   });
 
   // scroll on resize
@@ -65,7 +72,6 @@ try {
   // allow top-bar display
   document.body.dataset.topbar = 'true';
 } catch (err) {
-  console.error(err);
-
-  // FIXME:
+  // FIXME: ui
+  console.error('[Index Error]', err);
 }

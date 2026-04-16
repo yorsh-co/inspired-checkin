@@ -1,10 +1,7 @@
 import { goToStep } from '../ui/navigation.js';
 
-import ui from '../../../../modules/ui/index.js';
-import utils from '../../../../modules/utils/index.js';
-
 import api from '../../../../core/api/index.js';
-import dom from '../dom.js';
+
 
 /**
  * TODO:
@@ -17,11 +14,12 @@ export const onQrScan = async (qrCode) => {
   // server request
   const res = await api.checkin.submitQrCode(qrCode);
 
-  const hintDiv = dom.qr.hint;
-  ui.hint.clearAll(hintDiv);
+  if (!res.success) throw new Error('Invalid');
 
   // handle server response
-  if (!res.success) throw new Error('Invalid');
+    store.setState({
+      session: res.data.session,
+    });
 
   const nextStep = res.meta?.nextStep;
   if (!nextStep) {

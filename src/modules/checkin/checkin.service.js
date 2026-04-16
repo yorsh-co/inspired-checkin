@@ -45,6 +45,8 @@ export class CheckinService {
       const result = await this._processQrToken(qrToken);
 
       this.session = result.session;
+
+      data = { ...data, ...result.data };
     }
 
     return this._persistAndRespond(this.session, data);
@@ -80,9 +82,9 @@ export class CheckinService {
     this.sessionId = rotated.sessionId;
     this.session = rotated.session;
 
-    const { session } = await this._processVerification(verificationCode);
+    const { session, data } = await this._processVerification(verificationCode);
 
-    return await this._persistAndRespond(session);
+    return await this._persistAndRespond(session, data);
   }
 
   /**
@@ -95,9 +97,9 @@ export class CheckinService {
 
     const token = qrService.extractToken(qrCode);
 
-    const { session } = await this._processQrToken(token);
+    const { session, data } = await this._processQrToken(token);
 
-    return await this._persistAndRespond(session);
+    return await this._persistAndRespond(session, data);
   }
 
   /**
@@ -166,7 +168,10 @@ export class CheckinService {
         userPreview: result.userPreview,
       },
       data: {
-        userPreview: result.userPreview,
+        session: {
+          progress: updated.progress,
+          userPreview: result.userPreview,
+        },
       },
     };
   }
@@ -178,7 +183,12 @@ export class CheckinService {
 
     return {
       session: updated,
-      data: {},
+      data: {
+        session: {
+          progress: updated.progress,
+          userPreview: updated.userPreview,
+        },
+      },
     };
   }
 
@@ -191,7 +201,12 @@ export class CheckinService {
 
     return {
       session: updated,
-      data: {},
+      data: {
+        session: {
+          progress: updated.progress,
+          userPreview: updated.userPreview,
+        },
+      },
     };
   }
 

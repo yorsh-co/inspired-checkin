@@ -1,17 +1,18 @@
-let uiState = {
-  currentStepKey: null,
-  isSkeleton: false
+let state = {
+  currentUiStepKey: null,
+  isSkeleton: null,
+  session: null, // { progress, userPreview, currentStep }
 };
 
 const listeners = new Set();
 
 const store = {
-  getState: () => uiState,
+  getState: () => state,
 
   setState: (partial) => {
-    uiState = { ...uiState, ...partial };
+    state = { ...state, ...partial };
 
-    listeners.forEach((fn) => fn(uiState));
+    listeners.forEach((fn) => fn(state));
   },
 
   subscribe: (fn) => {

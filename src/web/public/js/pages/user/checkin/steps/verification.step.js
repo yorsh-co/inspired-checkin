@@ -5,10 +5,11 @@ import {
   isValidVerificationCode,
 } from '../ui/formatters.js';
 
-import * as ui from '../../../../modules/ui/transition.js';
+import ui from '../../../../modules/ui/index.js';
 import utils from '../../../../modules/utils/index.js';
 
 import api from '../../../../core/api/index.js';
+import store from '../state/store.js';
 
 let isSubmitting = false;
 
@@ -19,7 +20,6 @@ let isSubmitting = false;
  */
 export const onVerificationInput = async (fromPaste = false) => {
   if (isSubmitting) return;
-  console.log('verification code submitted');
 
   // validate input
   const input = dom.inputs.verificationCode;
@@ -27,80 +27,81 @@ export const onVerificationInput = async (fromPaste = false) => {
 
   const value = formatVerificationCode(input.value);
   input.value = value;
-  console.log('verification input', value);
 
   const hintDiv = dom.verification.hint;
   const defaultHint =
     hintDiv.textContent || 'Digite os 4 últimos digitos do seu celular 👆';
+  ui.hint.clearError(hintDiv);
 
   if (!value) {
     if (!fromPaste) {
       console.error('input is empty');
-      ui.showError(hintDiv, defaultHint);
+      ui.hint.showError(hintDiv, defaultHint);
     }
     return;
   }
 
   if (!isValidVerificationCode(value)) {
-    console.error('input is invalid');
-    ui.showError(hintDiv, defaultHint);
+    console.error('[Verification input] invalid');
+    ui.hint.showError(hintDiv, defaultHint);
     return;
   }
 
-  console.log('input is valid');
-
-  const inputWrapper = dom.verification.inputWrapper;
-  const backButton = dom.verification.backBtn;
+  const backBtn = dom.verification.backBtn;
 
   // submit input
   try {
     isSubmitting = true;
-    ui.clear(hintDiv);
-    ui.showHint(hintDiv, 'Confirmando seu ingresso... ⏳');
-    input.blur();
 
-    ui.startLoading(inputWrapper);
-    backButton.disabled = true;
+    ui.hint.clearAll(hintDiv);
+    ui.hint.showHint(hintDiv, 'Confirmando seu ingresso... ⏳');
+
+    input.blur();
     input.disabled = true;
 
-    console.log('submitting to server');
+    backBtn.disabled = true;
 
-    // verify user with the server
+    await utils.sleep(800);
+
+    // FIXME: use user data progress to establish what the next step will be (either qr or success)
+    const { session } = store.getState();
+
+    if (session.progress.qr) {
+      //TODO: show loading before success
+    } else {
+      await goToStep('qr', { skeleton: true });
+    }
+
+    // validate verification code with the server
+    console.log('submitting to server');
     const res = await api.checkin.submitVerification(value);
 
-    ui.clear(hintDiv);
+    if (!res.success) throw new Error('Invalid');
 
     // handle server response
-    if (res.success) {
-      ui.showHint(
-        hintDiv,
-        `Ingresso ok!${res.meta.nextStep === 'qr' ? ' Agora escaneia o QR code 📷' : ' 🎉'}`,
-      );
-      await utils.sleep(1200);
+    store.setState({
+      session: res.data.session,
+    });
 
-      const nextStep = res.meta?.nextStep;
-      if (!nextStep) {
-        throw new Error('Missing next step from server');
-      }
-
-      await goToStep(nextStep);
-    } else {
-      ui.showError(
-        hintDiv,
-        'Celular inválido 😕 Confirma que o número do ingresso está certo e tenta de novo',
-      );
-      throw new Error('Invalid');
+    const nextStep = res.meta?.nextStep;
+    if (!nextStep) {
+      throw new Error('Missing next step from server');
     }
+
+    await goToStep(nextStep, { skeleton: false });
   } catch (err) {
     console.error(err);
 
-    ui.stopLoading(inputWrapper);
-    backButton.disabled = false;
-    isSubmitting = false;
+    // remove skeleton
+    await goToStep('verification');
 
-    ui.showError(hintDiv, 'Telefone inválido 😕 Tenta de novo'); // FIXME: error-specific messages
+    ui.hint.showError(hintDiv, 'Telefone inválido 😕 Tenta de novo'); // FIXME: error-specific messages
+
+    backBtn.disabled = false;
 
     input.disabled = false;
     input.focus();
+  } finally {
+    isSubmitting = false;
   }
 };

@@ -19,9 +19,9 @@ export const runSuccessFlow = async () => {
   
   setTimeout(() => {
     ui.element.setShow(hintDiv, true);
-  }, 3000);
+  }, 2000);
 
   console.log('Redirecting...');
-  return; // FIXME:
+return; //FIXME:
   window.location.href = '/';
 };

@@ -63,11 +63,10 @@ export const onVerificationInput = async (fromPaste = false) => {
 
     await utils.sleep(800);
 
-    // FIXME: use user data progress to establish what the next step will be (either qr or success)
     const { session } = store.getState();
 
     if (session.progress.qr) {
-      //TODO: show loading before success
+      //TODO: show processing before success
     } else {
       await goToStep('qr', { skeleton: true });
     }

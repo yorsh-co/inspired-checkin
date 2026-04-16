@@ -1,11 +1,17 @@
 body {
   height: 100dvh;
+  min-height: 100dvh;
+  max-height: 100dvh;
+  
+  overflow-x: scroll;
+  
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  
   background: var(--bg-gradient);
-  min-height: 100dvh;
+  
   position: relative;
 }
 

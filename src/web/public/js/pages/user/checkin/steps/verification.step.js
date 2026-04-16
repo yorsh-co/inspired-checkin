@@ -37,18 +37,19 @@ export const onVerificationInput = async (fromPaste = false) => {
 
   if (!value) {
     if (!fromPaste) {
-      console.error('input is empty');
+      console.error('[Verification Input] empty');
       ui.hint.showError(hintDiv, defaultHint);
     }
     return;
   }
 
   if (!isValidVerificationCode(value)) {
-    console.error('[Verification input] invalid');
+    console.error('[Verification Input] invalid');
     ui.hint.showError(hintDiv, defaultHint);
     return;
   }
 
+  const verificationStep = dom.steps.verification;
   const backBtn = dom.verification.backBtn;
 
   // submit input
@@ -65,7 +66,9 @@ export const onVerificationInput = async (fromPaste = false) => {
     const { session } = store.getState();
 
     if (session.progress.qr) {
-      //TODO: show processing before success
+      ui.element.setProcessing(verificationStep, true);
+
+      await utils.timing.ensureMinimum(inputStartTime, 1200);
     } else {
       await utils.timing.ensureMinimum(inputStartTime, 1200);
 
@@ -88,12 +91,15 @@ export const onVerificationInput = async (fromPaste = false) => {
       throw new Error('Missing next step from server');
     }
 
+    ui.element.setProcessing(verificationStep, false);
+
     await goToStep(nextStep, { skeleton: false });
   } catch (err) {
     console.error(err);
 
-    // remove skeleton
+    // revert skeleton or processing
     await goToStep('verification');
+    ui.element.setProcessing(verificationStep, false);
 
     ui.hint.showError(hintDiv, 'Telefone inválido 😕 Tenta de novo'); // FIXME: error-specific messages
 

@@ -7,6 +7,7 @@ import transition from '../../../modules/ui/transition.js';
 import layoutDom from '../../../layouts/main/dom.js';
 import { setupTopBarBtn } from '../../../components/top-bar/buttons.js';
 import { attachScrollOnResize } from '../../../components/container/resize-scroll.js';
+import { setupCursorGlow } from '../../../modules/ui/cursorGlow.js';
 
 const bootScreen = layoutDom.bootScreen;
 
@@ -41,15 +42,6 @@ try {
   // scroll on resize
   attachScrollOnResize(dom.main.container);
 
-  // cursor glow
-  const container = dom.main.container;
-  container.addEventListener('mousemove', (e) => {
-    const rect = container.getBoundingClientRect();
-
-    container.style.setProperty('--x', `${e.clientX - rect.left}px`);
-    container.style.setProperty('--y', `${e.clientY - rect.top}px`);
-  });
-
   // top-bar buttons
   const topBarBtnConfig = [
     {
@@ -71,6 +63,10 @@ try {
 
   // allow top-bar display
   document.body.dataset.topbar = 'true';
+
+  // cursor glow
+  setupCursorGlow(dom.main.container);
+
 } catch (err) {
   // FIXME: ui
   console.error('[Index Error]', err);

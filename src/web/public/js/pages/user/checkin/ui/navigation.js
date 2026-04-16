@@ -49,7 +49,7 @@ export const goToStep = async (nextStepKey, options = {}) => {
       delay: skeleton ? 0 : 300,
       container: dom.main.container,
     });
-
+    
     store.setState({ currentUiStepKey: nextStepKey, isSkeleton: skeleton });
     
     // filter top-bar buttons

@@ -74,6 +74,11 @@ export const step = async (nextStep, currentStep = null, options = {}) => {
 
     container.style.height = startHeight + 'px';
     container.style.overflow = 'hidden';
+    
+    // reset cursor glow
+    container.style.removeProperty('--x');
+    container.style.removeProperty('--y');
+
   }
 
   if (currentStep) ui.element.setShow(currentStep, false);

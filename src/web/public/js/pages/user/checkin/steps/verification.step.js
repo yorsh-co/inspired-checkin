@@ -21,6 +21,8 @@ let isSubmitting = false;
 export const onVerificationInput = async (fromPaste = false) => {
   if (isSubmitting) return;
 
+  const inputStartTime = Date.now();
+
   // validate input
   const input = dom.inputs.verificationCode;
   input.classList.remove('error');
@@ -53,21 +55,20 @@ export const onVerificationInput = async (fromPaste = false) => {
   try {
     isSubmitting = true;
 
-    ui.hint.clearAll(hintDiv);
-    ui.hint.showHint(hintDiv, 'Confirmando seu ingresso... ⏳');
+    ui.hint.showHint(hintDiv, 'Confirmando seu ingresso... ☑️');
 
     input.blur();
     input.disabled = true;
 
     backBtn.disabled = true;
 
-    await utils.sleep(800);
-
     const { session } = store.getState();
 
     if (session.progress.qr) {
       //TODO: show processing before success
     } else {
+      await utils.timing.ensureMinimum(inputStartTime, 1200);
+
       await goToStep('qr', { skeleton: true });
     }
 

@@ -18,6 +18,8 @@ let isSubmitting = false;
 export const onTicketInput = async (fromPaste = false) => {
   if (isSubmitting) return;
 
+  const inputStartTime = Date.now();
+
   // validate input
   const input = dom.inputs.ticketCode;
   input.classList.remove('error');
@@ -52,13 +54,12 @@ export const onTicketInput = async (fromPaste = false) => {
   try {
     isSubmitting = true;
 
-    ui.hint.clearAll(hintDiv);
-    ui.hint.showHint(hintDiv, 'Buscando seu ingresso... ⏳');
+    ui.hint.showHint(hintDiv, 'Buscando seu ingresso... 🎫');
 
     input.blur();
     input.disabled = true;
 
-    await utils.sleep(800);
+    await utils.timing.ensureMinimum(inputStartTime, 1200);
 
     await goToStep('verification', { skeleton: true });
 

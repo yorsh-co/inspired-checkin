@@ -5,12 +5,14 @@ import api from '../../../../core/api/index.js';
 import utils from '../../../../modules/utils/index.js';
 
 /**
- * 
+ *
  * @param {string} qrCode
  * @param {HTMLDivElement} hintDiv
  * @returns
  */
 export const onQrScan = async (qrCode) => {
+  const scanStartTime = Date.now();
+
   // server request
   const res = await api.checkin.submitQrCode(qrCode);
 
@@ -26,7 +28,7 @@ export const onQrScan = async (qrCode) => {
     throw new Error('Missing next step from server');
   }
 
-  await utils.sleep(500);
+  await utils.timing.ensureMinimum(scanStartTime, 1200);
 
   await goToStep(nextStep);
 };

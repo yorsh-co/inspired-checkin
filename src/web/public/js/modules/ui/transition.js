@@ -33,9 +33,7 @@ export const step = async (nextStep, currentStep = null, options = {}) => {
 
     await new Promise((resolve) => {
       requestAnimationFrame(async () => {
-        await new Promise((r) =>
-          requestAnimationFrame(() => requestAnimationFrame(r)),
-        );
+        await utils.timing.waitForNextPaint();
 
         const currentHeight = container.getBoundingClientRect().height;
 
@@ -91,9 +89,7 @@ export const step = async (nextStep, currentStep = null, options = {}) => {
     void container.offsetHeight;
 
     // wait a full frame
-    await new Promise((r) =>
-      requestAnimationFrame(() => requestAnimationFrame(r)),
-    );
+    await utils.timing.waitForNextPaint();
 
     const endHeight =
       nextStep.getBoundingClientRect().height + (wrapperHeight || 0);

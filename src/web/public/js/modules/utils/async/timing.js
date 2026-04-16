@@ -23,6 +23,11 @@ export const waitForNextInterval = async (startTime, interval = 1000) => {
   };
 };
 
-const duration = { ensureMinimum, waitForNextInterval };
+export const waitForNextPaint = () =>
+  new Promise((resolve) =>
+    requestAnimationFrame(() => requestAnimationFrame(resolve)),
+  );
 
-export default duration;
+const timing = { ensureMinimum, waitForNextInterval,waitForNextPaint };
+
+export default timing;

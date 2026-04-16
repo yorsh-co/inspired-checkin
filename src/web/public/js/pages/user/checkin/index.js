@@ -5,10 +5,10 @@ import { goToStep } from './ui/navigation.js';
 import api from '../../../core/api/index.js';
 import transition from '../../../modules/ui/transition.js';
 import layoutDom from '../../../layouts/main/dom.js';
+import utils from '../../../modules/utils/index.js';
 import { setupTopBarBtn } from '../../../components/top-bar/buttons.js';
 import { attachScrollOnResize } from '../../../components/container/resize-scroll.js';
 import { setupCursorGlow } from '../../../modules/ui/cursorGlow.js';
-import utils from '../../../modules/utils/index.js';
 
 const BOOT_INTERVAL = 1000;
 const bootStartTime = Date.now();
@@ -37,11 +37,9 @@ const init = async () => {
     }
 
     // close boot-screen
-    await new Promise((r) =>
-      requestAnimationFrame(() => requestAnimationFrame(r)),
-    );
+    await utils.timing.waitForNextPaint();
 
-    await utils.duration.waitForNextInterval(bootStartTime, BOOT_INTERVAL);
+    await utils.timing.waitForNextInterval(bootStartTime, BOOT_INTERVAL);
 
     const bootScreen = layoutDom.bootScreen;
     const boot = transition.bootScreen(bootScreen);

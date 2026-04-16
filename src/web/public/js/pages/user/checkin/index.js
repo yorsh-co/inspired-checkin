@@ -9,38 +9,46 @@ import { setupTopBarBtn } from '../../../components/top-bar/buttons.js';
 import { attachScrollOnResize } from '../../../components/container/resize-scroll.js';
 import { setupCursorGlow } from '../../../modules/ui/cursorGlow.js';
 
-const bootScreen = layoutDom.bootScreen;
+// load step
+const init = async () => {
+  try {
+    window.history.replaceState(null, '', '/checkin');
 
-try {
-  window.history.replaceState(null, '', '/checkin');
+    // extract initial data
+    const el = document.getElementById('checkin-data');
+    if (!el) throw new Error('Missing checkin-data');
 
-  // load step
-  window.addEventListener('load', async () => {
-    try {
-      const initialData = JSON.parse(
-        document.getElementById('checkin-data').textContent,
-      );
+    const initialData = JSON.parse(el.textContent);
 
-      const initialStep = initialData?.meta?.nextStep || 'ticket';
-      const data = { ...(initialData?.data || {}) };
+    const initialStep = initialData?.meta?.nextStep || 'ticket';
+    const data = initialData?.data || {};
 
-      store.setState({
-        currentUiStepKey: null,
-        session: data.session || {},
-      });
+    store.setState({
+      currentUiStepKey: null,
+      session: data.session || {},
+    });
 
+    if (store.getState().currentUiStepKey !== initialStep) {
       await goToStep(initialStep, { skeleton: false });
-
-      requestAnimationFrame(() => {
-        transition.bootScreen(bootScreen).hide();
-      });
-    } catch (err) {
-      console.error('[Init Error]', err);
     }
-  });
 
-  // scroll on resize
-  attachScrollOnResize(dom.main.container);
+    // close boot-screen
+    await new Promise((r) =>
+      requestAnimationFrame(() => requestAnimationFrame(r)),
+    );
+
+    const bootScreen = layoutDom.bootScreen;
+    const boot = transition.bootScreen(bootScreen);
+    boot.hide();
+  } catch (err) {
+    // FIXME: ui feedback
+    console.error('[Init Error]', err);
+  }
+};
+
+// load page-specific topbar
+const setupTopBar = () => {
+  const topBar = layoutDom.topBar || {};
 
   // top-bar buttons
   const topBarBtnConfig = [
@@ -52,22 +60,35 @@ try {
       key: 'logoutIcon',
       handler: async () => {
         await api.checkin.reset();
-        goToStep('ticket');
+        await goToStep('ticket');
       },
     },
   ];
-  topBarBtnConfig.forEach((btnConfig) => {
-    const btnEl = layoutDom.topBar[btnConfig.key];
-    if (btnEl) setupTopBarBtn(btnEl, btnConfig.handler);
+  topBarBtnConfig.forEach(({ key, handler }) => {
+    const btnEl = topBar[key];
+    if (btnEl) setupTopBarBtn(btnEl, handler);
   });
 
   // allow top-bar display
   document.body.dataset.topbar = 'true';
+};
 
-  // cursor glow
+// dom enhancements
+const setupDomEnhancements = () => {
+  attachScrollOnResize(dom.main.container);
+
   setupCursorGlow(dom.main.container);
+};
 
-} catch (err) {
-  // FIXME: ui
-  console.error('[Index Error]', err);
+// init app
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    setupTopBar();
+    setupDomEnhancements();
+    init();
+  });
+} else {
+  setupTopBar();
+  setupDomEnhancements();
+  init();
 }

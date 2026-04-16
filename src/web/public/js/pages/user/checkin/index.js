@@ -5,7 +5,7 @@ import { goToStep } from './ui/navigation.js';
 import api from '../../../core/api/index.js';
 import transition from '../../../modules/ui/transition.js';
 import layoutDom from '../../../layouts/main/dom.js';
-import { setupTopBarBtn } from '../../../components/topBar/buttons.js';
+import { setupTopBarBtn } from '../../../components/top-bar/buttons.js';
 import { attachScrollOnResize } from '../../../components/container/resize-scroll.js';
 
 const bootScreen = layoutDom.bootScreen;

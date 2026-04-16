@@ -15,6 +15,7 @@
   <%- include('../../partials/header') %>
 
   <div class="content-wrapper">
+    
     <!-- ticket step -->
     <section data-checkin="ticket-step" class="ticket-step skeleton">
       <div data-checkin="ticket-input-wrapper" class="input-wrapper">
@@ -214,8 +215,7 @@
       </button>
       <%- include('../../components/privacy-notice') %>
 
-      <div data-checkin="qr-hint-div" class="hint-div qr-hint">
-        <!--FIXME: .qr-hint needed?-->
+      <div data-checkin="qr-hint-div" class="hint-div">
         Escaneia o QR code da Inspire para confirmar que você chegou 📍
       </div>
     </section>
@@ -224,6 +224,9 @@
     <section data-checkin="success-step" class="success-step skeleton">
       <div class="check material-symbols-outlined"></div>
       <div data-checkin="success-message" class="success-message"></div>
+      <div data-checkin="success-hint-div" class="hint-div">
+     <!--FIXME:-->   <a href="/">Clique aqui se nada acontecer ↗️<a/>
+      </div>
     </section>
   </div>
 

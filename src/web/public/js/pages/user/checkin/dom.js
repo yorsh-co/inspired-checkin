@@ -41,6 +41,7 @@ const dom = Object.freeze({
   },
 
   success: {
+    hint: qs('[data-checkin="success-hint-div"]'),
     message: qs('[data-checkin="success-message"]'),
   },
 });

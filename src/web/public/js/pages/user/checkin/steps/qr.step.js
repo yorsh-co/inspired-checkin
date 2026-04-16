@@ -1,7 +1,7 @@
+import store from '../state/store.js';
 import { goToStep } from '../ui/navigation.js';
 
 import api from '../../../../core/api/index.js';
-
 
 /**
  * TODO:
@@ -10,16 +10,16 @@ import api from '../../../../core/api/index.js';
  * @returns
  */
 export const onQrScan = async (qrCode) => {
-
+  throw new Error('Test'); // FIXME: not handling errors properly. Might by a promise issue
   // server request
   const res = await api.checkin.submitQrCode(qrCode);
 
   if (!res.success) throw new Error('Invalid');
 
   // handle server response
-    store.setState({
-      session: res.data.session,
-    });
+  store.setState({
+    session: res.data.session,
+  });
 
   const nextStep = res.meta?.nextStep;
   if (!nextStep) {

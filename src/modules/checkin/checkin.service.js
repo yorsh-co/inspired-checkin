@@ -23,8 +23,11 @@ export class CheckinService {
 
     let data = {};
 
-    if (this.session.userPreview) {
-      data.userPreview = this.session.userPreview;
+    if (this.session.currentStep !== 'init') {
+      data.session = {
+        progress: this.session.progress,
+        userPreview: this.session.userPreview,
+      };
     }
 
     if (ticketToken && !this.session.progress.ticket) {

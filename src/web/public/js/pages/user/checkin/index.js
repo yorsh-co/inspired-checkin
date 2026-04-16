@@ -21,7 +21,7 @@ try {
       );
 
       const initialStep = initialData?.meta?.nextStep || 'ticket';
-      const data = { ...(initalData?.data || {}) };
+      const data = { ...(initialData?.data || {}) };
 
       store.setState({
         currentUiStepKey: null,
@@ -58,8 +58,8 @@ try {
     },
     {
       key: 'logoutIcon',
-      handler: () => {
-        api.checkin.reset();
+      handler: async () => {
+        await api.checkin.reset();
         goToStep('ticket');
       },
     },

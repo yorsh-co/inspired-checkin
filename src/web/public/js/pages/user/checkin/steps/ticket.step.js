@@ -7,6 +7,7 @@ import api from '../../../../core/api/index.js';
 import { withSkeleton } from '../../../../modules/ui/skeleton.js';
 import utils from '../../../../modules/utils/index.js';
 import ui from '../../../../modules/ui/index.js';
+import { createStepFlow } from '../ui/flow.js';
 
 let isSubmitting = false;
 

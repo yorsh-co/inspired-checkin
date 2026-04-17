@@ -21,14 +21,24 @@ import {
   startPlaceholderTyping,
   stopPlaceholderTyping,
 } from '../ui/inputs.js';
+import { createStepFlow } from '../ui/flow.js';
 
 const stepConfig = {
   ticket: {
     next: ['verification'],
 
     el: dom.steps.ticket,
-    focusTarget: dom.inputs.ticketCode,
     hint: dom.ticket.hint,
+    input: dom.inputs.ticketCode,
+    focusTarget: dom.inputs.ticketCode,
+
+    getFlow() {
+      return createStepFlow({ // TODO:
+        stepEl: this.el,
+        hintEl: this.hint,
+        inputEl: this.input,
+      });
+    },
 
     async onEnter(_state, { skeleton }) {
       if (skeleton) {

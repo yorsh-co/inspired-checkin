@@ -1,5 +1,5 @@
-import utils from '../utils/index.js';
-import ui from './index.js';
+import utils from '../../../../modules/utils/index.js';
+import ui from '../../../../modules/ui/index.js';
 
 const waitForHeightTransition = (el) => {
   return new Promise((resolve) => {

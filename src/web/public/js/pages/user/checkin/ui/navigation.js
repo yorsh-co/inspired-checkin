@@ -5,6 +5,7 @@ import utils from '../../../../modules/utils/index.js';
 import ui from '../../../../modules/ui/index.js';
 
 import dom from '../dom.js';
+import transition from './transition.js';
 
 export const goToStep = async (nextStepKey, options = {}) => {
   const { skeleton = false } = options;
@@ -45,7 +46,7 @@ export const goToStep = async (nextStepKey, options = {}) => {
       await currentStep.onExit();
     }
 
-    await ui.transition.step(nextStep.el, currentStep?.el, {
+    await transition.step(nextStep.el, currentStep?.el, {
       delay: skeleton ? 0 : 300,
       container: dom.main.container,
     });

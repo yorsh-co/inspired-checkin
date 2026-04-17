@@ -1,125 +1,60 @@
 import animate from './animations.js';
 
-const getNextVersion = (el) => {
-  el._hintVersion = (el._hintVersion || 0) + 1;
-  return el._hintVersion;
-};
+const TRANSITION_DELAY = 120;
 
-const showError = (el, msg) =>
+const runTransition = (el, updater) =>
   new Promise((resolve) => {
-    const version = getNextVersion(el);
+    const version = (el._hintVersion = (el._hintVersion || 0) + 1);
 
     el.classList.add('changing');
 
     setTimeout(() => {
       if (el._hintVersion !== version) return resolve();
 
-      el.textContent = msg;
-      el.classList.add('error');
-      el.classList.remove('changing');
-
-      animate.shake(el);
-
-      resolve();
-    }, 120);
-  });
-
-const clearError = (el) =>
-  new Promise((resolve) => {
-    const version = getNextVersion(el);
-
-    el.classList.add('changing');
-
-    setTimeout(() => {
-      if (el._hintVersion !== version) return resolve();
-
-      el.textContent = '';
-      el.classList.remove('error');
-      el.classList.remove('changing');
-
-      resolve();
-    }, 120);
-  });
-
-const showHint = (el, msg) =>
-  new Promise((resolve) => {
-    const version = getNextVersion(el);
-
-    el.classList.add('changing');
-
-    setTimeout(() => {
-      if (el._hintVersion !== version) return resolve();
-
-      el.classList.remove('error');
-      el.textContent = msg;
-      el.classList.remove('changing');
-
-      resolve();
-    }, 120);
-  });
-
-const clearHint = (el) =>
-  new Promise((resolve) => {
-    const version = getNextVersion(el);
-
-    el.classList.add('changing');
-
-    setTimeout(() => {
-      if (el._hintVersion !== version) return resolve();
-
-      el.textContent = '';
-      el.classList.remove('changing');
-
-      resolve();
-    }, 120);
-  });
-
-const clearAll = (el) =>
-  new Promise((resolve) => {
-    const version = getNextVersion(el);
-
-    el.classList.add('changing');
-
-    setTimeout(() => {
-      if (el._hintVersion !== version) return resolve();
-
-      el.textContent = '';
-      el.classList.remove('error');
-      el.classList.remove('changing');
-
-      resolve();
-    }, 120);
-  });
-
-const change = (el, msg) => {
-  if (el.textContent === msg) return;
-
-  return new Promise((resolve) => {
-    const version = getNextVersion(el);
-
-    el.classList.add('changing');
-
-    setTimeout(() => {
-      if (el._hintVersion !== version) return resolve();
-
-      el.textContent = msg;
+      updater();
 
       requestAnimationFrame(() => {
         el.classList.remove('changing');
       });
 
       resolve();
-    }, 120);
+    }, TRANSITION_DELAY);
   });
+
+const set = (el, { text = '', type = 'hint' } = {}) =>
+  runTransition(el, () => {
+    el.textContent = text;
+
+    el.classList.toggle('error', type === 'error');
+
+    el.dataset.hintState = type;
+  });
+
+const clear = (el) =>
+  runTransition(el, () => {
+    el.textContent = '';
+    el.classList.remove('error');
+
+    el.dataset.hintState = '';
+  });
+
+const shake = (el) => {
+  animate.shake(el);
 };
 
 const hint = {
-  showError,
-  showHint,
-  clearError,
-  clearHint,
-  clearAll,
-  change,
+  set,
+  clear,
+  shake,
+
+  showHint: (el, msg) => set(el, { text: msg, type: 'hint' }),
+
+  showError: async (el, msg) => {
+    await set(el, { text: msg, type: 'error' });
+    animate.shake(el);
+  },
+
+  change: (el, msg) => set(el, { text: msg }),
 };
 
 export default hint;

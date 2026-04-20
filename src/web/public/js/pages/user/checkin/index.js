@@ -1,13 +1,14 @@
 import dom from './dom.js';
 import store from './state/store.js';
+import transition from './ui/transition.js';
 import { goToStep } from './ui/navigation.js';
 
+
 import api from '../../../core/api/index.js';
-import transition from '../../../modules/ui/transition.js';
 import layoutDom from '../../../layouts/main/dom.js';
-import utils from '../../../modules/utils/index.js';
 import { setupTopBarBtn } from '../../../components/top-bar/buttons.js';
 import { attachScrollOnResize } from '../../../components/container/resize-scroll.js';
+import utils from '../../../modules/utils/index.js';
 import { setupCursorGlow } from '../../../modules/ui/cursorGlow.js';
 
 const BOOT_INTERVAL = 1000;

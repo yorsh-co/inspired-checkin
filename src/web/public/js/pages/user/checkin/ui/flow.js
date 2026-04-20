@@ -1,5 +1,4 @@
-import ui from '../../../../modules/ui';
-import utils from '../../../../modules/utils';
+import ui from '../../../../modules/ui/index.js';
 
 //TODO:
 
@@ -7,7 +6,7 @@ export const createStepFlow = ({ stepEl, hintEl, inputEl, btnEl }) => {
   const transitions = {
     idle: async () => {
       ui.element.setProcessing(el, false);
-      await ui.hint.clearAll(hintEl);
+      await ui.hint.clear(hintEl);
     },
 
     loading: async (msg = 'Carregando...') => {

@@ -47,7 +47,7 @@ const stepConfig = {
       }
 
       ui.skeleton.clear(this.el);
-      ui.hint.clearAll(dom.ticket.hint);
+      ui.hint.clear(dom.ticket.hint);
 
       // set up input
       const input = dom.inputs.ticketCode;
@@ -91,7 +91,7 @@ const stepConfig = {
       input.blur();
 
       // clear the hint
-      ui.hint.clearAll(this.hint);
+      ui.hint.clear(this.hint);
 
       // reset to skeleton
       ui.skeleton.render(this.el);
@@ -187,7 +187,7 @@ const stepConfig = {
       dom.verification.tableToggle.disabled = true;
 
       // clear the hint
-      ui.hint.clearAll(this.hint);
+      ui.hint.clear(this.hint);
 
       // reset to skeleton
       ui.skeleton.render(this.el);
@@ -254,7 +254,7 @@ const stepConfig = {
       dom.qr.startBtn.disabled = true;
 
       // clear the hint
-      ui.hint.clearAll(this.hint);
+      ui.hint.clear(this.hint);
 
       // reset to skeleton
       ui.skeleton.render(this.el);

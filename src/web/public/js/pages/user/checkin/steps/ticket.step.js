@@ -1,13 +1,14 @@
 import dom from '../dom.js';
 import store from '../state/store.js';
+import stepConfig from '../state/step-config.js';
 import { goToStep } from '../ui/navigation.js';
 import { formatTicket, isValidTicket } from '../ui/formatters.js';
+import { createStepFlow } from '../ui/flow.js';
 
 import api from '../../../../core/api/index.js';
 import { withSkeleton } from '../../../../modules/ui/skeleton.js';
 import utils from '../../../../modules/utils/index.js';
 import ui from '../../../../modules/ui/index.js';
-import { createStepFlow } from '../ui/flow.js';
 
 let isSubmitting = false;
 
@@ -21,20 +22,18 @@ export const onTicketInput = async (fromPaste = false) => {
 
   const inputStartTime = Date.now();
 
-  // validate input
-  const input = dom.inputs.ticketCode;
-  input.classList.remove('error');
+  const flow = stepConfig.ticket.getFlow();
+  flow.idle();
 
+  // validate input
+  const input = stepConfig.ticket.input;
   const value = formatTicket(input.value);
   input.value = value;
-
-  const hintDiv = dom.ticket.hint;
-  ui.hint.clearError(hintDiv);
 
   if (!value) {
     if (!fromPaste) {
       console.error('[Ticket input] empty');
-      ui.hint.showError(hintDiv, 'Coloca seu código de ingresso ✨');
+      flow.error('Coloca seu código de ingresso ✨');
     }
     return;
   }
@@ -42,12 +41,11 @@ export const onTicketInput = async (fromPaste = false) => {
   if (!isValidTicket(value)) {
     console.error('[Ticket input] invalid');
 
-    ui.hint.showError(
-      hintDiv,
-      fromPaste && value.length === 5
+    const msg =
+      (fromPaste && value.length) === 5
         ? 'Código inválido 😕'
-        : 'O código precisa ter 5 letras ou números',
-    );
+        : 'O código precisa ter 5 letras ou números';
+    flow.error(msg);
     return;
   }
 

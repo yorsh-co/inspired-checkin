@@ -1,12 +1,23 @@
 import ui from '../../../../modules/ui/index.js';
 
-//TODO:
-
-export const createStepFlow = ({ stepEl, hintEl, inputEl, btnEl }) => {
+/**
+ *
+ * @param {{
+ *    step: HTMLElement,
+ *    hint: HTMLElement,
+ *    input: HTMLElement,
+ *    btn: HTMLElement
+ * }} els
+ * @returns
+ */
+export const createStepFlow = (els) => {
   const transitions = {
     idle: async () => {
-      ui.element.setProcessing(el, false);
-      await ui.hint.clear(hintEl);
+      ui.element.setProcessing(els.step, false);
+
+      if (els.input) els.input.classList.remove('error');
+
+      await ui.hint.clear(els.hint);
     },
 
     loading: async (msg = 'Carregando...') => {
@@ -28,6 +39,9 @@ export const createStepFlow = ({ stepEl, hintEl, inputEl, btnEl }) => {
 
     error: async (msg) => {
       ui.element.setProcessing(el, false);
+
+      if (els.input) els.input.classList.add('error');
+
       await ui.hint.showError(hintEl, msg);
     },
   };

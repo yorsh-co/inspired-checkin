@@ -1,5 +1,6 @@
 import { env } from '../../config/env.js';
 import { sessionService } from '../session/session.service.js';
+import { createCheckinSession } from './checkin.session.model.js';
 
 const COOKIE_NAME = 'checkin_session_id';
 
@@ -9,7 +10,7 @@ export const getOrCreateCheckinSession = async (req, res) => {
   let session = await sessionService.get(sessionId, req);
 
   if (!session) {
-    const created = await sessionService.create(req);
+    const created = await sessionService.create(createCheckinSession(req));
 
     sessionId = created.sessionId;
     session = created.session;

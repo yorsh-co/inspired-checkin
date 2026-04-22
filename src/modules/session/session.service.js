@@ -5,37 +5,33 @@ import { env } from '../../config/env.js';
 
 const getKey = (id) => `session:checkin:${id}`;
 
-const createSession = async (req) => {
+const getTtlByType = (type) => {
+  const envTtl = env.sessionTtl[type];
+
+  if (!envTtl) throw new Error(`Unknown session type: ${type}`);
+
+  const ttl = parseInt(envTtl, 10);
+
+  if (!Number.isInteger(ttl) || ttl <= 0) {
+    throw new Error(`Invalid TTL for ${type}: ${envTtl}`);
+  }
+
+  return ttl;
+};
+
+const createSession = async (data) => {
   const sessionId = uuidv4();
 
   // FIXME: move this model out of here??
   const session = {
-    version: 1,
-    progress: { qr: false, ticket: false, verified: false },
-
-    currentStep: 'init', // 'qr', 'ticket', 'verification', 'success'
-    source: 'direct', // 'qr', 'ticket', 'direct',
-
-    ticketId: null,
-    eventId: null,
-
-    phoneHash: null,
-    phoneLast4Hash: null,
-
-    userPreview: null, // { ticketCode, name, phoneStart }
-
-    ua: hashUA(req.headers['user-agent']),
-
+    ...data,
     createdAt: Date.now(),
     lastUpdatedAt: Date.now(),
   };
 
-  await redis.set(
-    getKey(sessionId),
-    JSON.stringify(session),
-    'EX',
-    env.sessionTtl,
-  );
+  const ttl = getTtlByType(session.type);
+
+  await redis.set(getKey(sessionId), JSON.stringify(session), 'EX', ttl);
 
   return { sessionId, session };
 };
@@ -56,12 +52,18 @@ const getSession = async (sessionId, req) => {
 };
 
 const saveSession = async (sessionId, session) => {
-  await redis.set(
-    getKey(sessionId),
-    JSON.stringify(session),
-    'EX',
-    env.sessionTtl,
-  );
+  if (!session) return;
+
+  const updatedSession = {
+    ...session,
+    lastUpdatedAt: Date.now(),
+  };
+
+  const ttl = getTtlByType(session.type);
+
+  await redis.set(getKey(sessionId), JSON.stringify(updatedSession), 'EX', ttl);
+
+  return updatedSession;
 };
 
 const destroySession = async (sessionId) => {
@@ -84,12 +86,9 @@ const rotateSession = async (oldSessionId, req) => {
     lastUpdatedAt: Date.now(),
   };
 
-  await redis.set(
-    getKey(newSessionId),
-    JSON.stringify(newSession),
-    'EX',
-    env.sessionTtl,
-  );
+  const ttl = getTtlByType(newSession.type);
+
+  await redis.set(getKey(newSessionId), JSON.stringify(newSession), 'EX', ttl);
 
   return { sessionId: newSessionId, session: newSession };
 };

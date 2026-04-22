@@ -227,9 +227,10 @@ export class CheckinService {
     };
 
     return {
-      status: getDebugLabel(this.session.progress),
+      type: this.session.type,
+      version: this.session.version,
 
-      sessionId: this.sessionId,
+      status: getDebugLabel(this.session.progress),
 
       progress: this.session.progress,
       nextStep: getNextStep(this.session.progress),

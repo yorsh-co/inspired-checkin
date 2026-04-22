@@ -15,35 +15,56 @@ export const createStepFlow = (els) => {
     idle: async () => {
       ui.element.setProcessing(els.step, false);
 
-      if (els.input) els.input.classList.remove('error');
-
       await ui.hint.clear(els.hint);
+
+      if (els.input) els.input.classList.remove('error');
     },
 
     loading: async (msg = 'Carregando...') => {
-      ui.skeleton.render(el);
-      ui.element.setShow(el, true);
-      await ui.hint.showHint(hintEl, msg);
+      
+      ui.skeleton.render(els.step);
+      ui.element.setShow(els.step, true);
+      
+      await ui.hint.showHint(els.hint, msg);
     },
 
     processing: async (msg = 'Processando...') => {
-      ui.element.setProcessing(el, true);
-      await ui.hint.showHint(hintEl, msg);
+      ui.element.setProcessing(els.step, true);
+      
+      if (els.input) {
+        els.input.disabled = true;
+        els.input.blur();
+      }
+      
+      await ui.hint.showHint(els.hint, msg);
     },
 
     success: async (msg) => {
-      ui.element.setProcessing(el, false);
-      ui.skeleton.clear(el);
-      if (msg) await ui.hint.showHint(hintEl, msg);
+      ui.element.setProcessing(els.step, false);
+      
+      ui.skeleton.clear(els.step); // step
+      
+      if (msg) await ui.hint.showHint(els.hint, msg);
     },
 
     error: async (msg) => {
-      ui.element.setProcessing(el, false);
+      ui.element.setProcessing(els.step, false);
 
-      if (els.input) els.input.classList.add('error');
+      if (els.input) {
+        els.input.classList.add('error');
+        
+        els.input.disabled = false;
+        els.input.focus();
+      }
 
-      await ui.hint.showError(hintEl, msg);
+      await ui.hint.showError(els.hint, msg);
     },
+    
+    hidden: async() => {
+      ui.element.setProcessing(els.step, false);
+      
+      await ui.hint.clear(els.hint)
+    }
   };
 
   const transition = async (state, payload) => {

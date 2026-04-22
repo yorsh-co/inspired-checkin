@@ -42,7 +42,7 @@ export const onTicketInput = async (fromPaste = false) => {
     console.error('[Ticket input] invalid');
 
     const msg =
-      (fromPaste && value.length) === 5
+      (fromPaste && value.length === 5)
         ? 'Código inválido 😕'
         : 'O código precisa ter 5 letras ou números';
     flow.error(msg);
@@ -52,11 +52,8 @@ export const onTicketInput = async (fromPaste = false) => {
   // submit input
   try {
     isSubmitting = true;
-
-    ui.hint.showHint(hintDiv, 'Buscando seu ingresso... 🎫');
-
-    input.blur();
-    input.disabled = true;
+    
+    flow.processing('Buscando seu ingresso... 🎫');
 
     await utils.timing.ensureMinimum(inputStartTime, 1200);
 
@@ -79,16 +76,15 @@ export const onTicketInput = async (fromPaste = false) => {
     }
 
     await goToStep(nextStep, { skeleton: false });
+    
+    flow.hidden();
   } catch (err) {
     console.error(err);
 
     // remove skeleton
     await goToStep('ticket');
 
-    ui.hint.showError(hintDiv, 'Código inválido 😕 Tenta de novo'); // FIXME: error-specific messages
-
-    input.disabled = false;
-    input.focus();
+    flow.error('Código inválido 😕 Tenta de novo'); // FIXME: error-specific messages
   } finally {
     isSubmitting = false;
   }

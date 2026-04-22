@@ -27,38 +27,36 @@ const stepConfig = {
   ticket: {
     next: ['verification'],
 
-    el: dom.steps.ticket,
+    step: dom.steps.ticket,
     hint: dom.ticket.hint,
     input: dom.inputs.ticketCode,
     focusTarget: dom.inputs.ticketCode,
 
     getFlow() {
       return createStepFlow({ // TODO:
-        stepEl: this.el,
-        hintEl: this.hint,
-        inputEl: this.input,
+        step: this.step,
+        hint: this.hint,
+        input: this.input,
       });
     },
 
     async onEnter(_state, { skeleton }) {
       if (skeleton) {
-        ui.skeleton.render(this.el);
+        ui.skeleton.render(this.step);
         return;
       }
 
-      ui.skeleton.clear(this.el);
-      ui.hint.clear(dom.ticket.hint);
+      ui.skeleton.clear(this.step);
+      ui.hint.clear(this.hint);
 
       // set up input
-      const input = dom.inputs.ticketCode;
-
-      setupInput(input, {
+      setupInput(this.input, {
         onInput: onTicketInput,
         formatValue: formatter.ticketCode.format,
         valueIsValid: formatter.ticketCode.isValid,
       });
 
-      attachScrollOnFocus(dom.inputs.ticketCode);
+      attachScrollOnFocus(this.input);
       //attachScrollOnBlur(dom.inputs.ticketCode);
 
       input.disabled = false;
@@ -76,40 +74,49 @@ const stepConfig = {
         this.focusTarget &&
         !this.focusTarget.disabled
       ) {
-        nextStep.focusTarget.focus();
+        this.focusTarget.focus();
       }
     },
 
     async onExit() {
       // reset input
-      const input = dom.inputs.ticketCode;
+      stopPlaceholderTyping(this.input);
 
-      stopPlaceholderTyping(input);
-
-      input.value = '';
-      input.disabled = true;
-      input.blur();
+      this.input.value = '';
+      this.input.disabled = true;
+      this.input.blur();
 
       // clear the hint
       ui.hint.clear(this.hint);
 
       // reset to skeleton
-      ui.skeleton.render(this.el);
+      ui.skeleton.render(this.step);
     },
   },
 
   verification: {
     next: ['ticket', 'qr', 'success'],
 
-    el: dom.steps.verification,
-    focusTarget: dom.inputs.verificationCode,
+    step: dom.steps.verification,
+    input: dom.inputs.verificationCode
     hint: dom.verification.hint,
+    btn: dom.verification.backBtn,
+    focusTarget: dom.inputs.verificationCode,
+    
+    getFlow() {
+      return createStepFlow({ // TODO:
+        step: this.el,
+        hint: this.hint,
+        input: this.input,
+        btn: this.btn,
+      });
+    },
 
     async onEnter(state, { skeleton }) {
       const { session } = state;
 
       if (skeleton) {
-        ui.skeleton.render(this.el);
+        ui.skeleton.render(this.step);
         return;
       }
 
@@ -117,7 +124,7 @@ const stepConfig = {
         throw new Error('User preview data is missing');
       }
 
-      ui.skeleton.clear(this.el);
+      ui.skeleton.clear(this.step);
 
       // populate the table
       populateStepValues('verification', session.userPreview, {
@@ -142,55 +149,60 @@ const stepConfig = {
       tableToggle.disabled = false;
 
       // setup input
-      const input = dom.inputs.verificationCode;
-
-      setupInput(input, {
+      setupInput(this.input, {
         onInput: onVerificationInput,
         formatValue: formatter.verificationCode.format,
         valueIsValid: formatter.verificationCode.isValid,
       });
 
-      attachScrollOnFocus(dom.inputs.verificationCode);
+      attachScrollOnFocus(this.input);
 
-      input.disabled = false;
+      this.input.disabled = false;
 
-      startPlaceholderTyping(dom.inputs.verificationCode, [
+      startPlaceholderTyping(this.input, [
         { text: 'Confirme seu celular...', pause: 1200 },
         { text: 'Digite os últimos 4 dígitos...', pause: 1000 },
         { text: 'Digite o final do seu telefone...', pause: 1400 },
         //{ text: 'Vamos fazer seu check-in ✨', pause: 1500 },
       ]);
+      
+      if (
+        !skeleton &&
+        utils.isDesktop() &&
+        this.focusTarget &&
+        !this.focusTarget.disabled
+      ) {
+        this.focusTarget.focus();
+      }
 
       // setup back button
-      if (dom.verification.backBtn) {
-        dom.verification.backBtn.onclick = () => {
+      if (this.btn) {
+        this.btn.onclick = () => {
           api.checkin.reset();
 
           goToStep('ticket');
         };
-        dom.verification.backBtn.disabled = false;
+        this.btn.disabled = false;
       }
     },
 
     async onExit() {
       // reset input
-      const input = dom.inputs.verificationCode;
+      stopPlaceholderTyping(this.input);
 
-      stopPlaceholderTyping(input);
-
-      input.value = '';
-      input.disabled = true;
-      input.blur();
+      this.input.value = '';
+      this.input.disabled = true;
+      this.input.blur();
 
       // reset buttons
-      dom.verification.backBtn.disabled = true;
+      this.btn.disabled = true;
       dom.verification.tableToggle.disabled = true;
 
       // clear the hint
       ui.hint.clear(this.hint);
 
       // reset to skeleton
-      ui.skeleton.render(this.el);
+      ui.skeleton.render(this.step);
     },
   },
 

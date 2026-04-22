@@ -59,7 +59,7 @@ const stepConfig = {
       attachScrollOnFocus(this.input);
       //attachScrollOnBlur(dom.inputs.ticketCode);
 
-      input.disabled = false;
+      this.input.disabled = false;
 
       startPlaceholderTyping(dom.inputs.ticketCode, [
         { text: 'Digite seu código de ingresso...', pause: 1200 },
@@ -98,7 +98,7 @@ const stepConfig = {
     next: ['ticket', 'qr', 'success'],
 
     step: dom.steps.verification,
-    input: dom.inputs.verificationCode
+    input: dom.inputs.verificationCode,
     hint: dom.verification.hint,
     btn: dom.verification.backBtn,
     focusTarget: dom.inputs.verificationCode,

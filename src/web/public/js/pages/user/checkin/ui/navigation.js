@@ -46,7 +46,7 @@ export const goToStep = async (nextStepKey, options = {}) => {
       await currentStep.onExit();
     }
 
-    await transition.step(nextStep.el, currentStep?.el, {
+    await transition.step(nextStep.step, currentStep?.step, {
       delay: skeleton ? 0 : 300,
       container: dom.main.container,
     });

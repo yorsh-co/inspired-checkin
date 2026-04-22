@@ -1,4 +1,6 @@
 import dom from '../dom.js';
+import store from '../state/store.js';
+import stepConfig from '../state/step-config.js';
 import { goToStep } from '../ui/navigation.js';
 import {
   formatVerificationCode,
@@ -7,9 +9,8 @@ import {
 
 import ui from '../../../../modules/ui/index.js';
 import utils from '../../../../modules/utils/index.js';
-
+import { withSkeleton } from '../../../../modules/ui/skeleton.js';
 import api from '../../../../core/api/index.js';
-import store from '../state/store.js';
 
 let isSubmitting = false;
 
@@ -23,61 +24,53 @@ export const onVerificationInput = async (fromPaste = false) => {
 
   const inputStartTime = Date.now();
 
+  const flow = stepConfig.verification.getFlow();
+
+  const defaultHint = 'Digite os 4 últimos digitos do seu celular 👆';
+
   // validate input
-  const input = dom.inputs.verificationCode;
-  input.classList.remove('error');
+  const input = stepConfig.verification.input;
 
   const value = formatVerificationCode(input.value);
   input.value = value;
 
-  const hintDiv = dom.verification.hint;
-  const defaultHint =
-    hintDiv.textContent || 'Digite os 4 últimos digitos do seu celular 👆';
-  ui.hint.clearError(hintDiv);
-
   if (!value) {
     if (!fromPaste) {
       console.error('[Verification Input] empty');
-      ui.hint.showError(hintDiv, defaultHint);
+      flow.error(defaultHint);
     }
     return;
   }
 
   if (!isValidVerificationCode(value)) {
     console.error('[Verification Input] invalid');
-    ui.hint.showError(hintDiv, defaultHint);
+    flow.error(defaultHint);
     return;
   }
-
-  const verificationStep = dom.steps.verification;
-  const backBtn = dom.verification.backBtn;
 
   // submit input
   try {
     isSubmitting = true;
 
-    ui.hint.showHint(hintDiv, 'Confirmando seu ingresso... ☑️');
+    flow.processing('Confirmando seu ingresso... ☑️');
 
-    input.blur();
-    input.disabled = true;
-
-    backBtn.disabled = true;
-
-    const { session } = store.getState();
-
-    if (session.progress.qr) {
-      ui.element.setProcessing(verificationStep, true);
-
-      await utils.timing.ensureMinimum(inputStartTime, 1200);
-    } else {
-      await utils.timing.ensureMinimum(inputStartTime, 1200);
-
-      await goToStep('qr', { skeleton: true });
-    }
+    await utils.timing.ensureMinimum(inputStartTime, 800);
 
     // validate verification code with the server
     console.log('submitting to server');
-    const res = await api.checkin.submitVerification(value);
+
+    let res;
+
+    const { session } = store.getState();
+
+    if (!session.progress.qr) {
+      // display qr skeleton if qr is pending
+      await goToStep('qr', { skeleton: true });
+
+      res = await withSkeleton(() => api.checkin.submitVerification(value));
+    } else {
+      res = await api.checkin.submitVerification(value);
+    }
 
     if (!res.success) throw new Error('Invalid');
 
@@ -91,7 +84,7 @@ export const onVerificationInput = async (fromPaste = false) => {
       throw new Error('Missing next step from server');
     }
 
-    ui.element.setProcessing(verificationStep, false);
+    flow.success();
 
     await goToStep(nextStep, { skeleton: false });
   } catch (err) {
@@ -99,14 +92,8 @@ export const onVerificationInput = async (fromPaste = false) => {
 
     // revert skeleton or processing
     await goToStep('verification');
-    ui.element.setProcessing(verificationStep, false);
 
-    ui.hint.showError(hintDiv, 'Telefone inválido 😕 Tenta de novo'); // FIXME: error-specific messages
-
-    backBtn.disabled = false;
-
-    input.disabled = false;
-    input.focus();
+    flow.error('Telefone inválido 😕 Tenta de novo'); // FIXME: error-specific messages
   } finally {
     isSubmitting = false;
   }

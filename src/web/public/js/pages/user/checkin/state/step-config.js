@@ -33,11 +33,14 @@ const stepConfig = {
     focusTarget: dom.inputs.ticketCode,
 
     getFlow() {
-      return createStepFlow({ // TODO:
-        step: this.step,
-        hint: this.hint,
-        input: this.input,
-      });
+      if (!this._flow) {
+        this._flow = createStepFlow({
+          step: this.step,
+          hint: this.hint,
+          input: this.input,
+        });
+      }
+      return this._flow;
     },
 
     async onEnter(_state, { skeleton }) {
@@ -47,7 +50,6 @@ const stepConfig = {
       }
 
       ui.skeleton.clear(this.step);
-      ui.hint.clear(this.hint);
 
       // set up input
       setupInput(this.input, {
@@ -59,8 +61,6 @@ const stepConfig = {
       attachScrollOnFocus(this.input);
       //attachScrollOnBlur(dom.inputs.ticketCode);
 
-      this.input.disabled = false;
-
       startPlaceholderTyping(dom.inputs.ticketCode, [
         { text: 'Digite seu código de ingresso...', pause: 1200 },
         { text: 'Cola seu ID do ticket aqui...', pause: 1000 },
@@ -68,26 +68,17 @@ const stepConfig = {
         { text: 'Vamos fazer seu check-in ✨', pause: 1500 },
       ]);
 
-      if (
-        !skeleton &&
-        utils.isDesktop() &&
-        this.focusTarget &&
-        !this.focusTarget.disabled
-      ) {
-        this.focusTarget.focus();
-      }
+      const flow = this.getFlow();
+      flow.idle();
     },
 
     async onExit() {
       // reset input
       stopPlaceholderTyping(this.input);
 
-      this.input.value = '';
-      this.input.disabled = true;
-      this.input.blur();
-
-      // clear the hint
-      ui.hint.clear(this.hint);
+      // reset flow
+      const flow = this.getFlow();
+      flow.hidden();
 
       // reset to skeleton
       ui.skeleton.render(this.step);
@@ -102,23 +93,26 @@ const stepConfig = {
     hint: dom.verification.hint,
     btn: dom.verification.backBtn,
     focusTarget: dom.inputs.verificationCode,
-    
+
     getFlow() {
-      return createStepFlow({ // TODO:
-        step: this.el,
-        hint: this.hint,
-        input: this.input,
-        btn: this.btn,
-      });
+      if (!this._flow) {
+        this._flow = createStepFlow({
+          step: this.step,
+          hint: this.hint,
+          input: this.input,
+          btn: this.btn,
+        });
+      }
+      return this._flow;
     },
 
     async onEnter(state, { skeleton }) {
-      const { session } = state;
-
       if (skeleton) {
         ui.skeleton.render(this.step);
         return;
       }
+
+      const { session } = state;
 
       if (!session.userPreview) {
         throw new Error('User preview data is missing');
@@ -135,17 +129,14 @@ const stepConfig = {
 
       // setup table toggle
       const tableToggle = dom.verification.tableToggle;
-      if (tableToggle.dataset.initialized !== 'true') {
-        tableToggle.addEventListener('click', () => {
-          const isCollapsed =
-            dom.verification.tableWrapper.classList.toggle('collapsed');
+      tableToggle.onclick = () => {
+        const isCollapsed =
+          dom.verification.tableWrapper.classList.toggle('collapsed');
 
-          dom.verification.tableToggleLabel.textContent = isCollapsed
-            ? 'keyboard_arrow_down'
-            : 'keyboard_arrow_up';
-        });
-        tableToggle.dataset.initialized = 'true';
-      }
+        dom.verification.tableToggleLabel.textContent = isCollapsed
+          ? 'keyboard_arrow_down'
+          : 'keyboard_arrow_up';
+      };
       tableToggle.disabled = false;
 
       // setup input
@@ -157,23 +148,12 @@ const stepConfig = {
 
       attachScrollOnFocus(this.input);
 
-      this.input.disabled = false;
-
       startPlaceholderTyping(this.input, [
         { text: 'Confirme seu celular...', pause: 1200 },
         { text: 'Digite os últimos 4 dígitos...', pause: 1000 },
         { text: 'Digite o final do seu telefone...', pause: 1400 },
         //{ text: 'Vamos fazer seu check-in ✨', pause: 1500 },
       ]);
-      
-      if (
-        !skeleton &&
-        utils.isDesktop() &&
-        this.focusTarget &&
-        !this.focusTarget.disabled
-      ) {
-        this.focusTarget.focus();
-      }
 
       // setup back button
       if (this.btn) {
@@ -182,24 +162,22 @@ const stepConfig = {
 
           goToStep('ticket');
         };
-        this.btn.disabled = false;
       }
+
+      const flow = this.getFlow();
+      flow.idle('Insira apenas os últimos 4 dígitos');
     },
 
     async onExit() {
       // reset input
       stopPlaceholderTyping(this.input);
 
-      this.input.value = '';
-      this.input.disabled = true;
-      this.input.blur();
-
-      // reset buttons
-      this.btn.disabled = true;
+      // reset secondary buttons
       dom.verification.tableToggle.disabled = true;
 
-      // clear the hint
-      ui.hint.clear(this.hint);
+      // reset flow
+      const flow = this.getFlow();
+      flow.hidden();
 
       // reset to skeleton
       ui.skeleton.render(this.step);
@@ -209,14 +187,26 @@ const stepConfig = {
   qr: {
     next: ['ticket', 'verification', 'success'],
 
-    el: dom.steps.qr,
+    step: dom.steps.qr,
     hint: dom.qr.hint,
+    btn: dom.qr.startBtn,
+
+    getFlow() {
+      if (!this._flow) {
+        this._flow = createStepFlow({
+          step: this.step,
+          hint: this.hint,
+          btn: this.btn,
+        });
+      }
+      return this._flow;
+    },
 
     async onEnter(state, { skeleton }) {
       const { session } = state;
 
       if (skeleton) {
-        ui.skeleton.render(this.el);
+        ui.skeleton.render(this.step);
         return;
       }
 
@@ -225,7 +215,7 @@ const stepConfig = {
         console.warn('User data is missing');
       }
 
-      ui.skeleton.clear(this.el);
+      ui.skeleton.clear(this.step);
 
       // populate the table
       populateStepValues('qr', session.userPreview, {
@@ -236,45 +226,51 @@ const stepConfig = {
 
       // setup table toggle
       const tableToggle = dom.qr.tableToggle;
-      if (tableToggle.dataset.initialized !== 'true') {
-        tableToggle.addEventListener('click', () => {
-          const isCollapsed = dom.qr.tableWrapper.classList.toggle('collapsed');
+      tableToggle.onclick = () => {
+        const isCollapsed = dom.qr.tableWrapper.classList.toggle('collapsed');
 
-          dom.qr.tableToggleLabel.textContent = isCollapsed
-            ? 'keyboard_arrow_down'
-            : 'keyboard_arrow_up';
-        });
-        tableToggle.dataset.initialized = 'true';
-      }
+        dom.qr.tableToggleLabel.textContent = isCollapsed
+          ? 'keyboard_arrow_down'
+          : 'keyboard_arrow_up';
+      };
       tableToggle.disabled = false;
 
       // setup the qr reader
+      const flow = this.getFlow();
+
       setupQr({
         // TODO: review
         qrReaderDiv: dom.qr.reader,
         startCameraBtn: dom.qr.startBtn,
         hintDiv: dom.qr.hint,
         onScan: onQrScan,
+
+        onProcessingStart: (msg) =>
+          flow.processing(msg, { target: dom.qr.wrapper }),
+        onProcessingEnd: (msg) => flow.idle(msg, { target: dom.qr.wrapper }),
+        onError: (msg) => flow.error(msg),
       });
 
-      dom.qr.startBtn.disabled = false;
+      flow.idle(
+        'Escaneia o QR code da Inspire para confirmar que você chegou 📍',
+      );
     },
 
     async onExit() {
-      // rest buttons
+      // rest secondary buttons
       dom.qr.tableToggle.disabled = true;
-      dom.qr.startBtn.disabled = true;
 
-      // clear the hint
-      ui.hint.clear(this.hint);
+      // reset flow
+      const flow = this.getFlow();
+      flow.hidden();
 
       // reset to skeleton
-      ui.skeleton.render(this.el);
+      ui.skeleton.render(this.step);
     },
   },
 
   success: {
-    el: dom.steps.success,
+    step: dom.steps.success,
 
     async onEnter() {
       await runSuccessFlow();

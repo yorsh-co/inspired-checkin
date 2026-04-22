@@ -19,14 +19,14 @@ let isSubmitting = false;
  */
 export const onTicketInput = async (fromPaste = false) => {
   if (isSubmitting) return;
-
+  
   const inputStartTime = Date.now();
 
   const flow = stepConfig.ticket.getFlow();
-  flow.idle();
 
   // validate input
   const input = stepConfig.ticket.input;
+
   const value = formatTicket(input.value);
   input.value = value;
 
@@ -60,7 +60,7 @@ export const onTicketInput = async (fromPaste = false) => {
     await goToStep('verification', { skeleton: true });
 
     // validate ticket code with the server
-    console.debug('Submitting to server');
+    console.debug('submitting to server');
     const res = await withSkeleton(() => api.checkin.submitTicket(value));
 
     if (!res.success) throw new Error('Invalid');
@@ -76,8 +76,6 @@ export const onTicketInput = async (fromPaste = false) => {
     }
 
     await goToStep(nextStep, { skeleton: false });
-    
-    flow.hidden();
   } catch (err) {
     console.error(err);
 

@@ -1,70 +1,117 @@
 import ui from '../../../../modules/ui/index.js';
+import { isDesktop } from '../../../../modules/utils/browser/viewport.js';
 
 /**
  *
  * @param {{
- *    step: HTMLElement,
- *    hint: HTMLElement,
- *    input: HTMLElement,
- *    btn: HTMLElement
+ *    step: HTMLDivElement,
+ *    hint: HTMLDivElement,
+ *    input: HTMLInputElement,
+ *    btn: HTMLButtonElement,
+ *    focusTarget: HTMLInputElement,
  * }} els
  * @returns
  */
 export const createStepFlow = (els) => {
+  const resolveTarget = (override) => override ?? els.step;
+
   const transitions = {
-    idle: async () => {
-      ui.element.setProcessing(els.step, false);
+    idle: async (msg = null, options = {}) => {
+      const { input, btn, hint, focusTarget } = els;
 
-      await ui.hint.clear(els.hint);
+      const target = resolveTarget(options.target);
 
-      if (els.input) els.input.classList.remove('error');
-    },
+      ui.element.setProcessing(target, false);
 
-    loading: async (msg = 'Carregando...') => {
-      
-      ui.skeleton.render(els.step);
-      ui.element.setShow(els.step, true);
-      
-      await ui.hint.showHint(els.hint, msg);
-    },
-
-    processing: async (msg = 'Processando...') => {
-      ui.element.setProcessing(els.step, true);
-      
-      if (els.input) {
-        els.input.disabled = true;
-        els.input.blur();
-      }
-      
-      await ui.hint.showHint(els.hint, msg);
-    },
-
-    success: async (msg) => {
-      ui.element.setProcessing(els.step, false);
-      
-      ui.skeleton.clear(els.step); // step
-      
-      if (msg) await ui.hint.showHint(els.hint, msg);
-    },
-
-    error: async (msg) => {
-      ui.element.setProcessing(els.step, false);
-
-      if (els.input) {
-        els.input.classList.add('error');
-        
-        els.input.disabled = false;
-        els.input.focus();
+      if (input) {
+        input.disabled = false;
+        input.classList.remove('error');
       }
 
-      await ui.hint.showError(els.hint, msg);
+      if (btn) {
+        btn.disabled = false;
+      }
+
+      if (focusTarget && isDesktop()) {
+        focusTarget.focus();
+      }
+
+      if (msg) await ui.hint.showHint(hint, msg);
+      else await ui.hint.clear(hint);
     },
-    
-    hidden: async() => {
-      ui.element.setProcessing(els.step, false);
-      
-      await ui.hint.clear(els.hint)
-    }
+
+    processing: async (msg = 'Processando...', options = {}) => {
+      const { input, btn, hint } = els;
+
+      const target = resolveTarget(options.target);
+
+      ui.element.setProcessing(target, true);
+
+      if (input) {
+        input.disabled = true;
+        input.blur();
+      }
+
+      if (btn) {
+        btn.disabled = true;
+      }
+
+      await ui.hint.showHint(hint, msg);
+    },
+
+    success: async (msg, options = {}) => {
+      const { hint } = els;
+
+      const target = resolveTarget(options.target);
+
+      ui.element.setProcessing(target, false);
+
+      if (msg) await ui.hint.showHint(hint, msg);
+    },
+
+    error: async (msg = 'Erro', options = {}) => {
+      const { input, btn, hint, focusTarget } = els;
+
+      const target = resolveTarget(options.target);
+
+      ui.element.setProcessing(target, false);
+
+      if (input) {
+        input.classList.add('error');
+        input.disabled = false;
+      }
+
+      if (btn) {
+        btn.disabled = false;
+      }
+
+      if (focusTarget) {
+        focusTarget.focus();
+      }
+
+      await ui.hint.showError(hint, msg);
+    },
+
+    hidden: async (_msg, options = {}) => {
+      const { input, btn, hint } = els;
+
+      const target = resolveTarget(options.target);
+
+      ui.element.setProcessing(target, false);
+
+      if (input) {
+        input.value = '';
+        input.classList.remove('error');
+        input.disabled = true;
+        input.blur();
+      }
+
+      if (btn) {
+        btn.disabled = true;
+      }
+
+      await ui.hint.clear(hint);
+    },
   };
 
   const transition = async (state, payload) => {
@@ -75,16 +122,25 @@ export const createStepFlow = (els) => {
       return;
     }
 
-    await fn(payload);
+    if (Array.isArray(payload)) {
+      await fn(...payload);
+    } else {
+      await fn(payload);
+    }
   };
 
   return {
     transition,
 
-    idle: (msg) => transition('idle', msg),
-    loading: (msg) => transition('loading', msg),
-    processing: (msg) => transition('processing', msg),
-    success: (msg) => transition('success', msg),
-    error: (msg) => transition('error', msg),
+    idle: async (msg = null, options = {}) => transition('idle', [msg, options]),
+    loading: async (msg = null, options = {}) =>
+      transition('loading', [msg, options]),
+    processing: async (msg = null, options = {}) =>
+      transition('processing', [msg, options]),
+    success: async (msg = null, options = {}) =>
+      transition('success', [msg, options]),
+    error: async (msg = null, options = {}) => transition('error', [msg, options]),
+    hidden: async (msg = null, options = {}) =>
+      transition('hidden', [msg, options]),
   };
 };

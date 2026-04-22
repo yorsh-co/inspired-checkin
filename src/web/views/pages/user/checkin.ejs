@@ -116,9 +116,7 @@
         />
       </div>
 
-      <div data-checkin="verification-hint-div" class="hint-div">
-        Insira apenas os últimos 4 dígitos
-      </div>
+      <div data-checkin="verification-hint-div" class="hint-div"></div>
 
       <button data-checkin="verification-back-btn" class="ghost" disabled>
         <span class="btn-label">Voltar</span>
@@ -191,7 +189,7 @@
         </button>
       </div>
 
-      <div data-skeleton="div" class="qr-reader-wrapper skeleton">
+      <div data-checkin="qr-reader-wrapper" data-skeleton="div" class="qr-reader-wrapper skeleton">
         <div
           id="checkin-qr-reader"
           data-checkin="qr-reader-div"
@@ -220,9 +218,7 @@
       </button>
       <%- include('../../components/privacy-notice') %>
 
-      <div data-checkin="qr-hint-div" class="hint-div">
-        Escaneia o QR code da Inspire para confirmar que você chegou 📍
-      </div>
+      <div data-checkin="qr-hint-div" class="hint-div"></div>
     </section>
 
     <!-- success step -->

@@ -36,6 +36,7 @@ const dom = Object.freeze({
     tableWrapper: qs('[data-checkin="qr-table-wrapper"]'),
     tableToggle: qs('[data-checkin="qr-table-toggle"]'),
     tableToggleLabel: qs('[data-checkin="qr-table-toggle-label"]'),
+    wrapper: qs('[data-checkin="qr-reader-wrapper"]'),
     reader: qs('[data-checkin="qr-reader-div"]'),
     startBtn: qs('[data-checkin="start-camera-btn"]'),
   },

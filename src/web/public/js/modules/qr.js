@@ -14,10 +14,14 @@ export const setupQr = ({
   startCameraBtn,
   hintDiv,
   onScan,
+
+  onProcessingStart,
+  onProcessingEnd,
+  onError,
 } = {}) => {
-  startCameraBtn.addEventListener('click', async () => {
+  startCameraBtn.onclick = async () => {
     const qrWrapper = qrReaderDiv.closest('.qr-reader-wrapper');
-    const defaultHint = hintDiv.textContent;
+    const defaultHint = hintDiv.textContent; // TODO: ?
 
     let helpTimeout;
 
@@ -69,8 +73,7 @@ export const setupQr = ({
 
           clearTimeout(helpTimeout);
 
-          ui.element.setProcessing(qrWrapper, true);
-          await ui.hint.showHint(hintDiv, 'Lendo o QR code... 🔎');
+          await onProcessingStart?.('Lendo o QR code... 🔎');
 
           await onScan(decodedText);
 
@@ -78,14 +81,13 @@ export const setupQr = ({
         } catch (err) {
           console.error(err);
 
-          ui.hint.showError(
-            hintDiv,
+          onError?.(
             'Ops! Não deu pra ler esse QR 😕 Tenta de novo ou usa outro',
           );
-          
+
           await utils.sleep(800);
 
-          ui.element.setProcessing(qrWrapper, false);
+          onProcessingEnd?.();
 
           scanner.resume();
 
@@ -116,18 +118,16 @@ export const setupQr = ({
 
       clearTimeout(helpTimeout);
 
-      // FIXME: handle different error types
-      ui.hint.showError(
-        hintDiv,
+      onError?.(
         'Não foi possível acessar a câmera 📷 Verifique as permissões e tente novamente',
-      );
+      ); // FIXME: handle different error types
 
       ui.element.setShow(qrWrapper, false);
 
       ui.element.setShow(startCameraBtn, true);
       startCameraBtn.disabled = false;
     }
-  });
+  };
 };
 
 /**

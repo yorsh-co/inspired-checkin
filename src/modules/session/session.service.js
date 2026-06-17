@@ -22,7 +22,6 @@ const getTtlByType = (type) => {
 const createSession = async (data) => {
   const sessionId = uuidv4();
 
-  // FIXME: move this model out of here??
   const session = {
     ...data,
     createdAt: Date.now(),

@@ -1,0 +1,108 @@
+import { env } from '../../config/env.js';
+import { sessionService } from './session.service.js';
+
+/**
+ * Creates a sessions adapter exposing frequently used methods
+ * to manipulate sessions using the session service.
+ *
+ * @param {string} cookieName
+ * @param {() => object} createSessionData
+ */
+export const createSessionAdapter = (cookieName, createSessionData) => {
+  const cookieOptions = {
+    httpOnly: true,
+    secure: env.nodeEnv === 'production',
+    sameSite: 'lax',
+  };
+
+  /**
+   * Retrieve session using the request cookie
+   * or create a new session and attach the
+   * session ID cookie to the response.
+   *
+   * @param {Object} req
+   * @param {Object} res
+   * @returns {Object}
+   */
+  const getOrCreate = async (req, res) => {
+    let sessionId = req.cookies[cookieName];
+
+    let session = await sessionService.get(sessionId, req);
+
+    if (!session) {
+      const created = await sessionService.create(createSessionData(req));
+
+      sessionId = created.sessionId;
+      session = created.session;
+
+      res.cookie(cookieName, sessionId, cookieOptions);
+    }
+
+    return { sessionId, session };
+  };
+
+  /**
+   * Persist the session data.
+   *
+   * @param {String} sessionId
+   * @param {Object} session
+   */
+  const persist = async (sessionId, session) => {
+    await sessionService.save(sessionId, session);
+  };
+
+  /**
+   * Rotate the session ID.
+   *
+   * @param {Object} req
+   * @param {Object} res
+   * @param {string} sessionId
+   * @returns {Object}
+   */
+  const rotate = async (req, res, sessionId) => {
+    const rotated = await sessionService.rotate(sessionId, req);
+
+    res.cookie(cookieName, rotated.sessionId, cookieOptions);
+
+    return rotated;
+  };
+
+  /**
+   * Destroy the session corresponding to the ID
+   * in the request cookie and clear the cookie.
+   *
+   * @param {Object} req
+   * @param {Object} res
+   */
+  const destroy = async (req, res) => {
+    const sessionId = req.cookies[cookieName];
+
+    if (sessionId) {
+      await sessionService.destroy(sessionId);
+    }
+
+    res.clearCookie(cookieName);
+  };
+
+  /**
+   * Reset the request session by destroying the current
+   * session and creating a new one.
+   *
+   * @param {Object} req
+   * @param {Object} res
+   * @returns {Object}
+   */
+  const reset = async (req, res) => {
+    await destroy(req, res);
+
+    return await getOrCreate(req, res);
+  };
+
+  return {
+    getOrCreate,
+    persist,
+    rotate,
+    destroy,
+    reset,
+  };
+};

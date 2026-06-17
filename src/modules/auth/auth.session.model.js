@@ -4,7 +4,7 @@ export const createAuthSession = (req) => ({
   type: 'user',
 
   version: 1,
-  //progress: { qr: false, ticket: false, verified: false },
+  progress: { qr: true, ticket: true, verified: true },
 
   //currentStep: 'init',
   //source: 'direct',

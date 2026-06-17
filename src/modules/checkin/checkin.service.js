@@ -1,4 +1,4 @@
-import { applyStep, getNextStep } from './checkin.flow.js';
+import { applyStep, getNextStep, isComplete } from './checkin.flow.js';
 import { CheckinSteps } from './checkin.steps.js';
 import { checkinSession } from './checkin.session.adapter.js';
 
@@ -7,6 +7,7 @@ import { maskName, maskPhone } from '../../shared/utils/mask.js';
 import { hash } from '../../shared/utils/hash.js';
 import { qrService } from '../qr/qr.service.js';
 import { env } from '../../config/env.js';
+import { authSession } from '../auth/auth.session.adapter.js';
 
 export class CheckinService {
   constructor({ req, res }) {
@@ -18,6 +19,17 @@ export class CheckinService {
   // PUBLIC API
   // =========================
 
+  /**
+   * Initialize a checkin session.
+   * Accepts initialization with a QR Code token
+   * or a ticket code.
+   *
+   * @param {Object} options
+   * @param {string} options.qrToken
+   * @param {string} options.ticketToken
+   *
+   * @returns {Object}
+   */
   async init({ qrToken, ticketToken }) {
     await this._initSession();
 
@@ -56,9 +68,11 @@ export class CheckinService {
   }
 
   /**
+   * Submit ticket code.
    *
    * @param {string} ticketCode
-   * @returns
+   *
+   * @returns {Object}
    */
   async submitTicket(ticketCode) {
     await this._initSession();
@@ -69,9 +83,11 @@ export class CheckinService {
   }
 
   /**
+   * Submit verification code.
    *
    * @param {string} verificationCode
-   * @returns
+   *
+   * @returns {Object}
    */
   async submitVerification(verificationCode) {
     await this._initSession();
@@ -91,9 +107,11 @@ export class CheckinService {
   }
 
   /**
+   * Submit QR code.
    *
    * @param {string} qrCode
-   * @returns
+   *
+   * @returns {Object}
    */
   async submitQrCode(qrCode) {
     await this._initSession();
@@ -106,8 +124,12 @@ export class CheckinService {
   }
 
   /**
+   * Reset checkin progress by deleting current session
+   * and generating a new session.
    *
-   * @param {object} values
+   * @param {Object} values
+   *
+   * @returns {Object}
    */
   async resetCheckin() {
     const { sessionId, session } = await checkinSession.reset(
@@ -125,6 +147,9 @@ export class CheckinService {
   // ORCHESTRATION HELPERS
   // =========================
 
+  /**
+   * Initialize checkin session
+   */
   async _initSession() {
     const { sessionId, session } = await checkinSession.getOrCreate(
       this.req,
@@ -135,10 +160,26 @@ export class CheckinService {
     this.session = session;
   }
 
+  /**
+   * Persist session data and return response data.
+   *
+   * If all checkin steps are complete, a new auth
+   * session is generated and the checkin session is destroyed.
+   *
+   * @param {Object} session
+   * @param {Object} data
+   * @returns {Object}
+   */
   async _persistAndRespond(session, data = {}) {
     this.session = session;
 
-    await checkinSession.persist(this.sessionId, session);
+    if (isComplete(session.progress)) {
+      await this._issueAuthSession(session);
+
+      await checkinSession.destroy(this.req, this.res);
+    } else {
+      await checkinSession.persist(this.sessionId, session);
+    }
 
     return {
       meta: this._buildMeta(session),
@@ -146,16 +187,47 @@ export class CheckinService {
     };
   }
 
+  /**
+   * Build response metadata.
+   *
+   * @param {Object} session
+   * @returns {Object}
+   */
   _buildMeta(session) {
     return {
       nextStep: getNextStep(session.progress),
     };
   }
 
+  /**
+   * Issue auth session.
+   *
+   * @param {Object} checkinSessionData
+   */
+  async _issueAuthSession(checkinSessionData) {
+    const { sessionId, session } = await authSession.getOrCreate(
+      this.req,
+      this.res,
+    );
+
+    await authSession.persist(sessionId, {
+      ...session,
+      progress: checkinSessionData.progress,
+      ticketId: checkinSessionData.ticketId,
+      eventId: checkinSessionData.eventId,
+    });
+  }
+
   // =========================
   // DOMAIN STEP HANDLERS
   // =========================
 
+  /**
+   * Process ticket code.
+   *
+   * @param {string} ticketCode
+   * @returns {Object}
+   */
   async _processTicket(ticketCode) {
     const result = await validateTicket(ticketCode);
 
@@ -179,6 +251,12 @@ export class CheckinService {
     };
   }
 
+  /**
+   * Process user verification code.
+   *
+   * @param {string} verificationCode
+   * @returns {Object}
+   */
   async _processVerification(verificationCode) {
     await verifyUser(this.session, verificationCode);
 
@@ -195,6 +273,12 @@ export class CheckinService {
     };
   }
 
+  /**
+   * Process qr token.
+   *
+   * @param {string} qrToken
+   * @returns {Object}
+   */
   async _processQrToken(qrToken) {
     await validateQrToken(qrToken);
 
@@ -216,6 +300,12 @@ export class CheckinService {
   // =========================
   // DEBUG
   // =========================
+
+  /**
+   * Debug checkin.
+   *
+   * @returns {Object}
+   */
   async debug() {
     await this._initSession();
 
@@ -249,9 +339,11 @@ export class CheckinService {
 }
 
 /**
+ * Validate ticket code.
  *
  * @param {string} ticketCode
- * @returns {object}
+ *
+ * @returns {Object}
  */
 const validateTicket = async (ticketCode) => {
   if (!ticketCode) throw new Error('Invalid ticket');
@@ -278,9 +370,12 @@ const validateTicket = async (ticketCode) => {
 };
 
 /**
+ * Verify user by validating the verification code.
  *
- * @param {object} session
+ * @param {Object} session
  * @param {string} code
+ *
+ * @return {boolean}
  */
 const verifyUser = async (session, code) => {
   if (!code || code.length !== 4) {
@@ -297,9 +392,11 @@ const verifyUser = async (session, code) => {
 };
 
 /**
+ * Validate the QR Code token.
  *
- * @param {*} qrToken
- * @returns
+ * @param {string} qrToken
+ *
+ * @returns {boolean}
  */
 const validateQrToken = async (qrToken) => {
   const isToken = (t) => /^[a-zA-Z0-9]{10,32}$/.test(t);

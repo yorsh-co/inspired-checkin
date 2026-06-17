@@ -16,6 +16,9 @@ router.get('/privacy', (_req, res) => {
 
 // checkin
 // FIXME: on error, set initial step to ticket with a new session
+// FIXME: check for an auth session cookie, just in case
+// a verified user accidentally access /checkin
+// OR, use the database flag when verifying the ticket TODO:
 router.get('/checkin', async (req, res, next) => {
   try {
     const service = new CheckinService({ req, res });

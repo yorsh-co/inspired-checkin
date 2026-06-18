@@ -7,7 +7,7 @@ import { maskName, maskPhone } from '../../shared/utils/mask.js';
 import { hash } from '../../shared/utils/hash.js';
 import { qrService } from '../qr/qr.service.js';
 import { env } from '../../config/env.js';
-import { authSession, userSession } from '../user/user.session.adapter.js';
+import { userSession } from '../user/user.session.adapter.js';
 
 export class CheckinService {
   constructor({ req, res }) {

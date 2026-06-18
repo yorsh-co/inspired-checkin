@@ -24,8 +24,8 @@ export const env = {
     admin: process.env.ADMIN_SESSION_TTL || 3600,
   },
 
-  dbUrl: process.env.DATABASE_URL,
+  databaseUrl: process.env.DATABASE_URL,
 
-  redisHost: process.env.REDIS_HOST || localhost,
+  redisHost: process.env.REDIS_HOST || 'localhost',
   redisPort: process.env.REDIS_PORT || 6379,
 };

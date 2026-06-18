@@ -24,8 +24,16 @@ export const env = {
     admin: process.env.ADMIN_SESSION_TTL || 3600,
   },
 
-  databaseUrl: process.env.DATABASE_URL,
+  postgresConfig: {
+    user: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
+    database: process.env.POSTGRES_DB,
+    host: process.env.POSTGRES_HOST || 'localhost',
+    port: process.env.POSTGRES_PORT || 5432,
+  },
 
-  redisHost: process.env.REDIS_HOST || 'localhost',
-  redisPort: process.env.REDIS_PORT || 6379,
+  redisConfig: {
+    host: process.env.REDIS_HOST || 'localhost',
+    port: process.env.REDIS_PORT || 6379,
+  },
 };

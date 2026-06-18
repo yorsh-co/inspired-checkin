@@ -12,6 +12,9 @@
  * @property {string|null} userId
  * @property {string|null} eventId
  *
+ * @property {Date|null} checkinAt
+ * @property {string|null} checkinNumber
+ *
  * @property {Object} ticket
  * @property {string} ticket.ticketCode
  * @property {Date} ticket.timestamp
@@ -43,6 +46,7 @@
  *
  * @property {string} userId
  * @property {number} checkinNumber
+ * @property {number} checkinAt
  *
  */
 

@@ -1,7 +1,7 @@
 import { applyStep, getNextStep, isComplete } from './checkin.flow.js';
 import { checkinSession } from './checkin.session.adapter.js';
 
-import { getUserByTicket } from '../ticket/ticket.service.js';
+import { getUserByTicket, completeCheckin } from '../ticket/ticket.service.js';
 import { maskName, maskPhone } from '../../shared/utils/mask.js';
 import { hash } from '../../shared/utils/hash.js';
 import { qrService } from '../qr/qr.service.js';
@@ -181,7 +181,7 @@ export class CheckinService {
     this.session = session;
 
     if (isComplete(session.progress)) {
-      await this._processCheckinComplete(); // TODO:
+      await this._processCheckinComplete();
 
       await this._issueUserSession();
 
@@ -225,6 +225,8 @@ export class CheckinService {
     await userSession.persist(sessionId, {
       ...session,
       userId: checkinSession.userId,
+      checkinNumber: checkinSession.checkinNumber,
+      checkinAt: checkinSession.checkinAt,
     });
   }
 
@@ -305,8 +307,14 @@ export class CheckinService {
    *
    */
   async _processCheckinComplete() {
-    // TODO: get unique sequential checkin_number
-    // TODO: store checkin status in user table
+    const { ticketCode } = this.session.ticket.ticketCode;
+
+    if (!ticketCode) throw new Error('Missing ticketCode in session');
+
+    const { checkinNumber, checkinAt } = completeCheckin(ticketCode);
+
+    this.session.checkinNumber = checkinNumber;
+    this.session.checkinAt = checkinAt;
   }
 
   // =========================

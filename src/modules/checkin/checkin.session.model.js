@@ -17,6 +17,9 @@ export const createCheckinSession = (req) => ({
   userId: null,
   eventId: null,
 
+  checkinAt: null,
+  checkinNumber: null,
+
   ticket: {},
   verification: {},
   qr: {},

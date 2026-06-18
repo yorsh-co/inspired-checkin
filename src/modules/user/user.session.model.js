@@ -1,21 +1,21 @@
 import { hashUA } from '../../shared/utils/hash.js';
 
+/** @import { UserSession } from '../../types/session.js' */
+
+/**
+ *
+ * @param {Object} req
+ * @returns {UserSession}
+ */
 export const createUserSession = (req) => ({
   type: 'user',
-
   version: 1,
-  progress: { qr: true, ticket: true, verified: true },
 
-  //currentStep: 'init',
-  //source: 'direct',
-
-  ticketId: null,
-  eventId: null,
-
-  //phoneHash: null,
-  //phoneLast4Hash: null,
-
-  //userPreview: null,
+  userId: null,
+  checkinNumber: null,
 
   ua: hashUA(req.headers['user-agent']),
+
+  updatedAt: null,
+  createdAt: new Date(),
 });

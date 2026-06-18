@@ -1,8 +1,15 @@
 import pg from '../../shared/db/postgres.js';
 
-export const getTicketByCode = async (ticketCode) => {
+/** @import { User } from '../../types/user.js' */
+
+/**
+ *
+ * @param {string} ticketCode
+ * @returns {Promise<User|null>}
+ */
+export const getUserByTicket = async (ticketCode) => {
   const result = await pg.query(
-    `SELECT id AS ticket_id, user_phone, user_name
+    `SELECT user_id, user_phone, user_name
     FROM tickets
     WHERE ticket_code = $1`,
     [ticketCode],

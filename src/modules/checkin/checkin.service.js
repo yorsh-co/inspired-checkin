@@ -1,18 +1,27 @@
 import { applyStep, getNextStep, isComplete } from './checkin.flow.js';
-import { CheckinSteps } from './checkin.steps.js';
 import { checkinSession } from './checkin.session.adapter.js';
 
-import { getTicketByCode } from '../ticket/ticket.service.js';
+import { getUserByTicket } from '../ticket/ticket.service.js';
 import { maskName, maskPhone } from '../../shared/utils/mask.js';
 import { hash } from '../../shared/utils/hash.js';
 import { qrService } from '../qr/qr.service.js';
 import { env } from '../../config/env.js';
 import { userSession } from '../user/user.session.adapter.js';
 
+/** @import { User } from '../../types/user.js' */
+/** @import { CheckinSession, UserSession } from '../../types/session.js' */
+/** @import { CheckinStep } from '../../types/checkin.js' */
+
 export class CheckinService {
   constructor({ req, res }) {
     this.req = req;
     this.res = res;
+
+    /** @type {CheckinSession} */
+    this.session = null;
+
+    /** @type {String} */
+    this.sessionId = '';
   }
 
   // =========================
@@ -44,8 +53,6 @@ export class CheckinService {
 
     if (ticketToken && !this.session.progress.ticket) {
       this.session.source = 'ticket';
-
-      // FIXME: verify the ticket token to get the code
 
       const result = await this._processTicket(ticketCode);
 
@@ -166,7 +173,7 @@ export class CheckinService {
    * If all checkin steps are complete, a new auth
    * session is generated and the checkin session is destroyed.
    *
-   * @param {Object} session
+   * @param {CheckinSession} session
    * @param {Object} data
    * @returns {Object}
    */
@@ -174,7 +181,9 @@ export class CheckinService {
     this.session = session;
 
     if (isComplete(session.progress)) {
-      await this._issueUserSession(session);
+      await this._processCheckinComplete(); // TODO:
+
+      await this._issueUserSession();
 
       await checkinSession.destroy(this.req, this.res);
     } else {
@@ -190,7 +199,7 @@ export class CheckinService {
   /**
    * Build response metadata.
    *
-   * @param {Object} session
+   * @param {CheckinSession} session
    * @returns {Object}
    */
   _buildMeta(session) {
@@ -202,9 +211,12 @@ export class CheckinService {
   /**
    * Issue user session.
    *
-   * @param {Object} checkinSessionData
+   * TODO:
    */
-  async _issueUserSession(checkinSessionData) {
+  async _issueUserSession() {
+    const checkinSession = this.session;
+
+    /** @type {{ sessionId: string, session: UserSession }} */
     const { sessionId, session } = await userSession.getOrCreate(
       this.req,
       this.res,
@@ -212,9 +224,7 @@ export class CheckinService {
 
     await userSession.persist(sessionId, {
       ...session,
-      progress: checkinSessionData.progress,
-      ticketId: checkinSessionData.ticketId,
-      eventId: checkinSessionData.eventId,
+      userId: checkinSession.userId,
     });
   }
 
@@ -231,17 +241,10 @@ export class CheckinService {
   async _processTicket(ticketCode) {
     const result = await validateTicket(ticketCode);
 
-    const updated = applyStep(this.session, CheckinSteps.TICKET, {
-      ticketId: result.ticketId,
-    });
+    const updated = applyStep(this.session, 'ticket', result);
 
     return {
-      session: {
-        ...updated,
-        phoneHash: result.security.phoneHash,
-        phoneLast4Hash: result.security.phoneLast4Hash,
-        userPreview: result.userPreview,
-      },
+      session: updated,
       data: {
         session: {
           progress: updated.progress,
@@ -260,7 +263,7 @@ export class CheckinService {
   async _processVerification(verificationCode) {
     await verifyUser(this.session, verificationCode);
 
-    const updated = applyStep(this.session, CheckinSteps.VERIFICATION);
+    const updated = applyStep(this.session, 'verification');
 
     return {
       session: updated,
@@ -282,8 +285,9 @@ export class CheckinService {
   async _processQrToken(qrToken) {
     await validateQrToken(qrToken);
 
-    const updated = applyStep(this.session, CheckinSteps.QR, {
-      eventId: env.eventId,
+    const updated = applyStep(this.session, 'qr', {
+      eventId: env.eventId, // TODO: derive the event ID from the qrToken
+      qr: { qrToken },
     });
 
     return {
@@ -295,6 +299,14 @@ export class CheckinService {
         },
       },
     };
+  }
+
+  /**
+   *
+   */
+  async _processCheckinComplete() {
+    // TODO: get unique sequential checkin_number
+    // TODO: store checkin status in user table
   }
 
   // =========================
@@ -346,24 +358,30 @@ export class CheckinService {
  * @returns {Object}
  */
 const validateTicket = async (ticketCode) => {
-  if (!ticketCode) throw new Error('Invalid ticket');
+  const isValidFormat = /^[a-z0-9]{5}$/.test(ticketCode);
+  if (!ticketCode || !isValidFormat) {
+    throw new Error('Invalid ticket code');
+  }
 
-  const record = await getTicketByCode(ticketCode);
-  if (!record) throw new Error('Ticket not found');
+  const user = await getUserByTicket(ticketCode);
+  if (!user) {
+    throw new Error('Ticket not found');
+  }
 
-  const fullPhone = record.user_phone;
+  const fullPhone = user.user_phone;
   const last4 = fullPhone.slice(-4);
 
   return {
-    ticketId: record.ticket_id,
-    security: {
+    userId: user.user_id,
+    ticket: { ticketCode },
+    verification: {
       phoneHash: hash(fullPhone),
       phoneLast4Hash: hash(last4),
     },
 
     userPreview: {
       ticketCode: ticketCode,
-      name: maskName(record.user_name),
+      name: maskName(user.user_name),
       phoneStart: maskPhone(fullPhone),
     },
   };
@@ -372,23 +390,19 @@ const validateTicket = async (ticketCode) => {
 /**
  * Verify user by validating the verification code.
  *
- * @param {Object} session
+ * @param {CheckinSession} session
  * @param {string} code
- *
- * @return {boolean}
  */
 const verifyUser = async (session, code) => {
-  if (!code || code.length !== 4) {
+  const isValidFormat = /^[0-9]{4}$/.test(code);
+  if (!code || !isValidFormat) {
     throw new Error('Invalid verification code');
   }
 
   const hashed = hash(code);
-
-  if (hashed !== session.phoneLast4Hash) {
+  if (hashed !== session.verification.phoneLast4Hash) {
     throw new Error('Verification failed');
   }
-
-  return true;
 };
 
 /**
@@ -399,8 +413,9 @@ const verifyUser = async (session, code) => {
  * @returns {boolean}
  */
 const validateQrToken = async (qrToken) => {
-  const isToken = (t) => /^[a-zA-Z0-9]{10,32}$/.test(t);
-  if (!isToken(qrToken)) throw new Error('Invalid QR token');
+  const isValidFormat = /^[a-zA-Z0-9]{10,32}$/.test(qrToken);
+
+  if (!isValidFormat) throw new Error('Invalid QR token');
 
   if (!qrToken) throw new Error('Invalid QR token');
 

@@ -1,6 +1,8 @@
 import { env } from '../../config/env.js';
 import { sessionService } from './session.service.js';
 
+/** @import { Session } from '../../types/session.js' */
+
 /**
  * Creates a sessions adapter exposing frequently used methods
  * to manipulate sessions using the session service.
@@ -22,7 +24,7 @@ export const createSessionAdapter = (cookieName, createSessionData) => {
    *
    * @param {Object} req
    * @param {Object} res
-   * @returns {Object}
+   * @returns {{ sessionId: string, session: Session }}
    */
   const getOrCreate = async (req, res) => {
     let sessionId = req.cookies[cookieName];
@@ -44,8 +46,8 @@ export const createSessionAdapter = (cookieName, createSessionData) => {
   /**
    * Persist the session data.
    *
-   * @param {String} sessionId
-   * @param {Object} session
+   * @param {string} sessionId
+   * @param {Session} session
    */
   const persist = async (sessionId, session) => {
     await sessionService.save(sessionId, session);
@@ -57,7 +59,8 @@ export const createSessionAdapter = (cookieName, createSessionData) => {
    * @param {Object} req
    * @param {Object} res
    * @param {string} sessionId
-   * @returns {Object}
+   *
+   * @returns {Session}
    */
   const rotate = async (req, res, sessionId) => {
     const rotated = await sessionService.rotate(sessionId, req);
@@ -90,7 +93,8 @@ export const createSessionAdapter = (cookieName, createSessionData) => {
    *
    * @param {Object} req
    * @param {Object} res
-   * @returns {Object}
+   *
+   * @returns {{ sessionId: string, session: Session }}
    */
   const reset = async (req, res) => {
     await destroy(req, res);

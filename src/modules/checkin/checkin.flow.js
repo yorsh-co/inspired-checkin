@@ -1,57 +1,46 @@
-import { CheckinSteps } from './checkin.steps.js';
+/** @import { CheckinSession } from '../../types/session.js' */
+/** @import { CheckinStep, CheckinProgress } from '../../types/checkin.js' */
 
-export const validateStep = (session, step) => {
-  switch (step) {
-    case CheckinSteps.TICKET: {
-      return true;
-    }
-
-    case CheckinSteps.VERIFICATION: {
-      if (!session.progress.ticket) {
-        throw new Error('Cannot verify without ticket');
-      }
-      return true;
-    }
-
-    case CheckinSteps.QR: {
-      console.log(session.source);
-      if (!session.progress.verified && session.source !== 'qr') {
-        throw new Error('QR requires verified ticket');
-      }
-      return true;
-    }
-
-    default: {
-      return true;
-    }
-  }
-};
-
+/**
+ *
+ * @param {CheckinSession} session
+ * @param {CheckinStep} step
+ * @param {Object} [payload={}]
+ *
+ * @returns {CheckinSession}
+ */
 export const applyStep = (session, step, payload = {}) => {
   const progress = session.progress;
 
   validateStep(session, step);
 
+  const now = Date.now();
+
+  /** @type {CheckinSession} */
   const updated = {
     ...session,
+    ...payload,
+
     progress: { ...progress },
-    lastUpdatedAt: Date.now(),
+    updatedAt: now,
   };
 
   switch (step) {
-    case CheckinSteps.TICKET:
+    case 'ticket': {
       updated.progress.ticket = true;
-      updated.ticketId = payload.ticketId;
+      updated.ticket.timestamp = now;
       break;
-
-    case CheckinSteps.VERIFICATION:
+    }
+    case 'verification': {
       updated.progress.verified = true;
+      updated.verification.timestamp = now;
       break;
-
-    case CheckinSteps.QR:
+    }
+    case 'qr': {
       updated.progress.qr = true;
-      updated.eventId = payload.eventId;
+      updated.qr.timestamp = now;
       break;
+    }
   }
 
   updated.currentStep = getNextStep(updated.progress);
@@ -59,13 +48,54 @@ export const applyStep = (session, step, payload = {}) => {
   return updated;
 };
 
-export const getNextStep = (progress) => {
-  if (!progress.ticket) return CheckinSteps.TICKET;
-  if (!progress.verified) return CheckinSteps.VERIFICATION;
-  if (!progress.qr) return CheckinSteps.QR;
-  return CheckinSteps.SUCCESS;
+/**
+ *
+ * @param {CheckinSession} session
+ * @param {CheckinStep} step
+ */
+export const validateStep = (session, step) => {
+  switch (step) {
+    case 'ticket': {
+      return;
+    }
+
+    case 'verification': {
+      if (!session.progress.ticket) {
+        throw new Error('Cannot verify without ticket');
+      }
+      return;
+    }
+
+    case 'qr': {
+      if (!session.progress.verified && session.source !== 'qr') {
+        throw new Error('QR requires verified ticket');
+      }
+      return;
+    }
+
+    default: {
+      return;
+    }
+  }
 };
 
+/**
+ *
+ * @param {CheckinProgress} progress
+ * @returns {CheckinStep}
+ */
+export const getNextStep = (progress) => {
+  if (!progress.ticket) return 'ticket';
+  if (!progress.verified) return 'verification';
+  if (!progress.qr) return 'qr';
+  return 'success';
+};
+
+/**
+ *
+ * @param {CheckinProgress} progress
+ * @returns {Boolean}
+ */
 export const isComplete = (progress) => {
   return progress.ticket && progress.verified && progress.qr;
 };

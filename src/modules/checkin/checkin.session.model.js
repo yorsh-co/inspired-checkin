@@ -1,21 +1,30 @@
-import { hashUA } from "../../shared/utils/hash.js";
+import { hashUA } from '../../shared/utils/hash.js';
 
+/** @import { CheckinSession } from '../../types/session.js' */
+
+/**
+ *
+ * @param {Object} req
+ * @returns {CheckinSession}
+ */
 export const createCheckinSession = (req) => ({
   type: 'checkin',
-
   version: 1,
   progress: { qr: false, ticket: false, verified: false },
-
   currentStep: 'init',
   source: 'direct',
 
-  ticketId: null,
+  userId: null,
   eventId: null,
 
-  phoneHash: null,
-  phoneLast4Hash: null,
+  ticket: {},
+  verification: {},
+  qr: {},
 
-  userPreview: null,
+  userPreview: {},
 
   ua: hashUA(req.headers['user-agent']),
+
+  updatedAt: null,
+  createdAt: new Date(),
 });

@@ -7,7 +7,7 @@ import { maskName, maskPhone } from '../../shared/utils/mask.js';
 import { hash } from '../../shared/utils/hash.js';
 import { qrService } from '../qr/qr.service.js';
 import { env } from '../../config/env.js';
-import { authSession } from '../auth/auth.session.adapter.js';
+import { authSession, userSession } from '../user/user.session.adapter.js';
 
 export class CheckinService {
   constructor({ req, res }) {
@@ -174,7 +174,7 @@ export class CheckinService {
     this.session = session;
 
     if (isComplete(session.progress)) {
-      await this._issueAuthSession(session);
+      await this._issueUserSession(session);
 
       await checkinSession.destroy(this.req, this.res);
     } else {
@@ -200,17 +200,17 @@ export class CheckinService {
   }
 
   /**
-   * Issue auth session.
+   * Issue user session.
    *
    * @param {Object} checkinSessionData
    */
-  async _issueAuthSession(checkinSessionData) {
-    const { sessionId, session } = await authSession.getOrCreate(
+  async _issueUserSession(checkinSessionData) {
+    const { sessionId, session } = await userSession.getOrCreate(
       this.req,
       this.res,
     );
 
-    await authSession.persist(sessionId, {
+    await userSession.persist(sessionId, {
       ...session,
       progress: checkinSessionData.progress,
       ticketId: checkinSessionData.ticketId,

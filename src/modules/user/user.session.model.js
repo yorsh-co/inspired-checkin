@@ -1,6 +1,6 @@
 import { hashUA } from '../../shared/utils/hash.js';
 
-export const createAuthSession = (req) => ({
+export const createUserSession = (req) => ({
   type: 'user',
 
   version: 1,

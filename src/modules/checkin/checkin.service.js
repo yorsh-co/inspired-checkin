@@ -307,7 +307,7 @@ export class CheckinService {
    *
    */
   async _processCheckinComplete() {
-    const { ticketCode } = this.session.ticket.ticketCode;
+    const { ticketCode } = this.session.ticket;
 
     if (!ticketCode) throw new Error('Missing ticketCode in session');
 
@@ -336,25 +336,7 @@ export class CheckinService {
       return 'COMPLETE';
     };
 
-    return {
-      type: this.session.type,
-      version: this.session.version,
-
-      status: getDebugLabel(this.session.progress),
-
-      progress: this.session.progress,
-      nextStep: getNextStep(this.session.progress),
-
-      currentStep: this.session.currentStep,
-
-      ticketId: this.session.ticketId,
-      eventId: this.session.eventId,
-
-      source: this.session.source,
-
-      createdAt: this.session.createdAt,
-      lastUpdatedAt: this.session.lastUpdatedAt,
-    };
+    return this.session;
   }
 }
 

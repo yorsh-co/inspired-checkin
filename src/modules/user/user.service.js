@@ -43,7 +43,7 @@ export const completeCheckin = async (ticketCode) => {
 
     if (rows.length === 0) throw new Error('Ticket not found');
 
-    if (rows[0].checkin_confirmed) throw new Error('Already checked in');
+    if (rows[0].checkin_complete) throw new Error('Already checked in');
 
     // generate unique and sequential checkin_number
     const sequenceResult = await client.query(
@@ -58,6 +58,7 @@ export const completeCheckin = async (ticketCode) => {
       SET checkin_complete = TRUE,
         checkin_at = $1,
         checkin_number = $2,
+        updated_at = NOW()
       WHERE ticket_code = $3`,
       [checkinAt, checkinNumber, ticketCode],
     );

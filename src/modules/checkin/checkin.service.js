@@ -1,7 +1,7 @@
 import { applyStep, getNextStep, isComplete } from './checkin.flow.js';
 import { checkinSession } from './checkin.session.adapter.js';
 
-import { getUserByTicket, completeCheckin } from '../ticket/ticket.service.js';
+import { getUserByTicket, completeCheckin } from '../user/user.service.js';
 import { maskName, maskPhone } from '../../shared/utils/mask.js';
 import { hash } from '../../shared/utils/hash.js';
 import { qrService } from '../qr/qr.service.js';

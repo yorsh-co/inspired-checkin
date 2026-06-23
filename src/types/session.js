@@ -14,6 +14,7 @@
  *
  * @property {Date|null} checkinAt
  * @property {string|null} checkinNumber
+ * @property {boolean|null} checkinComplete
  *
  * @property {Object} ticket
  * @property {string} ticket.ticketCode

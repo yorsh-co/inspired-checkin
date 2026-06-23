@@ -170,7 +170,7 @@ export class CheckinService {
   /**
    * Persist session data and return response data.
    *
-   * If all checkin steps are complete, a new auth
+   * If all checkin steps are complete, a new user
    * session is generated and the checkin session is destroyed.
    *
    * @param {CheckinSession} session
@@ -210,8 +210,6 @@ export class CheckinService {
 
   /**
    * Issue user session.
-   *
-   * TODO:
    */
   async _issueUserSession() {
     const checkinSession = this.session;
@@ -304,7 +302,8 @@ export class CheckinService {
   }
 
   /**
-   *
+   * Trigger checkin completion interaction with the database.
+   * Stores the checkinNumber and checkinAt timestamp in the session.
    */
   async _processCheckinComplete() {
     const { ticketCode } = this.session.ticket;
@@ -329,13 +328,6 @@ export class CheckinService {
   async debug() {
     await this._initSession();
 
-    const getDebugLabel = (progress) => {
-      if (!progress.ticket) return 'WAITING_FOR_TICKET';
-      if (!progress.verified) return 'WAITING_FOR_VERIFICATION';
-      if (!progress.qr) return 'WAITING_FOR_QR';
-      return 'COMPLETE';
-    };
-
     return this.session;
   }
 }
@@ -345,7 +337,7 @@ export class CheckinService {
  *
  * @param {string} ticketCode
  *
- * @returns {Object}
+ * @returns {CheckinSession}
  */
 const validateTicket = async (ticketCode) => {
   const isValidFormat = /^[a-z0-9]{5}$/.test(ticketCode);
@@ -374,6 +366,10 @@ const validateTicket = async (ticketCode) => {
       name: maskName(user.user_name),
       phoneStart: maskPhone(fullPhone),
     },
+
+    checkinComplete: user.checkin_complete,
+    checkinAt: user.checkin_at,
+    checkinNumber: user.checkin_number,
   };
 };
 

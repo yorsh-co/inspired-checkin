@@ -3,13 +3,21 @@ import pg from '../../shared/db/postgres.js';
 /** @import { User } from '../../types/user.js' */
 
 /**
+ * Get user by ticket code.
+ * Return the checkin status for returning users.
  *
  * @param {string} ticketCode
  * @returns {Promise<User|null>}
  */
 export const getUserByTicket = async (ticketCode) => {
   const result = await pg.query(
-    `SELECT user_id, user_phone, user_name
+    `SELECT
+      user_id,
+      user_phone,
+      user_name,
+      checkin_complete,
+      checkin_at,
+      checkin_number
     FROM users
     WHERE ticket_code = $1`,
     [ticketCode],
@@ -34,7 +42,11 @@ export const completeCheckin = async (ticketCode) => {
 
     // lock the row
     const { rows } = await client.query(
-      `SELECT ticket_code, checkin_complete
+      `SELECT
+        ticket_code,
+        checkin_complete,
+        checkin_at,
+        checkin_number
       FROM users
       WHERE ticket_code = $1
       FOR UPDATE`,
@@ -43,7 +55,14 @@ export const completeCheckin = async (ticketCode) => {
 
     if (rows.length === 0) throw new Error('Ticket not found');
 
-    if (rows[0].checkin_complete) throw new Error('Already checked in');
+    if (rows[0].checkin_complete && rows[0].checkin_number) {
+      await client.query('COMMIT');
+
+      return {
+        checkinNumber: rows[0].checkin_number,
+        checkinAt: rows[0].checkin_at,
+      };
+    }
 
     // generate unique and sequential checkin_number
     const sequenceResult = await client.query(

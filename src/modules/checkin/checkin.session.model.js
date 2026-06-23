@@ -19,6 +19,7 @@ export const createCheckinSession = (req) => ({
 
   checkinAt: null,
   checkinNumber: null,
+  checkinComplete: null,
 
   ticket: {},
   verification: {},

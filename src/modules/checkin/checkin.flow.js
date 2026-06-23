@@ -29,6 +29,11 @@ export const applyStep = (session, step, payload = {}) => {
     case 'ticket': {
       updated.progress.ticket = true;
       updated.ticket.timestamp = now;
+
+      // if the user already checked in, set the qr step to true so it is skipped
+      if (updated.checkinComplete && !updated.progress.qr) {
+        updated.progress.qr = true;
+      }
       break;
     }
     case 'verification': {

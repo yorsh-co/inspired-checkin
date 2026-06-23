@@ -26,7 +26,7 @@ export const createSessionAdapter = (cookieName, createSessionData) => {
    * @param {Object} res
    * @returns {{ sessionId: string, session: Session }}
    */
-  const getOrCreate = async (req, res) => {
+  const ensure = async (req, res) => {
     let sessionId = req.cookies[cookieName];
 
     let session = await sessionService.get(sessionId, req);
@@ -39,6 +39,22 @@ export const createSessionAdapter = (cookieName, createSessionData) => {
 
       res.cookie(cookieName, sessionId, cookieOptions);
     }
+
+    return { sessionId, session };
+  };
+
+  /**
+   * Retrieve the session using the request cookie.
+   *
+   * @param {Object} req
+   * @returns {{ sessionId: string, session: Session }|null}
+   */
+  const get = async (req) => {
+    let sessionId = req.cookies[cookieName];
+
+    const session = await sessionService.get(sessionId, req);
+
+    if (!session) return null;
 
     return { sessionId, session };
   };
@@ -99,11 +115,12 @@ export const createSessionAdapter = (cookieName, createSessionData) => {
   const reset = async (req, res) => {
     await destroy(req, res);
 
-    return await getOrCreate(req, res);
+    return await ensure(req, res);
   };
 
   return {
-    getOrCreate,
+    ensure,
+    get,
     persist,
     rotate,
     destroy,

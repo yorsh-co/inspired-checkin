@@ -1,6 +1,10 @@
 import express from 'express';
 
-import { requireWebAuth } from '../../middleware/auth.middleware.js';
+import {
+  resolveSessions,
+  requireWebAuth,
+  requireNoSession,
+} from '../../middleware/auth.middleware.js';
 import { CheckinService } from '../../modules/checkin/checkin.service.js';
 import { env } from '../../config/env.js';
 
@@ -8,42 +12,54 @@ const router = express.Router();
 
 // privacy and terms
 router.get('/terms', (_req, res) => {
-  res.redirect('https://yorsh.co/privacy');
-});
-router.get('/privacy', (_req, res) => {
   res.redirect('https://yorsh.co/terms');
 });
+router.get('/privacy', (_req, res) => {
+  res.redirect('https://yorsh.co/privacy');
+});
+
+// load sessions
+router.use(resolveSessions);
 
 // checkin
-// FIXME: on error, set initial step to ticket with a new session
-// FIXME: check for an auth session cookie, just in case
-// a verified user accidentally access /checkin
-// OR, use the database flag when verifying the ticket TODO:
-router.get('/checkin', async (req, res, next) => {
-  try {
-    const service = new CheckinService({ req, res });
+router.get(
+  '/checkin',
+  requireNoSession('user', '/'),
+  async (req, res, next) => {
+    try {
+      const service = new CheckinService({ req, res });
 
-    const result = await service.init({
-      qrToken: req.query.k,
-      ticketCode: req.query.t,
-    });
+      const result = await service.init({
+        qrToken: req.query.k,
+        ticketCode: req.query.t,
+      });
 
-    res.render('pages/user/checkin', {
-      title: `Check-in | ${env.appTitle}`,
+      res.render('pages/user/checkin', {
+        title: `Check-in | ${env.appTitle}`,
 
-      initialData: {
-        ...result,
-      },
-    });
-  } catch (err) {
-    next(err);
-  }
+        initialData: {
+          ...result,
+        },
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+// admin
+router.get('/admin/login', (req, res) => {
+  res.render('pages/admin/login', { title: 'Admin Login' });
+});
+
+router.get('/admin', requireWebAuth('admin', '/admin/login'), (req, res) => {
+  res.render('pages/admin/dashboard', { title: 'Admin' });
 });
 
 // app
-router.get('/', requireWebAuth, (req, res) => {
+router.get('/', requireWebAuth('user', '/checkin'), (req, res) => {
   try {
-    res.render('pages/app', {
+    res.render('pages/user/dashboard', {
       title: env.appTitle,
     });
   } catch (err) {

@@ -158,7 +158,7 @@ export class CheckinService {
    * Initialize checkin session
    */
   async _initSession() {
-    const { sessionId, session } = await checkinSession.getOrCreate(
+    const { sessionId, session } = await checkinSession.ensure(
       this.req,
       this.res,
     );
@@ -215,10 +215,7 @@ export class CheckinService {
     const checkinSession = this.session;
 
     /** @type {{ sessionId: string, session: UserSession }} */
-    const { sessionId, session } = await userSession.getOrCreate(
-      this.req,
-      this.res,
-    );
+    const { sessionId, session } = await userSession.ensure(this.req, this.res);
 
     await userSession.persist(sessionId, {
       ...session,

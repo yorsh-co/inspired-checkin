@@ -1,31 +1,87 @@
-import jwt from 'jsonwebtoken';
-import { env } from '../config/env.js';
+import { userSession } from '../modules/user/user.session.adapter.js';
+import { adminSession } from '../modules/admin/admin.session.adapter.js';
 
-export const requireApiAuth = (req, res, next) => {
+/** @import { Session, SessionType } from '../../types/session.js' */
+
+/**
+ * Resolve any valid sessions and attach them to `req.sessions`.
+ * Invalid requests are to be blocked by using `requireRole`
+ * to enforce access per route.
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ * @returns {Promise<void>}
+ */
+export const resolveSessions = async (req, res, next) => {
+  req.sessions = {};
+
   try {
-    const token = req.cookies?.token;
-    if (!token) return res.status(401).json({ error: 'Unauthorized' });
+    /** @type {{ sessionId: string, session: Session }|null} */
+    const user = await userSession.get(req);
+    if (user) req.sessions.user = user.session;
 
-    const decoded = jwt.verify(token, env.jwtSecret);
-    req.user = decoded;
-
-    next();
+    /** @type {{ sessionId: string, session: Session }|null} */
+    const admin = await adminSession.get(req);
+    if (admin) req.sessions.admin = admin.session;
   } catch {
-    return res.status(401).json({ error: 'Invalid token' });
+    // leave req.sessions in its current state
   }
+
+  next();
 };
 
-export const requireWebAuth = (req, res, next) => {
-  try {
-    const token = req.cookies?.token;
-    if (!token) return res.redirect('/checkin');
+/**
+ * Requires a session of the given type to access an API route.
+ * Must be used after `resolveSessions`. Attaches the matching
+ * session to `req.session`. Returns 401 if required session is
+ * missing.
+ *
+ * @param {SessionType} type
+ */
+export const requireRole = (type) => (req, res, next) => {
+  const session = req.sessions?.[type];
 
-    const decoded = jwt.verify(token, env.jwtSecret);
-    req.user = decoded;
-    res.locals.user = decoded;
+  if (!session) return res.status(401).json({ error: 'Unauthorized' });
 
-    next();
-  } catch {
-    return res.redirect('/checkin');
-  }
+  req.session = { type, ...session };
+
+  next();
+};
+
+/**
+ * Requires a session of the given type to access an web route.
+ * Must be used after `resolveSessions`. Attaches the matching
+ * session to `req.session`. Redirects to given route if required
+ * session is missing.
+ *
+ * @param {SessionType} type
+ * @param {string} redirectTo
+ * @returns {Function}
+ */
+export const requireWebAuth = (type, redirectTo) => (req, res, next) => {
+  const session = req.sessions?.[type];
+
+  if (!session) return res.redirect(redirectTo);
+
+  req.session = { type, ...session };
+
+  next();
+};
+
+/**
+ * Requires that no user session exists. Must be used after
+ * `resolveSessions`. Redirects to given route if a user
+ * session is found.
+ *
+ * @param {SessionType} type
+ * @param {string} redirectTo
+ * @returns {Function}
+ */
+export const requireNoSession = (type, redirectTo) => (req, res, next) => {
+  const session = req.sessions?.[type];
+
+  if (session) return res.redirect(redirectTo);
+
+  next();
 };

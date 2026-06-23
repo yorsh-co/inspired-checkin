@@ -61,4 +61,8 @@
  * @typedef {CheckinSession|UserSession|AdminSession} Session
  */
 
+/**
+ * @typedef {'checkin'|'user'|'admin'} SessionType
+ */
+
 export {};

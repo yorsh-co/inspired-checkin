@@ -33,7 +33,7 @@ export const completeCheckin = async (ticketCode) => {
     await client.query('BEGIN');
 
     // lock the row
-    const { row } = await client.query(
+    const { rows } = await client.query(
       `SELECT ticket_code, checkin_complete
       FROM users
       WHERE ticket_code = $1

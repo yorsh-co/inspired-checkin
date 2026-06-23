@@ -25,7 +25,7 @@ router.get('/checkin', async (req, res, next) => {
 
     const result = await service.init({
       qrToken: req.query.k,
-      ticketToken: req.query.t,
+      ticketCode: req.query.t,
     });
 
     res.render('pages/user/checkin', {

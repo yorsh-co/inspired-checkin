@@ -39,7 +39,7 @@ export class CheckinService {
    *
    * @returns {Object}
    */
-  async init({ qrToken, ticketToken }) {
+  async init({ qrToken, ticketCode }) {
     await this._initSession();
 
     let data = {};
@@ -51,7 +51,7 @@ export class CheckinService {
       };
     }
 
-    if (ticketToken && !this.session.progress.ticket) {
+    if (ticketCode && !this.session.progress.ticket) {
       this.session.source = 'ticket';
 
       const result = await this._processTicket(ticketCode);

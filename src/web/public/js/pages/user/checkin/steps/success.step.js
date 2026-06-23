@@ -16,12 +16,12 @@ export const runSuccessFlow = async () => {
 
   ui.hint.change(successMessage, 'Indo pro app...');
   await utils.sleep(1200);
-  
+
   setTimeout(() => {
     ui.element.setShow(hintDiv, true);
   }, 2000);
 
   console.log('Redirecting...');
-return; //FIXME:
+
   window.location.href = '/';
 };

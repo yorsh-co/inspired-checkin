@@ -25,7 +25,7 @@ const createSession = async (data) => {
   const session = {
     ...data,
     createdAt: Date.now(),
-    lastUpdatedAt: Date.now(),
+    updatedAt: Date.now(),
   };
 
   const ttl = getTtlByType(session.type);
@@ -55,7 +55,7 @@ const saveSession = async (sessionId, session) => {
 
   const updatedSession = {
     ...session,
-    lastUpdatedAt: Date.now(),
+    updatedAt: Date.now(),
   };
 
   const ttl = getTtlByType(session.type);
@@ -82,7 +82,7 @@ const rotateSession = async (oldSessionId, req) => {
   const newSession = {
     ...oldSession,
     ua: hashUA(req.headers['user-agent']),
-    lastUpdatedAt: Date.now(),
+    updatedAt: Date.now(),
   };
 
   const ttl = getTtlByType(newSession.type);

@@ -311,7 +311,7 @@ export class CheckinService {
 
     if (!ticketCode) throw new Error('Missing ticketCode in session');
 
-    const { checkinNumber, checkinAt } = completeCheckin(ticketCode);
+    const { checkinNumber, checkinAt } = await completeCheckin(ticketCode);
 
     this.session.checkinNumber = checkinNumber;
     this.session.checkinAt = checkinAt;

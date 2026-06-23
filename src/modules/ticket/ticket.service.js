@@ -10,7 +10,7 @@ import pg from '../../shared/db/postgres.js';
 export const getUserByTicket = async (ticketCode) => {
   const result = await pg.query(
     `SELECT user_id, user_phone, user_name
-    FROM tickets
+    FROM users
     WHERE ticket_code = $1`,
     [ticketCode],
   );
@@ -19,7 +19,7 @@ export const getUserByTicket = async (ticketCode) => {
 };
 
 /**
- * Atomically marks a ticket as checked in and assigns a unique
+ * Atomically marks a user as checked in and assigns a unique
  * sequential checkin number using postgres sequence.
  *
  * @param {string} ticketCode

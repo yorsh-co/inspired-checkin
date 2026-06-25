@@ -54,11 +54,13 @@ export const onVerificationInput = async (fromPaste = false) => {
 
     flow.processing('Confirmando seu ingresso... ☑️');
 
-    await utils.timing.ensureMinimum(inputStartTime, 800);
+    await utils.timing.ensureMinimum(inputStartTime, 300);
 
     // validate verification code with the server
     console.log('submitting to server');
 
+    /* 
+    // removed as verification code confirmation should be quick enough that errors will be returned almost immediately
     let res;
 
     const { session } = store.getState();
@@ -70,9 +72,13 @@ export const onVerificationInput = async (fromPaste = false) => {
       res = await withSkeleton(() => api.checkin.submitVerification(value));
     } else {
       res = await api.checkin.submitVerification(value);
-    }
+    }*/
+
+    const res = await api.checkin.submitVerification(value);
 
     if (!res.success) throw new Error('Invalid');
+
+    await utils.timing.ensureMinimum(inputStartTime, 800);
 
     // handle server response
     store.setState({

@@ -19,7 +19,7 @@ let isSubmitting = false;
  */
 export const onTicketInput = async (fromPaste = false) => {
   if (isSubmitting) return;
-  
+
   const inputStartTime = Date.now();
 
   const flow = stepConfig.ticket.getFlow();
@@ -42,7 +42,7 @@ export const onTicketInput = async (fromPaste = false) => {
     console.error('[Ticket input] invalid');
 
     const msg =
-      (fromPaste && value.length === 5)
+      fromPaste && value.length === 5
         ? 'Código inválido 😕'
         : 'O código precisa ter 5 letras ou números';
     flow.error(msg);
@@ -52,18 +52,22 @@ export const onTicketInput = async (fromPaste = false) => {
   // submit input
   try {
     isSubmitting = true;
-    
+
     flow.processing('Buscando seu ingresso... 🎫');
 
-    await utils.timing.ensureMinimum(inputStartTime, 1200);
+    await utils.timing.ensureMinimum(inputStartTime, 300);
 
-    await goToStep('verification', { skeleton: true });
+    //await goToStep('verification', { skeleton: true });
+    // removed as ticket code confirmation should be quick enough that errors will be returned almost immediately
 
     // validate ticket code with the server
     console.debug('submitting to server');
-    const res = await withSkeleton(() => api.checkin.submitTicket(value));
+    //const res = await withSkeleton(() => api.checkin.submitTicket(value)); // not required if the verification skeleton is not displayed
+    const res = await api.checkin.submitTicket(value);
 
     if (!res.success) throw new Error('Invalid');
+
+    await utils.timing.ensureMinimum(inputStartTime, 800);
 
     // handle server response
     store.setState({

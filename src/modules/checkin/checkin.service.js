@@ -59,6 +59,8 @@ export class CheckinService {
       this.session = result.session;
 
       data = { ...data, ...result.data };
+
+      return this._persistAndRespond(this.session, data);
     }
 
     if (qrToken && !this.session.progress.qr) {
@@ -69,6 +71,8 @@ export class CheckinService {
       this.session = result.session;
 
       data = { ...data, ...result.data };
+
+      return this._persistAndRespond(this.session, data);
     }
 
     return this._persistAndRespond(this.session, data);
@@ -99,6 +103,8 @@ export class CheckinService {
   async submitVerification(verificationCode) {
     await this._initSession();
 
+    const { session, data } = await this._processVerification(verificationCode);
+
     const rotated = await checkinSession.rotate(
       this.req,
       this.res,
@@ -106,9 +112,6 @@ export class CheckinService {
     );
 
     this.sessionId = rotated.sessionId;
-    this.session = rotated.session;
-
-    const { session, data } = await this._processVerification(verificationCode);
 
     return await this._persistAndRespond(session, data);
   }

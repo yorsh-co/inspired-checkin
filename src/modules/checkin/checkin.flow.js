@@ -22,6 +22,11 @@ export const applyStep = (session, step, payload = {}) => {
     ...payload,
 
     progress: { ...progress },
+
+    ticket: { ...session.ticket, ...payload.ticket },
+    verification: { ...session.verification, ...payload.verification },
+    qr: { ...session.qr, ...payload.qr },
+
     updatedAt: now,
   };
 

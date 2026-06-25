@@ -1,0 +1,36 @@
+body {
+  min-height: 100dvh;
+  
+  overflow-y: scroll;
+  overflow-x: hidden;
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  
+  background: var(--bg-gradient);
+  
+  position: relative;
+}
+
+.no-js-warning {
+  background: #ffdddd;
+  color: #900;
+  padding: 16px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.main-wrapper {
+  flex: 1;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  /* compensate for top-bar */
+  /*transform: translateY(calc(-1 * var(--top-bar-height) / 2));*/
+}

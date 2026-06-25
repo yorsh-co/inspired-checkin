@@ -1,0 +1,237 @@
+<% styles = `
+<link rel="stylesheet" href="/css/pages/user/checkin.css" />
+`; scripts = `
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script type="module" src="/js/pages/user/checkin/index.js"></script>
+`; %>
+<script id="checkin-data" type="application/json">
+  <%- JSON.stringify(initialData).replace(/</g, '\\u003c') %>
+</script>
+
+<main
+  data-checkin="main-container"
+  class="main-container checkin-container cursor-glow txt-center"
+>
+  <%- include('../../partials/header') %>
+
+  <div class="content-wrapper">
+    <!-- ticket step -->
+    <section data-checkin="ticket-step" class="ticket-step skeleton">
+      <div data-checkin="ticket-input-wrapper" class="input-wrapper">
+        <input
+          id="checkin-ticket-code-input"
+          data-checkin="ticket-code-input"
+          type="text"
+          placeholder=""
+          inputmode="text"
+          pattern="[a-z0-9]{5}"
+          autocomplete="one-time-code"
+          autocorrect="on"
+          autocapitalize="sentences"
+          enterkeyhint="send"
+          disabled
+        />
+      </div>
+      <%- include('../../components/privacy-notice') %>
+
+      <div data-checkin="ticket-hint-div" class="hint-div"></div>
+    </section>
+
+    <!-- ticket verification -->
+    <section
+      data-checkin="verification-step"
+      class="verification-step skeleton"
+    >
+      <h2>Confirme que o ingresso é seu</h2>
+      <div data-checkin="verification-table-wrapper" class="table-wrapper">
+        <table class="">
+          <tr>
+            <th>
+              <div>
+                <span class="material-symbols-outlined">
+                  confirmation_number
+                </span>
+                Ingresso
+              </div>
+            </th>
+            <td>
+              <span data-checkin="verification-ticketCode" data-skeleton="value"
+                >•••••</span
+              >
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <div>
+                <span class="material-symbols-outlined"> id_card </span>
+                Nome
+              </div>
+            </th>
+            <td>
+              <span data-checkin="verification-name" data-skeleton="value"
+                >••••• ••••••••</span
+              >
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <div>
+                <span class="material-symbols-outlined"> call </span>
+                Celular
+              </div>
+            </th>
+            <td>
+              <span
+                data-checkin="verification-phoneStart"
+                data-checkin-value=""
+                data-skeleton="value"
+                >(••) •••••-••••</span
+              >
+            </td>
+          </tr>
+        </table>
+        <button data-checkin="verification-table-toggle" class="ghost" disabled>
+          <span
+            data-checkin="verification-table-toggle-label"
+            class="material-symbols-outlined"
+            >keyboard_arrow_up
+          </span>
+        </button>
+      </div>
+
+      <div data-checkin="verification-input-wrapper" class="input-wrapper">
+        <input
+          id="checkin-verification-code-input"
+          data-checkin="verification-code-input"
+          class="tel-input txt-center"
+          type="text"
+          placeholder=""
+          inputmode="numeric"
+          pattern="[0-9]{4}"
+          autocomplete="one-time-code"
+          autocorrect="on"
+          autocapitalize="sentences"
+          enterkeyhint="send"
+          disabled
+        />
+      </div>
+
+      <div data-checkin="verification-hint-div" class="hint-div"></div>
+
+      <button data-checkin="verification-back-btn" class="ghost" disabled>
+        <span class="btn-label">Voltar</span>
+      </button>
+    </section>
+
+    <!-- TODO: turn this into a component -->
+    <!-- qr step -->
+    <section data-checkin="qr-step" class="qr-step skeleton">
+      <h2>Confirme que você chegou</h2>
+
+      <!--<div class="ticket-code-display">
+      <span class="material-symbols-outlined"> confirmation_number </span>
+      <span data-checkin="qr-ticketCode">t35t3</span>
+    </div>-->
+
+      <div data-checkin="qr-table-wrapper" class="table-wrapper collapsed">
+        <table class="">
+          <tr>
+            <th>
+              <div>
+                <span class="material-symbols-outlined">
+                  confirmation_number
+                </span>
+                Ingresso
+              </div>
+            </th>
+            <td>
+              <span data-checkin="qr-ticketCode" data-skeleton="value"
+                >•••••</span
+              >
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <div>
+                <span class="material-symbols-outlined"> id_card </span>
+                Nome
+              </div>
+            </th>
+            <td>
+              <span data-checkin="qr-name" data-skeleton="value"
+                >••••• ••••••••</span
+              >
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <div>
+                <span class="material-symbols-outlined"> call </span>
+                Celular
+              </div>
+            </th>
+            <td>
+              <span
+                data-checkin="qr-phoneStart"
+                data-checkin-value=""
+                data-skeleton="value"
+                >(••) •••••-••••</span
+              >
+            </td>
+          </tr>
+        </table>
+        <button data-checkin="qr-table-toggle" class="ghost" disabled>
+          <span
+            data-checkin="qr-table-toggle-label"
+            class="material-symbols-outlined"
+            >keyboard_arrow_down
+          </span>
+        </button>
+      </div>
+
+      <div data-checkin="qr-reader-wrapper" data-skeleton="div" class="qr-reader-wrapper skeleton">
+        <div
+          id="checkin-qr-reader"
+          data-checkin="qr-reader-div"
+          class="qr-reader skeleton"
+        ></div>
+        <div class="qr-reader-icon">
+          <span class="material-symbols-outlined on-skeleton">
+            no_photography
+          </span>
+          <span class="material-symbols-outlined on-processing">
+            qr_code_scanner
+          </span>
+        </div>
+      </div>
+
+      <button
+        data-checkin="start-camera-btn"
+        class="qr-start-btn show"
+        disabled
+      >
+        <span class="material-symbols-outlined btn-label">
+          qr_code_scanner
+        </span>
+        <span class="btn-label">Ativar câmera</span>
+        <span class="btn-spinner"></span>
+      </button>
+      <%- include('../../components/privacy-notice') %>
+
+      <div data-checkin="qr-hint-div" class="hint-div"></div>
+    </section>
+
+    <!-- success step -->
+    <section data-checkin="success-step" class="success-step">
+      <div class="check material-symbols-outlined"></div>
+      <div data-checkin="success-message" class="success-message"></div>
+      <div data-checkin="success-hint-div" class="hint-div">
+        <a href="/"
+          >Clique <span class="underline">aqui</span> se nada acontecer... ↗️</a
+        >
+      </div>
+    </section>
+  </div>
+
+  <%- include('../../partials/footer') %>
+</main>

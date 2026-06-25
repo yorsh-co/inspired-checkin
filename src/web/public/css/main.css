@@ -1,15 +1,22 @@
-@import './test.css';
+@import './components/debug.css';
 
 @import './base/reset.css';
 @import './base/variables.css';
 @import './base/typography.css';
-@import './base/elements.css';
+@import './base/global.css';
+@import './base/body.css';
 
+@import './components/boot-screen.css';
+@import './components/top-bar.css';
+@import './components/skeleton.css';
 @import './components/container.css';
-@import './components/div.css';
 @import './components/form.css';
 @import './components/button.css';
 @import './components/feedback.css';
 @import './components/qr.css';
 
+@import './partials/header.css';
+@import './partials/footer.css';
+
 @import './utilities/animations.css';
+@import './utilities/glow.css';

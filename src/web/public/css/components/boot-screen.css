@@ -1,0 +1,68 @@
+.app-boot {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  width: 100dvw;
+  height: 100dvh;
+
+  background: var(--bg-gradient);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  pointer-events: none;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition:
+    opacity 0.8s ease-in,
+    visibility 0.8s ease-in;
+}
+
+.app-boot.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.app-boot:not(.show) .boot-content {
+  animation: boot-flash 0.8s ease forwards;
+}
+
+.boot-content {
+  width: 100dvw;
+  height: 100dvh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.06) 25%,
+    rgba(255, 255, 255, 0.12) 37%,
+    rgba(255, 255, 255, 0.06) 63%
+  );
+
+  background-size: 400% 100%;
+  animation: shimmer 1s ease-in-out infinite;
+}
+
+.boot-content .logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+}
+
+.app-boot.show .logo {
+  animation: pop 0.5s ease forwards;
+}
+
+.app-boot:not(.show) .logo {
+  animation: boot-logo-pop-out 0.3s ease forwards;
+  animation-delay: 0.4s;
+}

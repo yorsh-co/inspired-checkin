@@ -1,0 +1,249 @@
+.checkin-container {
+  position: relative;
+  min-height: 300px;
+}
+
+.checkin-container input,
+.checkin-container button {
+  margin-bottom: 0;
+}
+
+.checkin-container h2 {
+  font-size: 1em;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* verification step */
+.checkin-container .table-wrapper {
+  padding: 8px;
+
+  margin-top: 16px;
+  margin-bottom: 24px;
+
+  border-radius: 20px;
+
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.18),
+    rgba(255, 255, 255, 0.08)
+  );
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    height 0.2s ease;
+}
+
+/* verification processing */
+.verification-step.processing {
+  position: relative;
+  pointer-events: none;
+}
+
+.verification-step.processing .input-wrapper,
+.verification-step.processing button {
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+.verification-step.processing .input-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.06) 25%,
+    rgba(255, 255, 255, 0.2) 37%,
+    rgba(255, 255, 255, 0.06) 63%
+  );
+
+  background-size: 400% 100%;
+  animation: skeleton-loading 1.2s ease infinite;
+
+  z-index: 2;
+}
+
+.verification-step.processing {
+  transform: scale(0.98);
+}
+.verification-step.processing > * {
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+.verification-step.processing .hint-div {
+  opacity: 1;
+  filter: none;
+}
+
+/* qr step */
+.qr-step {
+  display: flex;
+  flex-direction: column;
+}
+
+.qr-step .ticket-code-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+
+  font-weight: 700;
+}
+
+.qr-start-btn {
+  display: none;
+}
+.qr-start-btn.show {
+  display: flex;
+}
+
+.qr-step .hint-div {
+  min-height: 35px;
+}
+.qr-step .table-wrapper {
+  margin-bottom: 16px !important;
+}
+.qr-step button {
+  margin-top: 0 !important;
+}
+
+/* table toggle */
+.checkin-container .table-wrapper.collapsed tr:not(:first-child) {
+  display: none;
+}
+
+.verification-step .table-wrapper button {
+  display: none;
+}
+
+.checkin-container .table-wrapper button {
+  margin: 0;
+  height: 20px;
+}
+
+/* table */
+.checkin-container table {
+  width: 100%;
+}
+
+.checkin-container th,
+.checkin-container td {
+  padding: 0 4px;
+  height: 40px;
+  font-size: 0.9em;
+}
+
+.checkin-container th {
+  text-align: left;
+}
+
+.checkin-container th div {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkin-container td {
+  text-align: right;
+}
+
+.checkin-container button {
+  margin-top: 16px;
+}
+
+/* success */
+.success-step {
+  opacity: 0;
+  transform: scale(0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.success-step.show {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.success-step.show .check {
+  animation: pop 0.4s ease;
+}
+
+.check {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #4caf50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.check::after {
+  content: 'check';
+  color: #fff;
+  font-size: 36px;
+  font-weight: 900;
+}
+
+.success-message {
+  opacity: 0.95;
+
+  min-height: 20px;
+
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+.success-message.changing {
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+/* success hint */
+.success-step .hint-div {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.success-step .hint-div.show {
+  opacity: 1;
+  animation: shake 0.3s ease forwards;
+}
+
+.success-step a {
+  color: var(--error);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.success-step a span.underline {
+  text-decoration: underline;
+}
+.success-step a:hover {
+  color: var(--error);
+}
+
+/* top bar buttons */
+body[data-debug='true'] .top-bar button[data-top-bar='debug-btn'] {
+  opacity: 1;
+
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+body[data-step='verification'] .top-bar button[data-top-bar='logout-icon'],
+body[data-step='qr'] .top-bar button[data-top-bar='logout-icon'],
+body[data-step='success'] .top-bar button[data-top-bar='logout-icon'] {
+  opacity: 1;
+
+  pointer-events: auto;
+  cursor: pointer;
+}

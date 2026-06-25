@@ -1,0 +1,38 @@
+footer {
+  margin-top: 32px;
+
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  animation: fadeIn 0.4s ease-out forwards;
+  animation-delay: 0.5s;
+  animation-fill-mode: backwards;
+}
+
+.footer-top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+footer .dot {
+  opacity: 0.5;
+}
+
+footer .credit a {
+  font-weight: 700;
+}

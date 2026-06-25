@@ -1,0 +1,18 @@
+<% styles = `
+<link rel="stylesheet" href="/css/pages/user/dashboard.css" />
+`; scripts = `
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script type="module" src="/js/pages/user/dashboard/index.js"></script>
+`; %>
+<script id="user-data" type="application/json"></script>
+
+<main
+  data-dashboard="main-container"
+  class="main-container dashboard-container cursor-glow txt-center"
+>
+  <%- include('../../partials/header') %>
+
+  <div class="content-wrapper"></div>
+
+  <%- include('../../partials/footer') %>
+</main>

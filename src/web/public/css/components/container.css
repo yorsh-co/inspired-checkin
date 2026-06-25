@@ -1,45 +1,58 @@
-body {
-  height: 100dvh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-gradient);
-  min-height: 100dvh;
+.main-container {
   position: relative;
-}
 
-.container {
-  position: relative;
+  /*min-height: 300px;*/
   width: 90%;
   max-width: 400px;
-  padding: 40px 30px;
+
+  padding: 40px 30px 30px 30px;
+  display: flex;
+  flex-direction: column;
+
   background: var(--glass);
   border-radius: 20px;
   backdrop-filter: blur(20px);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  transition: opacity 0.3s ease;
+
+  transition: height 0.4s ease-in-out;
+  overflow: hidden;
+
+  animation: fadeIn 0.4s ease-out forwards;
+  animation-delay: 0.4s;
+  animation-fill-mode: backwards;
 }
 
-/* glow */
-.container::before {
-  content: '';
-  position: absolute;
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.25),
-    transparent 60%
-  );
+/* container content */
+.content-wrapper {
+  flex: 0 0 auto;
+  position: relative;
+  min-height: 100px;
+}
+
+/* section */
+section {
   opacity: 0;
-  top: var(--y);
-  left: var(--x);
-  transform: translate(-50%, -50%);
+
   pointer-events: none;
-  transition: opacity 0.2s;
+  position: absolute;
+  inset: 0;
+
+  transition:
+    opacity 0.1s ease-out,
+    transform 0.1s ease-out;
 }
 
-.container:hover::before {
+section.show {
   opacity: 1;
+
+  pointer-events: auto;
+  position: relative;
+
+  transition:
+    opacity 0.35s ease-in,
+    transform 0.35s ease-in;
+}
+
+section.fadeout {
+  animation: fadeOut 0.3s ease forwards;
 }

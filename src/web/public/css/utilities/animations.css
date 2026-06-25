@@ -57,10 +57,72 @@
     opacity: 0;
   }
   80% {
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
   100% {
     transform: scale(1);
     opacity: 1;
+  }
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+@keyframes boot-flash {
+  0% {
+    opacity: 1;
+    filter: brightness(10);
+    background-position: 0% 50%;
+  }
+
+  40% {
+    opacity: 1;
+    filter: brightness(10);
+    background-position: 100% 50%;
+  }
+
+  60% {
+    opacity: 1;
+    filter: brightness(10);
+    background-position: 0%;
+  }
+
+  100% {
+    opacity: 0;
+    filter: brightness(1);
+  }
+}
+
+@keyframes boot-logo-pop-out {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  30% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0;
   }
 }

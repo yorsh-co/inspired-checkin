@@ -1,0 +1,39 @@
+import utils from '../modules/utils/index.js';
+
+const debugIsAllowedHost = () => {
+  const host = location.hostname;
+  return (
+    host === 'localhost' ||
+    host === '127.0.0.1' ||
+    host.startsWith('192.168.') ||
+    host.startsWith('100.') ||
+    host.endsWith('.trycloudflare.com')
+  );
+};
+
+const isDebug = (params = null) => {
+  if (!debugIsAllowedHost()) return;
+
+  const searchParams = params || new URLSearchParams(window.location.search);
+
+  if (searchParams.get('debug') === 'true')
+    localStorage.setItem('debug', 'true');
+
+  if (searchParams.get('debug') === 'false') localStorage.removeItem('debug');
+
+  document.body.dataset.debug = localStorage.getItem('debug'); // used to display debug topbar button
+
+  return localStorage.getItem('debug') === 'true';
+};
+
+export const initErudaDebugMode = () => {
+  if (!isDebug() || utils.isDesktop()) return;
+
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/eruda';
+  script.onload = () => eruda.init();
+
+  document.body.appendChild(script);
+};
+
+initErudaDebugMode();

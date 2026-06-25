@@ -1,0 +1,13 @@
+header {
+  margin-bottom: 24px;
+
+  text-align: center;
+
+  animation: fadeIn 0.4s ease forwards;
+  animation-delay: 0.3s;
+  animation-fill-mode: backwards;
+}
+
+header h1 {
+  margin: 0;
+}

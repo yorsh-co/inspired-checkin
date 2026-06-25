@@ -1,137 +1,133 @@
-import * as test from '../test.js';
-
-import * as ui from './ui.js';
+import ui from './ui/index.js';
+import utils from './utils/index.js';
 
 /**
  *
- * @param {string} qrReaderId
- * @param {HTMLButtonElement} startCameraBtn
- * @param {HTMLDivElement} hintDiv
- * @param {(qrText: string) => Promise<void>|void} onScan
+ * @param {object} params
+ * @param {HTMLDivElement} params.qrReaderDiv
+ * @param {HTMLButtonElement} params.startCameraBtn
+ * @param {HTMLDivElement} params.hintDiv
+ * @param {(qrText: string) => Promise<void>|void} params.onScan
  */
-export const setupQr = (qrReaderId, startCameraBtn, hintDiv, onScan) => {
-  startCameraBtn.addEventListener('click', async () => {
-    const defaultHint = hintDiv.textContent;
-    const qrReader = document.getElementById(qrReaderId);
-    const qrWrapper = qrReader.closest('.qr-reader-wrapper');
+export const setupQr = ({
+  qrReaderDiv,
+  startCameraBtn,
+  hintDiv,
+  onScan,
+
+  onProcessingStart,
+  onProcessingEnd,
+  onError,
+} = {}) => {
+  startCameraBtn.onclick = async () => {
+    const qrWrapper = qrReaderDiv.closest('.qr-reader-wrapper');
+    const defaultHint = hintDiv.textContent; // TODO: ?
+
     let helpTimeout;
 
     try {
-      // update ui
       const permissionTimeout = setTimeout(() => {
-        ui.showHint(hintDiv, '👆 Libera acesso à câmera pra continuar');
+        ui.hint.showHint(hintDiv, '👆 Libera acesso à câmera pra continuar');
       }, 3000);
 
+      // update ui
       startCameraBtn.disabled = true;
+      ui.element.setShow(startCameraBtn, false);
 
-      ui.startLoading(startCameraBtn);
+      ui.skeleton.render(qrWrapper);
+      ui.element.setShow(qrWrapper, true);
 
       // open qr reader div
-      const scanner = new Html5Qrcode(qrReaderId);
+      const scanner = new Html5Qrcode(qrReaderDiv.id);
 
-      ui.startLoading(qrWrapper);
-      qrReader.classList.add('open');
-
-      ui.stopLoading(startCameraBtn);
-      ui.hide(startCameraBtn);
-
-      // set help timeout
+      // set help hint timeout
       const startHelpTimeout = (delay = 20000) => {
         clearTimeout(helpTimeout);
 
         helpTimeout = setTimeout(() => {
           console.error('qr scan timeout');
-          ui.showError(hintDiv, 'Se não funcionar, chama um voluntário ✨');
+          ui.hint.showError(
+            hintDiv,
+            'Se não funcionar, chama um voluntário ✨',
+          );
         }, delay);
       };
       startHelpTimeout();
 
-      // start scanner
+      // scan handler
       let isProcessing = false;
       let lastScanTime = 0;
 
-      const handleScan = async decodedText => {
-        // check against repeated scans
+      const handleScan = async (decodedText) => {
+        // guard against repeated scans
         const now = Date.now();
         if (now - lastScanTime < 1500) return;
         if (isProcessing) return;
 
         lastScanTime = now;
         isProcessing = true;
-        console.log('qr code scanned');
+        console.debug('qr code scanned', decodedText);
 
         try {
+          scanner.pause(true);
+
           clearTimeout(helpTimeout);
 
-          // show loading
-          ui.showHint(hintDiv, 'Lendo o QR code... 🔎');
-          setTimeout(() => {
-            if (isProcessing) {
-              ui.showHint(hintDiv, 'Isso pode levar uns segundinhos... ⌛');
-            }
-          }, 2000);
+          await onProcessingStart?.('Lendo o QR code... 🔎');
 
-          ui.startLoading(qrWrapper);
-          qrReader.style.opacity = 0;
+          await onScan(decodedText);
 
-          await onScan(decodedText, hintDiv);
           scanner.stop();
-          return;
-          // FIXME: handle errors or invalid QR code
         } catch (err) {
           console.error(err);
-          ui.showError(
-            hintDiv,
-            /*err.code === 'INVALID_QR'
-              ? 'Este QR code não é válido para este evento'
-              :*/ 'Ops! Não deu pra ler esse QR 😕 Tenta de novo ou usa outro'
+
+          onError?.(
+            'Ops! Não deu pra ler esse QR 😕 Tenta de novo ou usa outro',
           );
+
+          await utils.sleep(800);
+
+          onProcessingEnd?.();
+
+          scanner.resume();
 
           startHelpTimeout(10000);
         } finally {
-          // display the scanner again
-          qrReader.style.opacity = 1;
-          ui.stopLoading(qrWrapper);
           isProcessing = false;
         }
       };
 
-      // start
+      // start the scanner
       await scanner.start(
         { facingMode: 'environment' },
         { fps: 10, qrbox: { width: 220, height: 220 } },
-        handleScan
+        handleScan,
       );
 
       // display the scanner
       clearTimeout(permissionTimeout);
-      ui.showHint(hintDiv, defaultHint);
+      ui.hint.showHint(hintDiv, defaultHint);
 
-      await waitForVideoReady(qrReader);
-      ui.stopLoading(qrWrapper);
+      await waitForVideoReady(qrReaderDiv);
+
+      ui.skeleton.clear(qrWrapper);
 
       console.log('qr scanner started');
-
-      // FIXME: test
-      test.setupButton(() => handleScan('test'));
     } catch (err) {
       console.error(err);
+
       clearTimeout(helpTimeout);
-      ui.showError(
-        hintDiv,
-        'Não foi possível acessar a câmera 📷 Verifique as permissões e tente novamente'
-      );
 
-      // hide the scanner
-      qrReader.classList.remove('open');
-      ui.stopLoading(qrWrapper);
+      onError?.(
+        'Não foi possível acessar a câmera 📷 Verifique as permissões e tente novamente',
+      ); // FIXME: handle different error types
 
-      // show the camera start button
-      ui.stopLoading(startCameraBtn);
-      ui.show(startCameraBtn);
+      ui.element.setShow(qrWrapper, false);
+
+      ui.element.setShow(startCameraBtn, true);
       startCameraBtn.disabled = false;
     }
-  });
+  };
 };
 
 /**
@@ -149,7 +145,7 @@ const waitForVideoReady = (qrEl, timeoutMs = 5000) =>
 
       if (video) {
         if (!videoDetectedAt) {
-          videoDetectedAt = Date.now(); // start timeout HERE
+          videoDetectedAt = Date.now();
         }
 
         if (video.readyState >= 2) {

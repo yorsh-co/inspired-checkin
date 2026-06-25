@@ -17,59 +17,46 @@
 
   <!-- page-specific styles -->
   <% if (styles) { %>
-    <%- styles %>
+  <%-  styles %>
   <% } %>
 </head>
-<body>
+<body data-step data-debug data-topbar>
 
-  <%- body %>
+  <!-- no JS warning -->
+  <noscript>
+    <style>
+      main { display: none; }
+    </style>
+    <div class="no-js-warning">
+      <p>
+        Este aplicativo precisa de JavaScript para funcionar corretamente.
+        Por favor, ative o JavaScript no seu navegador.
+      </p>
+    </div>
+  </noscript>
+  
+  <!-- eruda debug -->
+  <script type="module" src="/js/debug/debug.js"></script>
 
-  <button id="skip-button" class="test">
-    <span>[test] pular etapa</span>
-  </button>
+  <!-- boot screen -->
+  <%- include('../components/boot-screen') %>
+
+  <!-- top bar -->
+  <%- include('../components/top-bar') %>
+  
+  <!-- main injection -->
+  <div class="main-wrapper">
+    <%- body %>
+  </div>
+
+  <!-- bottom bar - to balance content below top bar -->
+  <%- include('../components/bottom-bar') %>
 
   <!-- global scripts -->
 
   <!-- page-specific scripts -->
   <% if (scripts) { %>
-    <%- scripts %>
+  <%-  scripts %>
   <% } %>
-
 </body>
-
-<!-- dev tools on mobile -->
-<script>
-  (function initErudaDebugMode() {
-    const params = new URLSearchParams(window.location.search);
-    const host = location.hostname;
-
-    const isAllowedHost =
-      host === 'localhost' ||
-      host === '127.0.0.1' ||
-      host.startsWith('192.168.') ||
-      host.startsWith('100.') ||
-      host.endsWith('.trycloudflare.com');
-
-    if (!isAllowedHost) return;
-
-    if (params.get('debug') === 'true') {
-      localStorage.setItem('debug', 'true');
-    }
-
-    if (params.get('debug') === 'false') {
-      localStorage.removeItem('debug');
-    }
-
-    const isDebug = localStorage.getItem('debug') === 'true';
-
-    if (!isDebug) return;
-
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/eruda';
-    script.onload = () => eruda.init();
-
-    document.body.appendChild(script);
-  })();
-</script>
-
 </html>

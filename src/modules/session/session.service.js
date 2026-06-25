@@ -3,25 +3,34 @@ import { v4 as uuidv4 } from 'uuid';
 import { hashUA } from '../../shared/utils/hash.js';
 import { env } from '../../config/env.js';
 
-const getKey = id => `session:${id}`;
+const getKey = (id) => `session:checkin:${id}`;
 
-const createSession = async req => {
+const getTtlByType = (type) => {
+  const envTtl = env.sessionTtl[type];
+
+  if (!envTtl) throw new Error(`Unknown session type: ${type}`);
+
+  const ttl = parseInt(envTtl, 10);
+
+  if (!Number.isInteger(ttl) || ttl <= 0) {
+    throw new Error(`Invalid TTL for ${type}: ${envTtl}`);
+  }
+
+  return ttl;
+};
+
+const createSession = async (data) => {
   const sessionId = uuidv4();
 
   const session = {
-    ticketId: null,
-    eventId: null,
-    ticketValidated: false,
-    qrScanned: false,
-    ua: hashUA(req.headers['user-agent'])
+    ...data,
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
   };
 
-  await redis.set(
-    getKey(sessionId),
-    JSON.stringify(session),
-    'EX',
-    SESSION_TTL
-  );
+  const ttl = getTtlByType(session.type);
+
+  await redis.set(getKey(sessionId), JSON.stringify(session), 'EX', ttl);
 
   return { sessionId, session };
 };
@@ -42,16 +51,59 @@ const getSession = async (sessionId, req) => {
 };
 
 const saveSession = async (sessionId, session) => {
-  await redis.set(
-    getKey(sessionId),
-    JSON.stringify(session),
-    'EX',
-    SESSION_TTL
-  );
+  if (!session) return;
+
+  const updatedSession = {
+    ...session,
+    updatedAt: Date.now(),
+  };
+
+  const ttl = getTtlByType(session.type);
+
+  await redis.set(getKey(sessionId), JSON.stringify(updatedSession), 'EX', ttl);
+
+  return updatedSession;
 };
 
-const destroySession = async sessionId => {
+const destroySession = async (sessionId) => {
   await redis.del(getKey(sessionId));
 };
 
-export { createSession, getSession, saveSession, destroySession };
+const rotateSession = async (oldSessionId, req) => {
+  const oldSessionRaw = await redis.get(getKey(oldSessionId));
+  if (!oldSessionRaw) return null;
+
+  const oldSession = JSON.parse(oldSessionRaw);
+
+  await destroySession(oldSessionId);
+
+  const newSessionId = uuidv4();
+
+  const newSession = {
+    ...oldSession,
+    ua: hashUA(req.headers['user-agent']),
+    updatedAt: Date.now(),
+  };
+
+  const ttl = getTtlByType(newSession.type);
+
+  await redis.set(getKey(newSessionId), JSON.stringify(newSession), 'EX', ttl);
+
+  return { sessionId: newSessionId, session: newSession };
+};
+
+export {
+  createSession,
+  getSession,
+  saveSession,
+  destroySession,
+  rotateSession,
+};
+
+export const sessionService = {
+  create: createSession,
+  get: getSession,
+  save: saveSession,
+  destroy: destroySession,
+  rotate: rotateSession,
+};

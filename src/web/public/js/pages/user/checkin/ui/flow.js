@@ -132,14 +132,16 @@ export const createStepFlow = (els) => {
   return {
     transition,
 
-    idle: async (msg = null, options = {}) => transition('idle', [msg, options]),
+    idle: async (msg = null, options = {}) =>
+      transition('idle', [msg, options]),
     loading: async (msg = null, options = {}) =>
       transition('loading', [msg, options]),
     processing: async (msg = null, options = {}) =>
       transition('processing', [msg, options]),
     success: async (msg = null, options = {}) =>
       transition('success', [msg, options]),
-    error: async (msg = null, options = {}) => transition('error', [msg, options]),
+    error: async (msg = null, options = {}) =>
+      transition('error', [msg, options]),
     hidden: async (msg = null, options = {}) =>
       transition('hidden', [msg, options]),
   };

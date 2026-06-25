@@ -1,11 +1,11 @@
 {
   "name": "inspired-checkin",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "description": "",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yorsh-co/gps.inspire"
+    "url": "https://github.com/yorsh-co/inspired-checkin"
   },
   "author": "Joshua Porter",
   "license": "MIT",

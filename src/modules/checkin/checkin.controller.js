@@ -1,25 +1,69 @@
-import * as qr from '../qr/qr.service.js';
+import { CheckinService } from './checkin.service.js';
 
-export const validateTicket = async (req, res) => {
-  console.log(req.body);
-  return res.status(200).json({
-    code: 'TICKET_VALID',
-    message: 'Ticket endpoint working',
-    request: { body: req.body, headers: req.headers }, // FIXME:
-    data: { ticketValidated: true, qrValidated: false, checkinComplete: false }
-  });
+export const submitTicket = async (req, res, next) => {
+  try {
+    const service = new CheckinService({ req, res });
 
-  // TODO:
+    const result = await service.submitTicket(req.body.ticket);
+
+    return res.json({
+      success: true,
+      code: 'TICKET_VALIDATED',
+      meta: result.meta,
+      data: result.data || {},
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
-export const validateQr = async (req, res) => {
-  console.log(req.body);
-  return res.status(200).json({
-    code: 'QR_VALID',
-    message: 'QR endpoint working',
-    request: { body: req.body, headers: req.headers }, // FIXME:
-    data: { ticketValidated: true, qrValidated: true, checkinComplete: true }
-  });
+export const submitVerification = async (req, res, next) => {
+  try {
+    const service = new CheckinService({ req, res });
 
-  // TODO:
+    const result = await service.submitVerification(req.body.verificationCode);
+
+    return res.json({
+      success: true,
+      code: 'USER_VERIFIED',
+      meta: result.meta,
+      data: result.data || {},
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const submitQrCode = async (req, res, next) => {
+  try {
+    const service = new CheckinService({ req, res });
+
+    const result = await service.submitQrCode(req.body.qrCode);
+
+    return res.json({
+      success: true,
+      code: 'QR_PROCESSED',
+      meta: result.meta,
+      data: result.data || {},
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const reset = async (req, res, next) => {
+  try {
+    const service = new CheckinService({ req, res });
+
+    const result = await service.resetCheckin();
+
+    return res.json({
+      success: true,
+      code: 'CHECKIN_RESET',
+      meta: result.meta,
+      data: result.data || {},
+    });
+  } catch (err) {
+    next(err);
+  }
 };

@@ -315,21 +315,6 @@ export class CheckinService {
     this.session.checkinNumber = checkinNumber;
     this.session.checkinAt = checkinAt;
   }
-
-  // =========================
-  // DEBUG
-  // =========================
-
-  /**
-   * Debug checkin.
-   *
-   * @returns {Object}
-   */
-  async debug() {
-    await this._initSession();
-
-    return this.session;
-  }
 }
 
 /**

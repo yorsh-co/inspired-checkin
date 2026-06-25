@@ -11,6 +11,7 @@ import cookieParser from 'cookie-parser';
 import { resolveSessions } from './middleware/auth.middleware.js';
 import checkinRoutes from './modules/checkin/checkin.routes.js';
 import apiRoutes from './api/index.js';
+import debugRoutes from './modules/debug/debug.routes.js';
 import webRoutes from './web/routes/web.routes.js';
 
 const app = express();
@@ -34,6 +35,9 @@ app.use(
 
 // api
 app.use('/api/v1/checkin', checkinRoutes);
+
+app.use('/api/v1/debug', debugRoutes);
+
 app.use('/api/v1', resolveSessions, apiRoutes);
 
 // web

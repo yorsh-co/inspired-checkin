@@ -24,7 +24,9 @@ export const resolveSessions = async (req, res, next) => {
     /** @type {{ sessionId: string, session: Session }|null} */
     const admin = await adminSession.get(req);
     if (admin) req.sessions.admin = admin.session;
-  } catch {
+  } catch (err) {
+    console.error(err);
+
     // leave req.sessions in its current state
   }
 

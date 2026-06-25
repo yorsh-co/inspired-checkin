@@ -48,16 +48,28 @@ router.get(
 );
 
 // admin
-router.get('/admin/login', (req, res) => {
-  res.render('pages/admin/login', { title: 'Admin Login' });
+router.get('/admin/login', (req, res, next) => {
+  try {
+    res.render('pages/admin/login', { title: 'Admin Login' });
+  } catch (err) {
+    next(err);
+  }
 });
 
-router.get('/admin', requireWebAuth('admin', '/admin/login'), (req, res) => {
-  res.render('pages/admin/dashboard', { title: 'Admin' });
-});
+router.get(
+  '/admin',
+  requireWebAuth('admin', '/admin/login'),
+  (req, res, next) => {
+    try {
+      res.render('pages/admin/dashboard', { title: 'Admin' });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
 
 // app
-router.get('/', requireWebAuth('user', '/checkin'), (req, res) => {
+router.get('/', requireWebAuth('user', '/checkin'), (req, res, next) => {
   try {
     res.render('pages/user/dashboard', {
       title: env.appTitle,

@@ -24,7 +24,11 @@ app.use(expressLayouts);
 app.set('layout', 'layouts/main');
 
 // middleware
-app.use(express.json());
+app.use(
+  express.json({
+    limit: '10kb',
+  }),
+);
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 

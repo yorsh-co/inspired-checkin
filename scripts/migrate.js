@@ -9,10 +9,11 @@
  * }
  */
 
-import pg from './shared/db/postgres.js';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+
+import pg from '../src/shared/db/postgres.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

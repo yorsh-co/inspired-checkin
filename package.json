@@ -31,6 +31,7 @@
   "devDependencies": {
     "concurrently": "^9.2.1",
     "dotenv-cli": "^8.0.0",
+    "node-pg-migrate": "^8.0.4",
     "nodemon": "^3.1.14"
   },
   "scripts": {
@@ -40,6 +41,7 @@
     "dev:app": "nodemon src/server.js",
     "dev:redis": "dotenv -- sh -c 'docker run --rm -p 6379:6379 -v checkin_redis_data_dev:/data redis redis-server --requirepass $REDIS_PASSWORD'",
     "dev:postgres": "dotenv -- sh -c 'docker run --rm -p 5432:5432 -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -e POSTGRES_DB=$POSTGRES_DB -v checkin_pg_data_dev:/var/lib/postgresql/data postgres:16-alpine'",
-    "dev:tunnel": "cloudflared tunnel --url http://localhost:3000 --loglevel info 2>&1 | grep --line-buffered -o 'https://[-a-zA-Z0-9\\.]*trycloudflare.com'"
+    "dev:tunnel": "cloudflared tunnel --url http://localhost:3000 --loglevel info 2>&1 | grep --line-buffered -o 'https://[-a-zA-Z0-9\\.]*trycloudflare.com'",
+    "dev:migrate": "dotenv -- sh -c 'DATABASE_URL=postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost:5432/$POSTGRES_DB node-pg-migrate up'"
   }
 }

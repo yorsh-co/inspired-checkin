@@ -15,6 +15,10 @@ router.post('/reset', controller.reset);
 import { env } from '../../config/env.js';
 import { CheckinService } from './checkin.service.js';
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 router.get('/debug', async (req, res) => {
   try {
     console.log('SESSION DEBUG REQUEST');

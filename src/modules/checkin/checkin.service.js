@@ -13,8 +13,15 @@ import { userSession } from '../user/user.session.adapter.js';
 /** @import { CheckinStep } from '../../types/checkin.js' */
 
 export class CheckinService {
+  /**
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   */
   constructor({ req, res }) {
+    /** @type {import('express').Request} */
     this.req = req;
+
+    /** @type {import('express').Response} */
     this.res = res;
 
     /** @type {CheckinSession} */

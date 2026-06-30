@@ -1,5 +1,10 @@
 import { CheckinService } from './checkin.service.js';
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
 export const submitTicket = async (req, res, next) => {
   try {
     const service = new CheckinService({ req, res });
@@ -17,6 +22,11 @@ export const submitTicket = async (req, res, next) => {
   }
 };
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
 export const submitVerification = async (req, res, next) => {
   try {
     const service = new CheckinService({ req, res });
@@ -34,6 +44,11 @@ export const submitVerification = async (req, res, next) => {
   }
 };
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
 export const submitQrCode = async (req, res, next) => {
   try {
     const service = new CheckinService({ req, res });
@@ -51,6 +66,11 @@ export const submitQrCode = async (req, res, next) => {
   }
 };
 
+/**
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
 export const reset = async (req, res, next) => {
   try {
     const service = new CheckinService({ req, res });

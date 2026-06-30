@@ -22,8 +22,8 @@ export const createSessionAdapter = (cookieName, createSessionData) => {
    * or create a new session and attach the
    * session ID cookie to the response.
    *
-   * @param {Object} req
-   * @param {Object} res
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
    * @returns {{ sessionId: string, session: Session }}
    */
   const ensure = async (req, res) => {
@@ -46,7 +46,7 @@ export const createSessionAdapter = (cookieName, createSessionData) => {
   /**
    * Retrieve the session using the request cookie.
    *
-   * @param {Object} req
+   * @param {import('express').Request} req
    * @returns {{ sessionId: string, session: Session }|null}
    */
   const get = async (req) => {
@@ -72,8 +72,8 @@ export const createSessionAdapter = (cookieName, createSessionData) => {
   /**
    * Rotate the session ID.
    *
-   * @param {Object} req
-   * @param {Object} res
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
    * @param {string} sessionId
    *
    * @returns {Session}
@@ -90,8 +90,8 @@ export const createSessionAdapter = (cookieName, createSessionData) => {
    * Destroy the session corresponding to the ID
    * in the request cookie and clear the cookie.
    *
-   * @param {Object} req
-   * @param {Object} res
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
    */
   const destroy = async (req, res) => {
     const sessionId = req.cookies[cookieName];
@@ -107,8 +107,8 @@ export const createSessionAdapter = (cookieName, createSessionData) => {
    * Reset the request session by destroying the current
    * session and creating a new one.
    *
-   * @param {Object} req
-   * @param {Object} res
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
    *
    * @returns {{ sessionId: string, session: Session }}
    */

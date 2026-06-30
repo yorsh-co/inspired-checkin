@@ -10,7 +10,6 @@ import helmet from 'helmet';
 import crypto from 'crypto';
 
 // internal
-import { resolveSessions } from './middleware/auth.middleware.js';
 import checkinRoutes from './modules/checkin/checkin.routes.js';
 import apiRoutes from './api/index.js';
 import debugRoutes from './modules/debug/debug.routes.js';

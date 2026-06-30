@@ -155,7 +155,7 @@ export class CheckinService {
 
       return await this._persistAndRespond(session, data);
     } catch (err) {
-      return await this._handleFailure('qr');
+      return await this._handleFailure('qr', err);
     }
   }
 

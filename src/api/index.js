@@ -19,9 +19,10 @@ const router = express.Router();
 router.use(ipLimiter);
 
 router.use('/checkin', checkinRoutes);
-router.use('/debug', debugRoutes);
 
 router.use(resolveSessions);
+
+router.use('/debug', requireRole('admin'), debugRoutes);
 
 router.use('/admin', requireRole('admin'), adminSessionLimiter, adminRoutes);
 router.use('/', requireRole('user'), userSessionLimiter, userRoutes);

@@ -7,6 +7,7 @@ import express from 'express';
 import expressLayouts from 'express-ejs-layouts';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
+import crypto from 'crypto';
 
 // internal
 import { resolveSessions } from './middleware/auth.middleware.js';
@@ -25,14 +26,36 @@ app.use(expressLayouts);
 app.set('layout', 'layouts/main');
 
 // middleware
-app.use(helmet());
+app.use((req, res, next) => {
+  res.locals.cspNonce = crypto.randomBytes(16).toString('base64');
+  next();
+});
+
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        scriptSrc: [
+          "'self'",
+          'https://unpkg.com',
+          'https://challenges.cloudflare.com',
+          'https://static.cloudflareinsights.com',
+          (req, res) => `'nonce-${res.locals.cspNonce}'`,
+        ],
+        frameSrc: ["'self'", 'https://challenges.cloudflare.com'],
+      },
+    },
+  }),
+);
 
 app.use(
   express.json({
     limit: '10kb',
   }),
 );
+
 app.use(express.urlencoded({ extended: true }));
+
 app.use(cookieParser());
 
 // static

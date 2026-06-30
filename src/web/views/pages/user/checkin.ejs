@@ -14,7 +14,7 @@
 <!-- static files -->
 <script type="module" src="/js/pages/user/checkin/index.js"></script>
 `; %>
-<script id="checkin-data" type="application/json">
+<script id="checkin-data" type="application/json" nonce="<%= cspNonce %>">
   <%- JSON.stringify(initialData).replace(/</g, '\\u003c') %>
 </script>
 

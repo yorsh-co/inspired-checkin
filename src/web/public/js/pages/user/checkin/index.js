@@ -3,7 +3,6 @@ import store from './state/store.js';
 import transition from './ui/transition.js';
 import { goToStep } from './ui/navigation.js';
 
-
 import api from '../../../core/api/index.js';
 import layoutDom from '../../../layouts/main/dom.js';
 import { setupTopBarBtn } from '../../../components/top-bar/buttons.js';
@@ -26,9 +25,11 @@ const init = async () => {
     const initialData = JSON.parse(el.textContent);
 
     const initialStep = initialData?.meta?.nextStep || 'ticket';
+    const captchaRequired = initialData?.meta?.captchaRequired;
     const data = initialData?.data || {};
 
     store.setState({
+      captchaRequired,
       currentUiStepKey: null,
       session: data.session || {},
     });

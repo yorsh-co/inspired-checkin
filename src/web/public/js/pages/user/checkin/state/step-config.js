@@ -5,6 +5,7 @@ import {
   attachScrollOnFocus,
   attachScrollOnBlur,
 } from '../../../../components/input/focus-scroll.js';
+import { TurnstileCaptcha } from '../../../../components/captcha/captcha.js';
 import api from '../../../../core/api/index.js';
 
 import dom from '../dom.js';
@@ -22,6 +23,7 @@ import {
   stopPlaceholderTyping,
 } from '../ui/inputs.js';
 import { createStepFlow } from '../ui/flow.js';
+import store from './store.js';
 
 const stepConfig = {
   ticket: {
@@ -31,6 +33,11 @@ const stepConfig = {
     hint: dom.ticket.hint,
     input: dom.inputs.ticketCode,
     focusTarget: dom.inputs.ticketCode,
+
+    captcha: new TurnstileCaptcha(dom.ticket.captcha, {
+      action: 'ticket-code-input',
+      callback: (t) => onTicketInput({ captchaToken: t }),
+    }),
 
     getFlow() {
       if (!this._flow) {
@@ -43,10 +50,16 @@ const stepConfig = {
       return this._flow;
     },
 
-    async onEnter(_state, { skeleton }) {
+    async onEnter(state, { skeleton }) {
       if (skeleton) {
         ui.skeleton.render(this.step);
         return;
+      }
+
+      const { captchaRequired } = state;
+
+      if (captchaRequired) {
+        // await this.captcha.render(); FIXME: test once using the live url
       }
 
       ui.skeleton.clear(this.step);
@@ -73,6 +86,10 @@ const stepConfig = {
     },
 
     async onExit() {
+      if (this.captcha.widgetId) {
+        this.captcha.remove();
+      }
+
       // reset input
       stopPlaceholderTyping(this.input);
 

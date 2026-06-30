@@ -82,6 +82,7 @@ export const onVerificationInput = async (fromPaste = false) => {
 
     // handle server response
     store.setState({
+      captchaRequired: res.meta?.captchaRequired,
       session: res.data.session,
     });
 

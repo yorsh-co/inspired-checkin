@@ -1,9 +1,9 @@
-export const submitTicket = async (ticket) => {
+export const submitTicket = async (ticket, captchaToken) => {
   const res = await fetch('/api/v1/checkin/ticket', {
     method: 'POST',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ticket }),
+    body: JSON.stringify({ ticket, captchaToken }),
   });
 
   const data = await res.json();
@@ -73,7 +73,7 @@ export const reset = async () => {
 };
 
 export const debugSession = async () => {
-  const res = await fetch('/api/v1/checkin/debug', {
+  const res = await fetch('/api/v1/debug/session', {
     method: 'GET',
     credentials: 'include',
   });

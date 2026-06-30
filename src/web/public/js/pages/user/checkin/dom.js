@@ -20,6 +20,7 @@ const dom = Object.freeze({
   ticket: {
     hint: qs('[data-checkin="ticket-hint-div"]'),
     inputWrapper: qs('[data-checkin="ticket-input-wrapper"]'),
+    captcha: qs('[data-checkin="ticket-captcha-div"]'),
   },
 
   verification: {

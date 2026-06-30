@@ -1,7 +1,17 @@
 <% styles = `
 <link rel="stylesheet" href="/css/pages/user/checkin.css" />
 `; scripts = `
+
+<!-- html5-qrcode -->
 <script src="https://unpkg.com/html5-qrcode"></script>
+
+<!-- cloudflare turnstile captcha -->
+<script
+  src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+  defer
+></script>
+
+<!-- static files -->
 <script type="module" src="/js/pages/user/checkin/index.js"></script>
 `; %>
 <script id="checkin-data" type="application/json">
@@ -35,6 +45,13 @@
       <%- include('../../components/privacy-notice') %>
 
       <div data-checkin="ticket-hint-div" class="hint-div"></div>
+
+      <div
+        id="ticket-captcha-div"
+        data-checkin="ticket-captcha-div"
+        data-sitekey="<%- turnstileSiteKey %>"
+        class="captcha-container"
+      ></div>
     </section>
 
     <!-- ticket verification -->
@@ -189,7 +206,11 @@
         </button>
       </div>
 
-      <div data-checkin="qr-reader-wrapper" data-skeleton="div" class="qr-reader-wrapper skeleton">
+      <div
+        data-checkin="qr-reader-wrapper"
+        data-skeleton="div"
+        class="qr-reader-wrapper skeleton"
+      >
         <div
           id="checkin-qr-reader"
           data-checkin="qr-reader-div"

@@ -1,5 +1,6 @@
 let state = {
   currentUiStepKey: null,
+  captchaRequired: null,
   isSkeleton: null,
   session: null, // { progress, userPreview, currentStep }
 };

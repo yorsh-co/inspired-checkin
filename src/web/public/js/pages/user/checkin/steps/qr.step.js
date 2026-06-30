@@ -20,6 +20,7 @@ export const onQrScan = async (qrCode) => {
 
   // handle server response
   store.setState({
+    captchaRequired: res.meta?.captchaRequired,
     session: res.data.session,
   });
 

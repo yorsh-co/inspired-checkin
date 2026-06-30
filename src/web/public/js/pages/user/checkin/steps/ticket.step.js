@@ -14,15 +14,45 @@ let isSubmitting = false;
 
 /**
  *
- * @param {boolean} fromPaste
+ * @param {Object} options
+ * @param {boolean} [options.fromPaste=false]
+ * @param {boolean} [options.captchaToken]
  * @returns
  */
-export const onTicketInput = async (fromPaste = false) => {
+export const onTicketInput = async (options = {}) => {
   if (isSubmitting) return;
+
+  const { fromPaste = false } = options;
+  let { captchaToken = null } = options;
 
   const inputStartTime = Date.now();
 
   const flow = stepConfig.ticket.getFlow();
+
+  // check captcha
+  const { session } = store.getState();
+  if (session.captchaRequired && !captchaToken) {
+    const captcha = stepConfig.ticket.captcha;
+
+    captchaToken = await captcha.getToken();
+
+    if (!captchaToken) {
+      console.error('[Ticket input] missing captcha');
+
+      flow.error('Complete a verificação antes ✨');
+      return;
+    }
+
+    if (captcha.isExpired()) {
+      console.error('[Ticket input] captcha expired');
+
+      flow.error('Refaça a verificação ✨');
+
+      await captcha.reset();
+
+      return;
+    }
+  }
 
   // validate input
   const input = stepConfig.ticket.input;
@@ -63,14 +93,15 @@ export const onTicketInput = async (fromPaste = false) => {
     // validate ticket code with the server
     console.debug('submitting to server');
     //const res = await withSkeleton(() => api.checkin.submitTicket(value)); // not required if the verification skeleton is not displayed
-    const res = await api.checkin.submitTicket(value);
+    const res = await api.checkin.submitTicket(value, captchaToken);
 
-    if (!res.success) throw new Error('Invalid');
+    if (!res.success) throw new Error('Invalid'); // FIXME: add error-handling
 
     await utils.timing.ensureMinimum(inputStartTime, 800);
 
     // handle server response
     store.setState({
+      captchaRequired: res.meta?.captchaRequired,
       session: res.data.session,
     });
 

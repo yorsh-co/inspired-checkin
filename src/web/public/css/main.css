@@ -14,6 +14,7 @@
 @import './components/button.css';
 @import './components/feedback.css';
 @import './components/qr.css';
+@import './components/captcha.css';
 
 @import './partials/header.css';
 @import './partials/footer.css';

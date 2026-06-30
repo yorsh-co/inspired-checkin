@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import express from 'express';
 import expressLayouts from 'express-ejs-layouts';
 import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
 
 // internal
 import { resolveSessions } from './middleware/auth.middleware.js';
@@ -24,6 +25,8 @@ app.use(expressLayouts);
 app.set('layout', 'layouts/main');
 
 // middleware
+app.use(helmet());
+
 app.use(
   express.json({
     limit: '10kb',

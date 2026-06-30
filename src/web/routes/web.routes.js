@@ -50,6 +50,8 @@ router.get(
       res.render('pages/user/checkin', {
         title: `Check-in | ${env.appTitle}`,
 
+        turnstileSiteKey: env.captcha.siteKey,
+
         initialData: {
           ...result,
         },

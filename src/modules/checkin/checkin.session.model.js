@@ -27,6 +27,13 @@ export const createCheckinSession = (req) => ({
 
   userPreview: {},
 
+  failedAttempts: {
+    ticket: 0,
+    verification: 0,
+    qr: 0,
+  },
+  captchaRequired: false,
+
   ua: hashUA(req.headers['user-agent']),
 
   updatedAt: null,

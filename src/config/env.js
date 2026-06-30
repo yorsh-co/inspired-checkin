@@ -37,4 +37,9 @@ export const env = {
     port: process.env.REDIS_PORT || 6379,
     password: process.env.REDIS_PASSWORD,
   },
+
+  captcha: {
+    siteKey: process.env.TURNSTILE_SITE_KEY,
+    secret: process.env.TURNSTILE_SECRET,
+  },
 };

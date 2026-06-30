@@ -1,4 +1,4 @@
-/** @import { CheckinStep, CheckinProgress } from './checkin.js' */
+/** @import { CheckinStep, CheckinProgress, CheckinFailedAttempts } from './checkin.js' */
 
 /**
  * @typedef {Object} CheckinSession
@@ -33,6 +33,9 @@
  * @property {Object} userPreview.ticketCode
  * @property {Object} userPreview.name
  * @property {Object} userPreview.phoneStart
+ *
+ * @property {CheckinFailedAttempts} failedAttempts
+ * @property {Boolean} captchaRequired
  *
  * @property {string} ua
  *

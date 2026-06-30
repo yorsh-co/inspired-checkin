@@ -1,5 +1,6 @@
 import { applyStep, getNextStep, isComplete } from './checkin.flow.js';
 import { checkinSession } from './checkin.session.adapter.js';
+import { recordFailedAttempt } from './checkin.attempts.js';
 
 import { getUserByTicket, completeCheckin } from '../user/user.service.js';
 import { maskName, maskPhone } from '../../shared/utils/mask.js';
@@ -100,9 +101,13 @@ export class CheckinService {
   async submitTicket(ticketCode) {
     await this._initSession();
 
-    const { session, data } = await this._processTicket(ticketCode);
+    try {
+      const { session, data } = await this._processTicket(ticketCode);
 
-    return await this._persistAndRespond(session, data);
+      return await this._persistAndRespond(session, data);
+    } catch (err) {
+      return await this._handleFailure('ticket', err);
+    }
   }
 
   /**
@@ -115,17 +120,22 @@ export class CheckinService {
   async submitVerification(verificationCode) {
     await this._initSession();
 
-    const { session, data } = await this._processVerification(verificationCode);
+    try {
+      const { session, data } =
+        await this._processVerification(verificationCode);
 
-    const rotated = await checkinSession.rotate(
-      this.req,
-      this.res,
-      this.sessionId,
-    );
+      const rotated = await checkinSession.rotate(
+        this.req,
+        this.res,
+        this.sessionId,
+      );
 
-    this.sessionId = rotated.sessionId;
+      this.sessionId = rotated.sessionId;
 
-    return await this._persistAndRespond(session, data);
+      return await this._persistAndRespond(session, data);
+    } catch (err) {
+      return await this._handleFailure('verification', err);
+    }
   }
 
   /**
@@ -138,11 +148,15 @@ export class CheckinService {
   async submitQrCode(qrCode) {
     await this._initSession();
 
-    const token = qrService.extractToken(qrCode);
+    try {
+      const token = qrService.extractToken(qrCode);
 
-    const { session, data } = await this._processQrToken(token);
+      const { session, data } = await this._processQrToken(token);
 
-    return await this._persistAndRespond(session, data);
+      return await this._persistAndRespond(session, data);
+    } catch (err) {
+      return await this._handleFailure('qr');
+    }
   }
 
   /**
@@ -154,10 +168,15 @@ export class CheckinService {
    * @returns {Object}
    */
   async resetCheckin() {
+    let captchaRequired;
+    if (this.session) captchaRequired = this.session.captchaRequired;
+
     const { sessionId, session } = await checkinSession.reset(
       this.req,
       this.res,
     );
+
+    session.captchaRequired = captchaRequired;
 
     this.sessionId = sessionId;
     this.session = session;
@@ -180,6 +199,29 @@ export class CheckinService {
 
     this.sessionId = sessionId;
     this.session = session;
+  }
+
+  /**
+   * Record a failed attempt for the given step and persist it
+   * in the session.
+   *
+   * @param {CheckinStep} step
+   * @returns {Promise<CheckinSession|null>}
+   */
+  async _handleFailure(step, err) {
+    if (!this.session) throw err;
+
+    const updated = recordFailedAttempt(this.session, step);
+
+    this.session = updated;
+
+    if (updated.captchaRequired) {
+      return await this.resetCheckin();
+    }
+
+    await checkinSession.persist(this.sessionId, updated);
+
+    throw err;
   }
 
   /**
@@ -224,6 +266,11 @@ export class CheckinService {
     };
   }
 
+  /**
+   *
+   * @param {Function} handler
+   * @returns {*}
+   */
   async _withGlobalFailureTracking(handler) {
     try {
       return await handler();

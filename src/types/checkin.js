@@ -9,4 +9,11 @@
  * @property {boolean} qr
  */
 
+/**
+ * @typedef {Object} CheckinFailedAttempts
+ * @property {number} ticket
+ * @property {number} verification
+ * @property {number} qr
+ */
+
 export {};

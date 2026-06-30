@@ -1,5 +1,6 @@
 import { userSession } from '../modules/user/user.session.adapter.js';
 import { adminSession } from '../modules/admin/admin.session.adapter.js';
+import { checkinSession } from '../modules/checkin/checkin.session.adapter.js';
 
 /** @import { Session, SessionType } from '../../types/session.js' */
 
@@ -17,6 +18,10 @@ export const resolveSessions = async (req, res, next) => {
   req.sessions = {};
 
   try {
+    /** @type {{ sessionId: string, session: Session }|null} */
+    const checkin = await checkinSession.get(req);
+    if (checkin) req.sessions.checkin = checkin.session;
+
     /** @type {{ sessionId: string, session: Session }|null} */
     const user = await userSession.get(req);
     if (user) req.sessions.user = user.session;

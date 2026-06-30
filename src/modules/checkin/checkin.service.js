@@ -7,6 +7,7 @@ import { hash } from '../../shared/utils/hash.js';
 import { qrService } from '../qr/qr.service.js';
 import { env } from '../../config/env.js';
 import { userSession } from '../user/user.session.adapter.js';
+import { consumeCheckinEntryFailure } from '../../middleware/rate.middleware.js';
 
 /** @import { User } from '../../types/user.js' */
 /** @import { CheckinSession, UserSession } from '../../types/session.js' */
@@ -61,7 +62,9 @@ export class CheckinService {
     if (ticketCode && !this.session.progress.ticket) {
       this.session.source = 'ticket';
 
-      const result = await this._processTicket(ticketCode);
+      const result = await this._withGlobalFailureTracking(() =>
+        this._processTicket(ticketCode),
+      );
 
       this.session = result.session;
 
@@ -73,7 +76,9 @@ export class CheckinService {
     if (qrToken && !this.session.progress.qr) {
       this.session.source = 'qr';
 
-      const result = await this._processQrToken(qrToken);
+      const result = await this._withGlobalFailureTracking(() =>
+        this._processQrToken(qrToken),
+      );
 
       this.session = result.session;
 
@@ -142,9 +147,9 @@ export class CheckinService {
 
   /**
    * Reset checkin progress by deleting current session
-   * and generating a new session.
-   *
-   * @param {Object} values
+   * and generating a new session. The user flow will
+   * be reset to the first step, with the captcha flag
+   * set accordingly.
    *
    * @returns {Object}
    */
@@ -157,7 +162,7 @@ export class CheckinService {
     this.sessionId = sessionId;
     this.session = session;
 
-    return this._persistAndRespond(session);
+    return await this._persistAndRespond(session);
   }
 
   // =========================
@@ -215,24 +220,22 @@ export class CheckinService {
   _buildMeta(session) {
     return {
       nextStep: getNextStep(session.progress),
+      captchaRequired: session.captchaRequired,
     };
   }
 
-  /**
-   * Issue user session.
-   */
-  async _issueUserSession() {
-    const checkinSession = this.session;
+  async _withGlobalFailureTracking(handler) {
+    try {
+      return await handler();
+    } catch (err) {
+      const { blocked, retryAfterSeconds } = await consumeCheckinEntryFailure();
 
-    /** @type {{ sessionId: string, session: UserSession }} */
-    const { sessionId, session } = await userSession.ensure(this.req, this.res);
+      if (blocked) {
+        throw new CheckinEntryRateLimitError(retryAfterSeconds);
+      }
 
-    await userSession.persist(sessionId, {
-      ...session,
-      userId: checkinSession.userId,
-      checkinNumber: checkinSession.checkinNumber,
-      checkinAt: checkinSession.checkinAt,
-    });
+      throw err;
+    }
   }
 
   // =========================
@@ -322,6 +325,23 @@ export class CheckinService {
     this.session.checkinNumber = checkinNumber;
     this.session.checkinAt = checkinAt;
   }
+
+  /**
+   * Issue user session.
+   */
+  async _issueUserSession() {
+    const checkinSession = this.session;
+
+    /** @type {{ sessionId: string, session: UserSession }} */
+    const { sessionId, session } = await userSession.ensure(this.req, this.res);
+
+    await userSession.persist(sessionId, {
+      ...session,
+      userId: checkinSession.userId,
+      checkinNumber: checkinSession.checkinNumber,
+      checkinAt: checkinSession.checkinAt,
+    });
+  }
 }
 
 /**
@@ -401,3 +421,17 @@ const validateQrToken = async (qrToken) => {
 
   return true;
 };
+
+/**
+ * Thrown when the global GET /checkin failure budget is exhausted -
+ * i.e. too many failed ticket/QR lookups across all IPs combined,
+ * indicating a distributed brute-force attempt. Routes should map
+ * this to a 429 response.
+ */
+export class CheckinEntryRateLimitError extends Error {
+  constructor(retryAfterSeconds) {
+    super('Too many failed checkin attempts. Please try again shortly.');
+    this.name = 'CheckinEntryRateLimitError';
+    this.retryAfterSeconds = retryAfterSeconds;
+  }
+}

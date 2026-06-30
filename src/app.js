@@ -24,7 +24,11 @@ app.use(expressLayouts);
 app.set('layout', 'layouts/main');
 
 // middleware
-app.use(express.json());
+app.use(
+  express.json({
+    limit: '10kb',
+  }),
+);
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
@@ -34,11 +38,7 @@ app.use(
 );
 
 // api
-app.use('/api/v1/checkin', checkinRoutes);
-
-app.use('/api/v1/debug', debugRoutes);
-
-app.use('/api/v1', resolveSessions, apiRoutes);
+app.use('/api/v1', apiRoutes);
 
 // web
 app.use('/', webRoutes);

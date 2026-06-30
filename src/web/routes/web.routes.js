@@ -1,14 +1,26 @@
 import express from 'express';
 
+import { env } from '../../config/env.js';
+
 import {
   resolveSessions,
   requireWebAuth,
   requireNoSession,
 } from '../../middleware/auth.middleware.js';
-import { CheckinService } from '../../modules/checkin/checkin.service.js';
-import { env } from '../../config/env.js';
+import {
+  checkinEntryIpLimiter,
+  ipLimiter,
+  webLimiter,
+} from '../../middleware/rate.middleware.js';
+
+import {
+  CheckinService,
+  CheckinEntryRateLimitError,
+} from '../../modules/checkin/checkin.service.js';
 
 const router = express.Router();
+
+router.use(webLimiter);
 
 // privacy and terms
 router.get('/terms', (_req, res) => {
@@ -24,6 +36,7 @@ router.use(resolveSessions);
 // checkin
 router.get(
   '/checkin',
+  checkinEntryIpLimiter,
   requireNoSession('user', '/'),
   async (req, res, next) => {
     try {
@@ -42,6 +55,14 @@ router.get(
         },
       });
     } catch (err) {
+      if (err instanceof CheckinEntryRateLimitError) {
+        if (err.retryAfterSeconds) {
+          res.set('Retry-After', String(err.retryAfterSeconds));
+        }
+        return res
+          .status(429)
+          .send('Too many requests. Please try again shortly.');
+      }
       next(err);
     }
   },

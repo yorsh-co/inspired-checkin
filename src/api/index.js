@@ -1,16 +1,29 @@
 import express from 'express';
 
-import { requireRole } from '../middleware/auth.middleware.js';
+import checkinRoutes from '../modules/checkin/checkin.routes.js';
 import adminRoutes from '../modules/admin/admin.routes.js';
 import userRoutes from '../modules/user/user.routes.js';
+import debugRoutes from '../modules/debug/debug.routes.js';
+
+import { requireRole, resolveSessions } from '../middleware/auth.middleware.js';
+import {
+  adminSessionLimiter,
+  ipLimiter,
+  userSessionLimiter,
+} from '../middleware/rate.middleware.js';
 
 /** @import { SessionType } from '../../types/session.js' */
 
 const router = express.Router();
 
-// feature modules
-router.use('/admin', requireRole('admin'), adminRoutes);
+router.use(ipLimiter);
 
-router.use('/', requireRole('user'), userRoutes);
+router.use('/checkin', checkinRoutes);
+router.use('/debug', debugRoutes);
+
+router.use(resolveSessions);
+
+router.use('/admin', requireRole('admin'), adminSessionLimiter, adminRoutes);
+router.use('/', requireRole('user'), userSessionLimiter, userRoutes);
 
 export default router;

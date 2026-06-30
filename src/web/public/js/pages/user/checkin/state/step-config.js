@@ -59,7 +59,7 @@ const stepConfig = {
       const { captchaRequired } = state;
 
       if (captchaRequired) {
-        // await this.captcha.render(); FIXME: test once using the live url
+        await this.captcha.render();
       }
 
       ui.skeleton.clear(this.step);

@@ -1,6 +1,7 @@
 /* hint */
 .hint-div {
   margin-top: 10px;
+  margin-bottom: 10px;
   font-size: 0.9rem;
   color: var(--text);
   opacity: 0.9;

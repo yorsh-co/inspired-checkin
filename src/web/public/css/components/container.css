@@ -4,6 +4,7 @@
   /*min-height: 300px;*/
   width: 90%;
   max-width: 400px;
+  min-width: 360px;
 
   padding: 40px 30px 30px 30px;
   display: flex;

@@ -30,8 +30,8 @@ export const onTicketInput = async (options = {}) => {
   const flow = stepConfig.ticket.getFlow();
 
   // check captcha
-  const { session } = store.getState();
-  if (session.captchaRequired && !captchaToken) {
+  const { captchaRequired } = store.getState();
+  if (captchaRequired && !captchaToken) {
     const captcha = stepConfig.ticket.captcha;
 
     captchaToken = await captcha.getToken();
@@ -43,7 +43,7 @@ export const onTicketInput = async (options = {}) => {
       return;
     }
 
-    if (captcha.isExpired()) {
+    /*if (captcha.isExpired()) {
       console.error('[Ticket input] captcha expired');
 
       flow.error('Refaça a verificação ✨');
@@ -51,7 +51,7 @@ export const onTicketInput = async (options = {}) => {
       await captcha.reset();
 
       return;
-    }
+    }*/
   }
 
   // validate input
@@ -115,7 +115,7 @@ export const onTicketInput = async (options = {}) => {
     console.error(err);
 
     // remove skeleton
-    await goToStep('ticket');
+    // await goToStep('ticket');
 
     flow.error('Código inválido 😕 Tenta de novo'); // FIXME: error-specific messages
   } finally {

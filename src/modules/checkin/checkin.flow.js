@@ -1,3 +1,5 @@
+import { ConflictError } from '../../shared/errors/app-error.js';
+
 /** @import { CheckinSession } from '../../types/session.js' */
 /** @import { CheckinStep, CheckinProgress } from '../../types/checkin.js' */
 
@@ -71,14 +73,14 @@ export const validateStep = (session, step) => {
 
     case 'verification': {
       if (!session.progress.ticket) {
-        throw new Error('Cannot verify without ticket');
+        throw new ConflictError('Cannot verify without a validated ticket');
       }
       return;
     }
 
     case 'qr': {
       if (!session.progress.verified && session.source !== 'qr') {
-        throw new Error('QR requires verified ticket');
+        throw new ConflictError('QR scan requires a verified ticket');
       }
       return;
     }

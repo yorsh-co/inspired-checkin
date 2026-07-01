@@ -57,14 +57,6 @@ router.get(
         },
       });
     } catch (err) {
-      if (err instanceof CheckinEntryRateLimitError) {
-        if (err.retryAfterSeconds) {
-          res.set('Retry-After', String(err.retryAfterSeconds));
-        }
-        return res
-          .status(429)
-          .send('Too many requests. Please try again shortly.');
-      }
       next(err);
     }
   },

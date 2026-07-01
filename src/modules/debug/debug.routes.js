@@ -1,31 +1,40 @@
 import express from 'express';
-import { CheckinService } from '../checkin/checkin.service.js';
-import { env } from '../../config/env.js';
+
 import { createSessionAdapter } from '../session/session.adapter.js';
+import { env } from '../../config/env.js';
+import {
+  NotFoundError,
+  ValidationError,
+} from '../../shared/errors/app-error.js';
 
 const router = express.Router();
 
-router.get('/session', async (req, res) => {
+const COOKIE_NAMES = {
+  checkin: 'checkin_session_id',
+  user: 'user_session_id',
+  admin: 'admin_session_id',
+};
+
+/**
+ * @param {import('express').Request} req
+ * @returns {string}
+ */
+const resolveCookieName = (req) => {
+  if (env.nodeEnv === 'production') {
+    throw new NotFoundError();
+  }
+
+  const cookieName = COOKIE_NAMES[req.query.type];
+  if (!cookieName) {
+    throw new ValidationError('Invalid or missing session type');
+  }
+
+  return cookieName;
+};
+
+router.get('/session', async (req, res, next) => {
   try {
-    if (env.nodeEnv === 'production') {
-      return res.status(404).end();
-    }
-
-    const sessionType = req.query.type;
-    if (!sessionType) {
-      return res.status(400).end();
-    }
-
-    const cookieNames = {
-      checkin: 'checkin_session_id',
-      user: 'user_session_id',
-      admin: 'admin_session_id',
-    };
-
-    const cookieName = cookieNames[sessionType];
-    if (!cookieName) {
-      return res.status(400).end();
-    }
+    const cookieName = resolveCookieName(req);
 
     const session = createSessionAdapter(cookieName);
 
@@ -33,39 +42,21 @@ router.get('/session', async (req, res) => {
 
     res.json(data);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Debug failed' });
+    next(err);
   }
 });
 
 router.delete('/session', async (req, res) => {
   try {
-    if (env.nodeEnv === 'production') {
-      return res.status(404).end();
-    }
-
-    const sessionType = req.query.type;
-    if (!sessionType) {
-      return res.status(400).end();
-    }
-
-    const cookieNames = {
-      checkin: 'checkin_session_id',
-      user: 'user_session_id',
-      admin: 'admin_session_id',
-    };
-
-    const cookieName = cookieNames[sessionType];
-    if (!cookieName) {
-      return res.status(400).end();
-    }
+    const cookieName = resolveCookieName(req);
 
     const session = createSessionAdapter(cookieName);
 
     await session.destroy(req, res);
+
+    res.status(204).end();
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Debug failed' });
+    next(err);
   }
 });
 

@@ -1,5 +1,6 @@
 import { RateLimiterRedis } from 'rate-limiter-flexible';
 import redis from '../shared/db/redis.js';
+import { RateLimitError } from '../shared/errors/app-error.js';
 
 /**
  * Build an Express middleware backed by a RateLimiterRedis instance
@@ -24,8 +25,8 @@ const createLimiterMiddleware = (limiter, getKey) => async (req, res, next) => {
       return next();
     }
 
-    res.set('Retry-After', String(Math.ceil(err.msBeforeNext / 1000)));
-    return res.status(429).json({ error: 'Too many requests' });
+    const retryAfterSeconds = Math.ceil(err.msBeforeNext / 1000);
+    return next(new RateLimitError('Too many requests', retryAfterSeconds));
   }
 };
 

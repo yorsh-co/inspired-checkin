@@ -2,6 +2,7 @@ import { env } from '../config/env.js';
 import { TurnstileValidator } from '../modules/captcha/captcha.service.js';
 import { clearCaptchaRequirement } from '../modules/checkin/checkin.attempts.js';
 import { checkinSession } from '../modules/checkin/checkin.session.adapter.js';
+import { CaptchaRequiredError } from '../shared/errors/app-error.js';
 
 /**
  * @param {import('express').Request} req
@@ -27,10 +28,7 @@ export const requireCaptchaIfFlagged = async (req, res, next) => {
     if (!result.success) {
       console.error('Required captcha invalid:', result);
 
-      return res.status(400).json({
-        error: 'Captcha verification required',
-        code: 'CAPTCHA_REQUIRED',
-      });
+      return next(new CaptchaRequiredError());
     }
 
     await checkinSession.persist(sessionId, clearCaptchaRequirement(session));

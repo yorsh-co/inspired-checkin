@@ -11,6 +11,7 @@ import {
   ipLimiter,
   userSessionLimiter,
 } from '../middleware/rate.middleware.js';
+import { errorHandler } from '../middleware/error.middleware.js';
 
 /** @import { SessionType } from '../../types/session.js' */
 
@@ -26,5 +27,7 @@ router.use('/debug', requireRole('admin'), debugRoutes);
 
 router.use('/admin', requireRole('admin'), adminSessionLimiter, adminRoutes);
 router.use('/', requireRole('user'), userSessionLimiter, userRoutes);
+
+router.use(errorHandler);
 
 export default router;

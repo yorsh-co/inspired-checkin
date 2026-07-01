@@ -54,6 +54,7 @@ export class TurnstileValidator {
       );
 
       const result = await response.json();
+      console.log('Captcha validation result:', result);
 
       if (result.success) {
         if (

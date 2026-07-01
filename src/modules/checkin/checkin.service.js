@@ -9,6 +9,10 @@ import { qrService } from '../qr/qr.service.js';
 import { env } from '../../config/env.js';
 import { userSession } from '../user/user.session.adapter.js';
 import { consumeCheckinEntryFailure } from '../../middleware/rate.middleware.js';
+import {
+  RateLimitError,
+  ValidationError,
+} from '../../shared/errors/app-error.js';
 
 /** @import { User } from '../../types/user.js' */
 /** @import { CheckinSession, UserSession } from '../../types/session.js' */
@@ -278,7 +282,7 @@ export class CheckinService {
       const { blocked, retryAfterSeconds } = await consumeCheckinEntryFailure();
 
       if (blocked) {
-        throw new CheckinEntryRateLimitError(retryAfterSeconds);
+        throw new RateLimitError('Too many requests', retryAfterSeconds);
       }
 
       throw err;
@@ -401,12 +405,12 @@ export class CheckinService {
 const validateTicket = async (ticketCode) => {
   const isValidFormat = /^[a-z0-9]{5}$/.test(ticketCode);
   if (!ticketCode || !isValidFormat) {
-    throw new Error('Invalid ticket code');
+    throw new ValidationError('Invalid ticket code');
   }
 
   const user = await getUserByTicket(ticketCode);
   if (!user) {
-    throw new Error('Ticket not found');
+    throw new ValidationError('Invalid ticket code');
   }
 
   const fullPhone = user.user_phone;
@@ -441,12 +445,12 @@ const validateTicket = async (ticketCode) => {
 const verifyUser = async (session, code) => {
   const isValidFormat = /^[0-9]{4}$/.test(code);
   if (!code || !isValidFormat) {
-    throw new Error('Invalid verification code');
+    throw new ValidationError('Invalid verification code');
   }
 
   const hashed = hash(code);
   if (hashed !== session.verification.phoneLast4Hash) {
-    throw new Error('Verification failed');
+    throw new ValidationError('Invalid verification code');
   }
 };
 
@@ -460,25 +464,9 @@ const verifyUser = async (session, code) => {
 const validateQrToken = async (qrToken) => {
   const isValidFormat = /^[a-zA-Z0-9]{10,32}$/.test(qrToken);
 
-  if (!isValidFormat) throw new Error('Invalid QR token');
-
-  if (!qrToken) throw new Error('Invalid QR token');
-
-  if (qrToken !== env.checkinQrToken) throw new Error('Invalid QR token');
+  if (!isValidFormat || !qrToken || qrToken !== env.checkinQrToken) {
+    throw new ValidationError('Invalid QR token');
+  }
 
   return true;
 };
-
-/**
- * Thrown when the global GET /checkin failure budget is exhausted -
- * i.e. too many failed ticket/QR lookups across all IPs combined,
- * indicating a distributed brute-force attempt. Routes should map
- * this to a 429 response.
- */
-export class CheckinEntryRateLimitError extends Error {
-  constructor(retryAfterSeconds) {
-    super('Too many failed checkin attempts. Please try again shortly.');
-    this.name = 'CheckinEntryRateLimitError';
-    this.retryAfterSeconds = retryAfterSeconds;
-  }
-}

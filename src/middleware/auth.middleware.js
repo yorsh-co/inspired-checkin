@@ -1,6 +1,7 @@
 import { userSession } from '../modules/user/user.session.adapter.js';
 import { adminSession } from '../modules/admin/admin.session.adapter.js';
 import { checkinSession } from '../modules/checkin/checkin.session.adapter.js';
+import { UnauthorizedError } from '../shared/errors/app-error.js';
 
 /** @import { Session, SessionType } from '../../types/session.js' */
 
@@ -49,7 +50,7 @@ export const resolveSessions = async (req, res, next) => {
 export const requireRole = (type) => (req, res, next) => {
   const session = req.sessions?.[type];
 
-  if (!session) return res.status(401).json({ error: 'Unauthorized' });
+  if (!session) return next(new UnauthorizedError());
 
   req.session = { type, ...session };
 

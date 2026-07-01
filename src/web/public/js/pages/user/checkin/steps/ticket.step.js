@@ -95,7 +95,7 @@ export const onTicketInput = async (options = {}) => {
     //const res = await withSkeleton(() => api.checkin.submitTicket(value)); // not required if the verification skeleton is not displayed
     const res = await api.checkin.submitTicket(value, captchaToken);
 
-    if (!res.success) throw new Error('Invalid'); // FIXME: add error-handling
+    //if (!res.success) throw new Error('Invalid'); // FIXME: add error-handling
 
     await utils.timing.ensureMinimum(inputStartTime, 800);
 
@@ -112,12 +112,17 @@ export const onTicketInput = async (options = {}) => {
 
     await goToStep(nextStep, { skeleton: false });
   } catch (err) {
-    console.error(err);
-
     // remove skeleton
     // await goToStep('ticket');
 
-    flow.error('Código inválido 😕 Tenta de novo'); // FIXME: error-specific messages
+    const messages = {
+      VALIDATION_ERROR: 'Código inválido 😕 Tenta de novo',
+      NOT_FOUND: 'Código inválido 😕 Tenta de novo',
+      CAPTCHA_REQUIRED: 'Complete a verificação antes ✨',
+      RATE_LIMITED: 'Muitas tentativas. Espera um pouco ⏳',
+    };
+
+    flow.error(messages[err.code] || 'Algo deu errado 😕 Tenta de novo');
   } finally {
     isSubmitting = false;
   }

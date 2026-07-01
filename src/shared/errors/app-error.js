@@ -16,8 +16,6 @@ export class AppError extends Error {
    * @param {number} [options.details.retryAfterSeconds]
    */
   constructor(message, options = {}) {
-    const { statusCode = 500, code = 'INTERNAL_ERROR', details } = options;
-
     super(message);
 
     this.name = this.constructor.name;
